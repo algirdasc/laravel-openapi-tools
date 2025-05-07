@@ -1,0 +1,20 @@
+{
+  "name": "algirdasc/laravel-openapi-tools",
+  "type": "package",
+  "description": "",
+  "license": "GPL-3.0-or-later",
+  "require": {
+    "php": "^8.2",
+    "zircote/swagger-php": "^5.1",
+    "phpstan/phpstan": "^2.1"
+  },
+  "require-dev": {
+
+  },
+  "autoload": {
+    "psr-4": {
+      "OpenApiTools\\OpenApi\\": "openapi/",
+      "OpenApiTools\\PHPStan\\": "phpstan/"
+    }
+  }
+}
