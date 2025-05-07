@@ -24,7 +24,11 @@ services:
         tags:
             - openApiTools.validators.openapi.operation
     -
-        class: OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\Validators\RequestBodyContentValidator
+        class: OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\Validators\RequestBodyReferenceValidator
+        tags:
+            - openApiTools.validators.openapi.operation
+    -
+        class: OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\Validators\ParameterReferenceValidator
         tags:
             - openApiTools.validators.openapi.operation
     -

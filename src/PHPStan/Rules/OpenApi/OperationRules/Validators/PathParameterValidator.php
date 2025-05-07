@@ -51,9 +51,7 @@ class PathParameterValidator implements ValidatorInterface
             }
 
             if (!$found) {
-                $errors[] = RuleErrorBuilder::message(
-                    sprintf('Path parameter "%s" is missing in operation "%s" parameters', $pathParameter, $path)
-                )
+                $errors[] = RuleErrorBuilder::message(sprintf('Path parameter "%s" is missing in operation "%s" parameters', $pathParameter, $path))
                     ->identifier(RuleIdentifier::identifier('pathParameterMissingInSchemaParameters'))
                     ->build();
             }
