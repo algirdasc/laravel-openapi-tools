@@ -21,26 +21,6 @@ use PHPStan\ShouldNotHappenException;
 
 class ValidateOperationRule extends AbstractOpenApiRule implements Rule
 {
-    public function __construct(
-        private readonly ReflectionProvider $reflectionProvider,
-    ) {
-    }
-
-    /**
-     * @template T of ValidatorInterface
-     * @return array<class-string<T>>
-     */
-    public function getValidators(): array
-    {
-        return [
-            DescriptionValidator::class,
-            PathParameterValidator::class,
-            PathValidator::class,
-            SummaryValidator::class,
-            TagCountValidator::class,
-        ];
-    }
-
     public function getNodeType(): string
     {
         return Stmt\Class_::class;

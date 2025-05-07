@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace OpenApiTools\PHPStan\Rules\OpenApi;
 
-use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
+use OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\ValidatorInterface as OperationValidatorInterface;
+use OpenApiTools\PHPStan\Rules\OpenApi\SchemaRules\ValidatorInterface as SchemaValidatorInterface;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionAttribute;
-use PHPStan\BetterReflection\Reflection\Adapter\ReflectionMethod;
-use PHPStan\BetterReflection\Reflector\Exception\IdentifierNotFound;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\IdentifierRuleError;
@@ -15,8 +14,6 @@ use PHPStan\ShouldNotHappenException;
 
 abstract class AbstractOpenApiRule
 {
-    abstract public function getValidators(): array;
-
     abstract protected function getValidatorTag(): string;
 
     /**
@@ -25,8 +22,8 @@ abstract class AbstractOpenApiRule
     protected array $errors = [];
 
     public function __construct(
-        private readonly ReflectionProvider $reflectionProvider,
-        private readonly Container $container
+        protected readonly ReflectionProvider $reflectionProvider,
+        protected readonly Container $container
     ) {
     }
 
@@ -36,10 +33,16 @@ abstract class AbstractOpenApiRule
      */
     protected function validateAttributes(array $attributes): void
     {
+        $tagName = sprintf('openApiTools.validators.%s', $this->getValidatorTag());
+
+        /**
+         * @var array<SchemaValidatorInterface|OperationValidatorInterface> $validators
+         */
+        $validators = $this->container->getServicesByTag($tagName);
+
         foreach ($attributes as $attribute) {
             $instance = $attribute->newInstance();
 
-            $validators = $this->container->getServicesByTag('openApiTools.validator.' . $this->getValidatorTag());
             foreach ($validators as $validator) {
                 $this->addErrors($validator->validate($instance));
             }

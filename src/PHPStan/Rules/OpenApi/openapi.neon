@@ -1,16 +1,30 @@
 rules:
-    - Rules\OpenApi\Rules\ValidateLaravelRequestRule
-    - Rules\OpenApi\Rules\ValidateLaravelResourceRule
-    - Rules\OpenApi\Rules\ValidateLaravelControllerRule
-    # - Rules\OpenApi\Rules\ValidateOpenApiOperationRule
-    - Rules\OpenApi\Rules\ValidateOpenApiSchemaRule
+    - OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\ValidateOperationRule
+    - OpenApiTools\PHPStan\Rules\OpenApi\SchemaRules\ValidateSchemaRule
 
 services:
     -
-        class: Rules\OpenApi\Collectors\JsonResourceReturnArrayCollector
+        class: OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\Validators\DescriptionValidator
         tags:
-            - phpstan.collector
+            - openApiTools.validators.openapi.operation
     -
-        class: Rules\OpenApi\Collectors\FormRequestRuleArrayCollector
+        class: OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\Validators\PathParameterValidator
         tags:
-            - phpstan.collector
+            - openApiTools.validators.openapi.operation
+    -
+        class: OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\Validators\PathValidator
+        tags:
+            - openApiTools.validators.openapi.operation
+    -
+        class: OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\Validators\SummaryValidator
+        tags:
+            - openApiTools.validators.openapi.operation
+    -
+        class: OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\Validators\TagCountValidator
+        tags:
+            - openApiTools.validators.openapi.operation
+
+    -
+        class: OpenApiTools\PHPStan\Rules\OpenApi\SchemaRules\Validators\TagCountValidator
+        tags:
+            - openApiTools.validators.openapi.schema

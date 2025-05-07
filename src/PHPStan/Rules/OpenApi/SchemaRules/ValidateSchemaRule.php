@@ -7,34 +7,14 @@ namespace OpenApiTools\PHPStan\Rules\OpenApi\SchemaRules;
 use OpenApi\Attributes\Schema;
 use OpenApiTools\PHPStan\Helpers\Attributes;
 use OpenApiTools\PHPStan\Rules\OpenApi\AbstractOpenApiRule;
-use OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\Validators\PathValidator;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PHPStan\Analyser\Scope;
-use PHPStan\DependencyInjection\Container;
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPStan\ShouldNotHappenException;
 
 class ValidateSchemaRule extends AbstractOpenApiRule implements Rule
 {
-    public function __construct(
-        private readonly ReflectionProvider $reflectionProvider,
-        private readonly Container $container
-    ) {
-    }
-
-    /**
-     * @template T of ValidatorInterface
-     * @return array<class-string<T>>
-     */
-    public function getValidators(): array
-    {
-        return [
-            PathValidator::class,
-        ];
-    }
-
     public function getNodeType(): string
     {
         return Stmt\Class_::class;
