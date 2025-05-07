@@ -25,6 +25,10 @@ services:
             - openApiTools.validators.openapi.operation
 
     -
-        class: OpenApiTools\PHPStan\Rules\OpenApi\SchemaRules\Validators\TagCountValidator
+        class: OpenApiTools\PHPStan\Rules\OpenApi\SchemaRules\Validators\NameValidator
+        tags:
+            - openApiTools.validators.openapi.schema
+    -
+        class: OpenApiTools\PHPStan\Rules\OpenApi\SchemaRules\Validators\PropertiesValidator
         tags:
             - openApiTools.validators.openapi.schema
