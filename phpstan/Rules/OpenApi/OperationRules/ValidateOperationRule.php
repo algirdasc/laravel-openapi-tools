@@ -2,11 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rules\Rules\SchemaRules;
+namespace OpenApiTools\Rules\OpenApi\OperationRules;
 
-use Rules\Rules\AbstractOpenApiRule;
-
-class ValidateSchemaRule extends AbstractOpenApiRule implements Rule
+class ValidateOperationRule extends AbstractOpenApiRule implements Rule
 {
     private const array VALIDATORS = [
 

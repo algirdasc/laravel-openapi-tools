@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rules\Rules\OperationRules;
+namespace OpenApiTools\Rules\OpenApi\OperationRules;
 
 use OpenApi\Annotations\Operation;
 

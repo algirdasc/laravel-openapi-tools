@@ -2,13 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rules\Rules\OperationRules;
+namespace OpenApiTools\Rules\OpenApi\SchemaRules;
 
-use PhpParser\Node;
-use Rules\Rules\AbstractOpenApiRule;
-use Rules\Rules\OperationRules\Validators\PathValidator;
-
-class ValidateOperationRule extends AbstractOpenApiRule implements Rule
+class ValidateSchemaRule extends AbstractOpenApiRule implements Rule
 {
     private const array VALIDATORS = [
 

@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Rules\Rules\SchemaRules;
+namespace OpenApiTools\Rules\OpenApi\SchemaRules;
 
 use OpenApi\Attributes\Schema;
-use Rules\Rules\OperationRules\IdentifierRuleError;
 
 interface ValidatorInterface
 {

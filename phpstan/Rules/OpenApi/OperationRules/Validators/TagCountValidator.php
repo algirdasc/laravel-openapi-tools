@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Rules\Rules\OperationRules\Validators;
+namespace OpenApiTools\Rules\OpenApi\OperationRules\Validators;
 
 use OpenApi\Annotations\Operation;
-use Rules\Rules\OperationRules\ValidatorInterface;
+use OpenApiTools\Rules\OpenApi\OperationRules\ValidatorInterface;
 
 class TagCountValidator implements ValidatorInterface
 {
