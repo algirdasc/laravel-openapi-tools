@@ -23,7 +23,10 @@ services:
         class: OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\Validators\TagCountValidator
         tags:
             - openApiTools.validators.openapi.operation
-
+    -
+        class: OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\Validators\RequestBodyContentValidator
+        tags:
+            - openApiTools.validators.openapi.operation
     -
         class: OpenApiTools\PHPStan\Rules\OpenApi\SchemaRules\Validators\NameValidator
         tags:

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace OpenApiTools\PHPStan\Rules\OpenApi\SchemaRules\Validators;
 
 use OpenApi\Attributes\Items;
-use OpenApi\Attributes\Property;
 use OpenApi\Attributes\Schema;
 use OpenApi\Generator;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
@@ -57,6 +56,8 @@ class PropertiesValidator implements ValidatorInterface
                     ->identifier(RuleIdentifier::identifier('schemaPropertyFormatIncorrect'))
                     ->build();
             }
+
+            // TODO: check for snake case
 
             if ($property->items instanceof Items) {
                 $errors = [
