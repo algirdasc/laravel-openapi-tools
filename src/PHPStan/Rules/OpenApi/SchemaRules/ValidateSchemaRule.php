@@ -2,14 +2,19 @@
 
 declare(strict_types=1);
 
-namespace OpenApiTools\Rules\OpenApi\OperationRules;
+namespace OpenApiTools\PHPStan\Rules\OpenApi\SchemaRules;
 
-class ValidateOperationRule extends AbstractOpenApiRule implements Rule
+use OpenApiTools\PHPStan\Rules\OpenApi\AbstractOpenApiRule;
+use OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\Validators\PathValidator;
+use PhpParser\Node;
+use PhpParser\Node\Stmt;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Rules\Rule;
+use PHPStan\ShouldNotHappenException;
+
+class ValidateSchemaRule extends AbstractOpenApiRule implements Rule
 {
-    private const array VALIDATORS = [
-
-    ];
-
     public function __construct(
         private ReflectionProvider $reflectionProvider,
     ) {

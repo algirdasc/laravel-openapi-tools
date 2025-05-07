@@ -2,14 +2,20 @@
 
 declare(strict_types=1);
 
-namespace OpenApiTools\Rules\OpenApi\SchemaRules;
+namespace OpenApiTools\PHPStan\Rules\OpenApi\OperationRules;
 
-class ValidateSchemaRule extends AbstractOpenApiRule implements Rule
+use OpenApiTools\PHPStan\Rules\OpenApi\AbstractOpenApiRule;
+use OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\Validators\PathValidator;
+use OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\Validators\TagCountValidator;
+use PhpParser\Node;
+use PhpParser\Node\Stmt;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Rules\Rule;
+use PHPStan\ShouldNotHappenException;
+
+class ValidateOperationRule extends AbstractOpenApiRule implements Rule
 {
-    private const array VALIDATORS = [
-
-    ];
-
     public function __construct(
         private ReflectionProvider $reflectionProvider,
     ) {
@@ -23,12 +29,13 @@ class ValidateSchemaRule extends AbstractOpenApiRule implements Rule
     {
         return [
             PathValidator::class,
+            TagCountValidator::class,
         ];
     }
 
     public function getNodeType(): string
     {
-        return Stmt\Class_::class;
+        return Node\Attribute::class;
     }
 
     /**

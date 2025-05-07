@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace OpenApiTools\Rules\OpenApi\SchemaRules;
+namespace OpenApiTools\PHPStan\Rules\OpenApi\SchemaRules;
 
 use OpenApi\Attributes\Schema;
+use PHPStan\Rules\IdentifierRuleError;
 
 interface ValidatorInterface
 {

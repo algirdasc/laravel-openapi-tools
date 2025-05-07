@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace OpenApiTools\Rules\OpenApi\OperationRules\Validators;
+namespace OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\Validators;
 
 use OpenApi\Annotations\Operation;
-use OpenApiTools\Rules\OpenApi\OperationRules\ValidatorInterface;
+use OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\ValidatorInterface;
 
 class PathValidator implements ValidatorInterface
 {

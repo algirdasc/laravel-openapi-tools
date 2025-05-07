@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OpenApiTools\Rules\OpenApi\OperationRules;
+namespace OpenApiTools\PHPStan\Rules\OpenApi\OperationRules;
 
 use OpenApi\Annotations\Operation;
 
