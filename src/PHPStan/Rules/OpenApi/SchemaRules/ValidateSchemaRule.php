@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace OpenApiTools\PHPStan\Rules\OpenApi\SchemaRules;
 
+use OpenApi\Attributes\Schema;
+use OpenApiTools\PHPStan\Helpers\Attributes;
 use OpenApiTools\PHPStan\Rules\OpenApi\AbstractOpenApiRule;
 use OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\Validators\PathValidator;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PHPStan\Analyser\Scope;
+use PHPStan\DependencyInjection\Container;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPStan\ShouldNotHappenException;
@@ -16,7 +19,8 @@ use PHPStan\ShouldNotHappenException;
 class ValidateSchemaRule extends AbstractOpenApiRule implements Rule
 {
     public function __construct(
-        private ReflectionProvider $reflectionProvider,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly Container $container
     ) {
     }
 
@@ -41,18 +45,21 @@ class ValidateSchemaRule extends AbstractOpenApiRule implements Rule
      */
     public function processNode(Node $node, Scope $scope): array
     {
+        if (!$node instanceof Stmt\Class_) {
+            return [];
+        }
+
         $className = (string) $node->namespacedName;
 
         $reflectionClass = $this->reflectionProvider->getClass($className)->getNativeReflection();
-        $errors = $this->validateOpenApiAttributes($reflectionClass);
+        $classAttributes = Attributes::getAttributes($reflectionClass, Schema::class);
+        $this->validateAttributes($classAttributes);
 
-        foreach ($reflectionClass->getMethods() as $method) {
-            $errors = [
-                ...$errors,
-                ...$this->validateOpenApiAttributes($method),
-            ];
-        }
+        return $this->errors;
+    }
 
-        return $errors;
+    protected function getValidatorTag(): string
+    {
+        return 'openapi.schema';
     }
 }

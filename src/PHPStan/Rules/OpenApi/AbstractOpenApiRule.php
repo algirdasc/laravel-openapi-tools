@@ -8,6 +8,7 @@ use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionAttribute;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionMethod;
 use PHPStan\BetterReflection\Reflector\Exception\IdentifierNotFound;
+use PHPStan\DependencyInjection\Container;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\ShouldNotHappenException;
@@ -16,13 +17,16 @@ abstract class AbstractOpenApiRule
 {
     abstract public function getValidators(): array;
 
+    abstract protected function getValidatorTag(): string;
+
     /**
      * @var list<IdentifierRuleError>
      */
     protected array $errors = [];
 
     public function __construct(
-        protected readonly ReflectionProvider $reflectionProvider,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly Container $container
     ) {
     }
 
@@ -35,8 +39,8 @@ abstract class AbstractOpenApiRule
         foreach ($attributes as $attribute) {
             $instance = $attribute->newInstance();
 
-            foreach ($this->getValidators() as $validator) {
-                $validator = new $validator($this->reflectionProvider);
+            $validators = $this->container->getServicesByTag('openApiTools.validator.' . $this->getValidatorTag());
+            foreach ($validators as $validator) {
                 $this->addErrors($validator->validate($instance));
             }
         }

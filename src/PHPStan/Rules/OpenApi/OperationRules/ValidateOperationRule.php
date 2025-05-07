@@ -15,11 +15,17 @@ use OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\Validators\TagCountValidat
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPStan\ShouldNotHappenException;
 
 class ValidateOperationRule extends AbstractOpenApiRule implements Rule
 {
+    public function __construct(
+        private readonly ReflectionProvider $reflectionProvider,
+    ) {
+    }
+
     /**
      * @template T of ValidatorInterface
      * @return array<class-string<T>>
@@ -61,5 +67,10 @@ class ValidateOperationRule extends AbstractOpenApiRule implements Rule
         }
 
         return $this->errors;
+    }
+
+    protected function getValidatorTag(): string
+    {
+        return 'openapi.operation';
     }
 }
