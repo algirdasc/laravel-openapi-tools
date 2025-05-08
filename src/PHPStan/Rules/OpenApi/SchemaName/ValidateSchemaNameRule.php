@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OpenApiTools\PHPStan\Rules\OpenApi\Schema;
+namespace OpenApiTools\PHPStan\Rules\OpenApi\SchemaName;
 
 use OpenApi\Attributes\Schema;
 use OpenApiTools\PHPStan\Helpers\Attributes;
@@ -10,6 +10,7 @@ use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PHPStan\Analyser\Scope;
+use PHPStan\DependencyInjection\Container;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
@@ -19,6 +20,7 @@ class ValidateSchemaNameRule implements Rule
 {
     public function __construct(
         private readonly ReflectionProvider $reflectionProvider,
+        private readonly Container $container,
     ) {
     }
 
@@ -45,7 +47,12 @@ class ValidateSchemaNameRule implements Rule
             return [];
         }
 
-        $preferredSchemaName = str_replace('\\', '.', str_replace('App\\Http\\', '', (string) $node->namespacedName));
+        /**
+         * @var SchemaNameValidatorInterface $validator
+         */
+        $validator = $this->container->getService('SchemaNameValidator');
+
+        $preferredSchemaName = $validator->getPreferredSchemaName($node);
         if ($classSchema->schema === $preferredSchemaName) {
             return [];
         }

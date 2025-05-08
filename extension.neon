@@ -1,11 +1,14 @@
 rules:
     - OpenApiTools\PHPStan\Rules\OpenApi\Operation\ValidateOperationRule
     - OpenApiTools\PHPStan\Rules\OpenApi\Schema\ValidateSchemaRule
-    - OpenApiTools\PHPStan\Rules\OpenApi\Schema\ValidateSchemaNameRule
+    - OpenApiTools\PHPStan\Rules\OpenApi\SchemaName\ValidateSchemaNameRule
     - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\ValidateFormRequestRule
-    - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\ValidateResourceRule
+    - OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidateResourceRule
 
 services:
+    SchemaNameValidator:
+        class: OpenaApiTools\PHPStan\Rules\OpenApi\SchemaName\LaravelSchemaNameValidator
+
     -
         class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\DescriptionValidator
         tags:

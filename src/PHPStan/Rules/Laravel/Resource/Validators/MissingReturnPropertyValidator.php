@@ -22,7 +22,7 @@ class MissingReturnPropertyValidator implements ValidatorInterface
      */
     public function validate(ArrayReturn $arrayReturn, ?Schema $schema): array
     {
-        if (Generator::isDefault($schema?->properties) || empty($schema?->properties)) {
+        if (Generator::isDefault($schema?->properties) || empty($schema?->properties) || empty($arrayReturn->getItems())) {
             return [];
         }
 
