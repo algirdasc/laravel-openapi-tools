@@ -16,11 +16,6 @@ use PHPStan\Rules\Rule;
  */
 class ValidateFormRequestRule extends AbstractLaravelRule implements Rule
 {
-    public function getNodeType(): string
-    {
-        return CollectedDataNode::class;
-    }
-
     public function getValidatorTag(): string
     {
         return 'laravel.form_request';

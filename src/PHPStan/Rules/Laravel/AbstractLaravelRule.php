@@ -32,6 +32,11 @@ abstract class AbstractLaravelRule
     ) {
     }
 
+    public function getNodeType(): string
+    {
+        return CollectedDataNode::class;
+    }
+
     /**
      * @return list<IdentifierRuleError>
      */

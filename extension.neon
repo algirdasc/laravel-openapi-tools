@@ -10,6 +10,10 @@ services:
         class: OpenApiTools\PHPStan\Generators\LaravelSchemaNameGenerator
     propertyNameGenerator:
         class: OpenApiTools\PHPStan\Generators\SnakeCasePropertyNameGenerator
+    -
+        class: OpenApiTools\PHPStan\Collectors\SchemaCollector
+        tags:
+            - phpstan.collector
 
     -
         class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\ControllerInvokeMethodValidator

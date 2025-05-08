@@ -26,11 +26,6 @@ class ValidateResourceRule extends AbstractLaravelRule implements Rule
         return JsonResourceArrayCollector::class;
     }
 
-    public function getNodeType(): string
-    {
-        return CollectedDataNode::class;
-    }
-
     public function processNode(Node $node, Scope $scope): array
     {
         if (!$node instanceof CollectedDataNode) {
