@@ -7,7 +7,6 @@ namespace OpenApiTools\PHPStan\Rules\OpenApi\Schema;
 use OpenApi\Attributes\Schema;
 use OpenApiTools\PHPStan\Helpers\Attributes;
 use PhpParser\Node;
-use PhpParser\Node\Stmt;
 use PHPStan\Analyser\Scope;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionAttribute;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
@@ -18,7 +17,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\ShouldNotHappenException;
 
 /**
- * @implements Rule<Stmt\Class_>
+ * @implements Rule<Node\Stmt\Class_>
  */
 readonly class ValidateSchemaRule implements Rule
 {
@@ -30,7 +29,7 @@ readonly class ValidateSchemaRule implements Rule
 
     public function getNodeType(): string
     {
-        return Stmt\Class_::class;
+        return Node\Stmt\Class_::class;
     }
 
     /**
@@ -38,7 +37,7 @@ readonly class ValidateSchemaRule implements Rule
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        if (!$node instanceof Stmt\Class_) {
+        if (!$node instanceof Node\Stmt\Class_) {
             return [];
         }
 
@@ -56,7 +55,7 @@ readonly class ValidateSchemaRule implements Rule
      * @return list<IdentifierRuleError>
      * @throws ShouldNotHappenException
      */
-    protected function validateAttributes(Stmt\Class_ $node, array $attributes): array
+    protected function validateAttributes(Node\Stmt\Class_ $node, array $attributes): array
     {
         $errors = [];
 

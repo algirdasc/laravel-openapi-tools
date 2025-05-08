@@ -2,6 +2,7 @@ rules:
     - OpenApiTools\PHPStan\Rules\OpenApi\Operation\ValidateOperationRule
     - OpenApiTools\PHPStan\Rules\OpenApi\Schema\ValidateSchemaRule
     - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\ValidateFormRequestRule
+    - OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidateResourceSchemaRule
     - OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidateResourceRule
 
 services:
@@ -86,10 +87,6 @@ services:
         class: OpenApiTools\PHPStan\Rules\Laravel\FormRequest\Collectors\FormRequestArrayCollector
         tags:
             - phpstan.collector
-    -
-        class: OpenApiTools\PHPStan\Rules\Laravel\Resource\Validators\MissingSchemaValidator
-        tags:
-            - openApiTools.validators.laravel.resource
     -
         class: OpenApiTools\PHPStan\Rules\Laravel\Resource\Validators\MissingSchemaPropertiesValidator
         tags:
