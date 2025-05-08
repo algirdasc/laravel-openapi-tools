@@ -10,7 +10,6 @@ use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PHPStan\Analyser\Scope;
-use PHPStan\DependencyInjection\Container;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
@@ -40,13 +39,16 @@ class ValidateSchemaNameRule implements Rule
         $className = (string) $node->namespacedName;
 
         $reflectionClass = $this->reflectionProvider->getClass($className)->getNativeReflection();
-        $classSchema = Attributes::getAttributes($reflectionClass, Schema::class)[0]->newInstance() ?? null;
+        $classSchema = Attributes::getAttributes($reflectionClass, Schema::class)[0]?->newInstance();
 
         if ($classSchema === null) {
             return [];
         }
 
         $preferredSchemaName = str_replace('\\', '.', str_replace('App\\Http\\', '', (string) $node->namespacedName));
+        if ($classSchema->schema === $preferredSchemaName) {
+            return [];
+        }
 
         return [
             RuleErrorBuilder::message(sprintf('Schema name "%s" does not match "%s"', $classSchema->schema, $preferredSchemaName))
