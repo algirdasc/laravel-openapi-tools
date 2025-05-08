@@ -1,6 +1,7 @@
 rules:
     - OpenApiTools\PHPStan\Rules\OpenApi\Operation\ValidateOperationRule
     - OpenApiTools\PHPStan\Rules\OpenApi\Schema\ValidateSchemaRule
+    - OpenApiTools\PHPStan\Rules\OpenApi\Schema\ValidateSchemaNameRule
     - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\ValidateFormRequestRule
 
 services:
@@ -28,10 +29,6 @@ services:
         class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\RequestBodyReferenceValidator
         tags:
             - openApiTools.validators.openapi.operation
-    -
-        class: OpenApiTools\PHPStan\Rules\OpenApi\Schema\Validators\NameValidator
-        tags:
-            - openApiTools.validators.openapi.schema
     -
         class: OpenApiTools\PHPStan\Rules\OpenApi\Schema\Validators\PropertiesValidator
         tags:
