@@ -15,6 +15,14 @@ services:
         tags:
             - openApiTools.validators.openapi.operation
     -
+        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\ControllerMethodParametersValidator
+        tags:
+            - openApiTools.validators.openapi.operation
+    -
+        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\ControllerMethodsValidator
+        tags:
+            - openApiTools.validators.openapi.operation
+    -
         class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\ControllerInvokeMethodValidator
         tags:
             - openApiTools.validators.openapi.operation
@@ -32,10 +40,6 @@ services:
             - openApiTools.validators.openapi.operation
     -
         class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\RequestBodyFormRequestParametersValidator
-        tags:
-            - openApiTools.validators.openapi.operation
-    -
-        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\RequestBodyBuiltinParametersValidator
         tags:
             - openApiTools.validators.openapi.operation
     -

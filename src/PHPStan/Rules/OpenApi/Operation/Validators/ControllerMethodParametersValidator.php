@@ -17,7 +17,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\RuleErrorBuilder;
 use Throwable;
 
-readonly class RequestBodyBuiltinParametersValidator implements ValidatorInterface
+readonly class ControllerMethodParametersValidator implements ValidatorInterface
 {
     public function validate(ReflectionClass|ReflectionMethod $reflection, Operation $operation): array
     {
@@ -52,16 +52,24 @@ readonly class RequestBodyBuiltinParametersValidator implements ValidatorInterfa
 
             $orderedParameters[] = $parameter->getName();
         }
-
         if (!$orderedParameters) {
             return $errors;
         }
 
-        preg_match_all('/{(.*?)}/', $operation->path, $parameters);
-        $parametersDiff = array_diff_assoc($parameters[1], $orderedParameters);
+        preg_match_all('/{(.*?)}/', $operation->path, $pathParameters);
+        $pathParameters = $pathParameters[1];
+
+        $parametersDiff = array_diff_assoc($pathParameters, $orderedParameters);
         if ($parametersDiff) {
             $errors[] = RuleErrorBuilder::message(sprintf('Method "%s" parameters "%s" are either missing or not in the correct order', $reflection->getName(), implode(', ', $parametersDiff)))
-                ->identifier(RuleIdentifier::identifier('incorrectMethodParametersOrder'))
+                ->identifier(RuleIdentifier::identifier('missingOrIncorrectMethodParametersOrder'))
+                ->build();
+        }
+
+        $parametersDiff = array_diff_assoc($orderedParameters, $pathParameters);
+        if ($parametersDiff) {
+            $errors[] = RuleErrorBuilder::message(sprintf('Method "%s" parameters "%s" are missing in operation path', $reflection->getName(), implode(', ', $parametersDiff)))
+                ->identifier(RuleIdentifier::identifier('missingMethodParameterInSchemaPath'))
                 ->build();
         }
 

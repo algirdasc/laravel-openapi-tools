@@ -19,6 +19,9 @@ use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\ShouldNotHappenException;
 
+/**
+ * @implements Rule<Stmt\Class_>
+ */
 class ValidateOperationRule implements Rule
 {
     public function __construct(

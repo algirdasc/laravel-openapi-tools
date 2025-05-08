@@ -11,6 +11,9 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Node\CollectedDataNode;
 use PHPStan\Rules\Rule;
 
+/**
+ * @implements Rule<CollectedDataNode>
+ */
 class ValidateResourceRule extends AbstractLaravelRule implements Rule
 {
     public function getValidatorTag(): string

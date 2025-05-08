@@ -9,16 +9,10 @@ use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
 use OpenApiTools\PHPStan\Rules\OpenApi\Operation\ValidatorInterface;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionMethod;
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\RuleErrorBuilder;
 
-readonly class ControllerMethodValidator implements ValidatorInterface
+readonly class ControllerMethodsValidator implements ValidatorInterface
 {
-    public function __construct(
-        private ReflectionProvider $reflectionProvider,
-    ) {
-    }
-
     public function validate(ReflectionClass|ReflectionMethod $reflection, Operation $operation): array
     {
         $errors = [];

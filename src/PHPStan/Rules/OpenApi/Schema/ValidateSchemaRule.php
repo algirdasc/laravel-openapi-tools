@@ -16,6 +16,9 @@ use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\ShouldNotHappenException;
 
+/**
+ * @implements Rule<Stmt\Class_>
+ */
 readonly class ValidateSchemaRule implements Rule
 {
     public function __construct(
