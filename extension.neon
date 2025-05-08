@@ -7,9 +7,9 @@ rules:
 
 services:
     schemaNameGenerator:
-        class: OpenApiTools\PHPStan\Rules\OpenApi\Schema\Generators\LaravelSchemaNameGenerator
+        class: OpenApiTools\PHPStan\Generators\LaravelSchemaNameGenerator
     propertyNameGenerator:
-        class: OpenApiTools\PHPStan\Rules\OpenApi\Schema\Generators\SnakeCasePropertyNameGenerator
+        class: OpenApiTools\PHPStan\Generators\SnakeCasePropertyNameGenerator
 
     -
         class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\ControllerInvokeMethodValidator

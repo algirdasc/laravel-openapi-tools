@@ -4,17 +4,23 @@ declare(strict_types=1);
 
 namespace OpenApiTools\PHPStan\Rules\Laravel\Resource\Validators;
 
-use Illuminate\Support\Str;
 use OpenApi\Attributes\Schema;
 use OpenApi\Generator;
 use OpenApiTools\PHPStan\DTO\ArrayReturn;
+use OpenApiTools\PHPStan\Generators\PropertyNameGeneratorInterface;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
 use OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidatorInterface;
+use PHPStan\DependencyInjection\Container;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
 
 readonly class BooleanReturnPropertyValidator implements ValidatorInterface
 {
+    public function __construct(
+        private Container $container,
+    ) {
+    }
+
     /**
      * @throws ShouldNotHappenException
      */
@@ -26,9 +32,14 @@ readonly class BooleanReturnPropertyValidator implements ValidatorInterface
 
         $errors = [];
 
+        /**
+         * @var PropertyNameGeneratorInterface $propertyNameGenerator
+         */
+        $propertyNameGenerator = $this->container->getService('propertyNameGenerator');
+
         foreach ($schema->properties as $property) {
-            if ($property->type === 'boolean' && !str_starts_with($property->property, 'is_')) {
-                $errors[] = RuleErrorBuilder::message(sprintf('Schema property "%s" is not returned in JsonResource "%s" class', $property->property, $arrayReturn->getClass()))
+            if ($property->type === 'boolean' && !$propertyNameGenerator->isBooleanProperty($property->property)) {
+                $errors[] = RuleErrorBuilder::message(sprintf('Schema property "%s" must start with "is" or "has"', $property->property))
                     ->identifier(RuleIdentifier::identifier('booleanInJsonResourceMustStartWithIs'))
                     ->file($arrayReturn->getFile())
                     ->line($arrayReturn->getLine())

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OpenApiTools\PHPStan\Rules\OpenApi\Schema\Generators;
+namespace OpenApiTools\PHPStan\Generators;
 
 use PhpParser\Node\Stmt;
 

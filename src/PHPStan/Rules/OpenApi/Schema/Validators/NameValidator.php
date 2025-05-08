@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace OpenApiTools\PHPStan\Rules\OpenApi\Schema\Validators;
 
 use OpenApi\Attributes\Schema;
+use OpenApiTools\PHPStan\Generators\SchemaNameGeneratorInterface;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
-use OpenApiTools\PHPStan\Rules\OpenApi\Schema\Generators\SchemaNameGeneratorInterface;
 use OpenApiTools\PHPStan\Rules\OpenApi\Schema\ValidatorInterface;
 use PhpParser\Node\Stmt;
 use PHPStan\DependencyInjection\Container;

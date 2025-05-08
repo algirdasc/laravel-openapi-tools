@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace OpenApiTools\PHPStan\Rules\OpenApi\Schema\Generators;
+namespace OpenApiTools\PHPStan\Generators;
 
 use Illuminate\Support\Str;
-use PhpParser\Node\Stmt;
 
 class SnakeCasePropertyNameGenerator implements PropertyNameGeneratorInterface
 {
@@ -17,5 +16,10 @@ class SnakeCasePropertyNameGenerator implements PropertyNameGeneratorInterface
     public function isDateProperty(string $property): bool
     {
         return str_ends_with($property, '_at');
+    }
+
+    public function isBooleanProperty(string $property): bool
+    {
+        return str_starts_with($property, 'is_') || str_starts_with($property, 'has_');
     }
 }
