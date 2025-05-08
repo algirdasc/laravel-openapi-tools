@@ -11,7 +11,7 @@ services:
         class: OpenApiTools\PHPStan\Rules\OpenApi\Schema\Generators\SnakeCasePropertyNameGenerator
 
     -
-        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\ControllerMethodValidator
+        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\ControllerInvokeMethodValidator
         tags:
             - openApiTools.validators.openapi.operation
     -
@@ -44,6 +44,10 @@ services:
             - openApiTools.validators.openapi.operation
     -
         class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\RequestBodyReferenceValidator
+        tags:
+            - openApiTools.validators.openapi.operation
+    -
+        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\ResponsesValidator
         tags:
             - openApiTools.validators.openapi.operation
     -
