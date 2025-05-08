@@ -14,7 +14,7 @@ use PhpParser\Node;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
 
-class NulllableRuleValidator implements ValidatorInterface
+class NullableRuleValidator implements ValidatorInterface
 {
     /**
      * @throws ShouldNotHappenException
