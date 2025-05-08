@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OpenApiTools\PHPStan\Rules\Laravel\Resource;
 
+use Illuminate\Http\Resources\Json\JsonResource;
 use OpenApi\Attributes\Schema;
 use OpenApiTools\PHPStan\Helpers\Attributes;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
@@ -41,8 +42,14 @@ class ValidateResourceSchemaRule implements Rule
 
         $className = (string) $node->namespacedName;
 
+        $reflection = $this->reflectionProvider->getClass($className);
+
+        if (!$reflection->isSubclassOf(JsonResource::class)) {
+            return [];
+        }
+
         /** @var ReflectionClass $reflectionClass */
-        $reflectionClass = $this->reflectionProvider->getClass($className)->getNativeReflection();
+        $reflectionClass = $reflection->getNativeReflection();
         $schema = Attributes::getAttributes($reflectionClass, Schema::class);
 
         if ($schema) {
