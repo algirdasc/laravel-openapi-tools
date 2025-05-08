@@ -7,12 +7,14 @@ namespace OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators;
 use OpenApi\Annotations\Operation;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
 use OpenApiTools\PHPStan\Rules\OpenApi\Operation\ValidatorInterface;
+use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
+use PHPStan\BetterReflection\Reflection\Adapter\ReflectionMethod;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
 
-class PathValidator implements ValidatorInterface
+readonly class PathValidator implements ValidatorInterface
 {
-    public function validate(Operation $operation): array
+    public function validate(ReflectionClass|ReflectionMethod $reflection, Operation $operation): array
     {
         $errors = [];
 

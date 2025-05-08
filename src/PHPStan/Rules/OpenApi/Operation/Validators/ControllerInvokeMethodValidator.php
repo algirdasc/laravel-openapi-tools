@@ -11,20 +11,18 @@ use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionMethod;
 use PHPStan\Rules\RuleErrorBuilder;
 
-readonly class TagCountValidator implements ValidatorInterface
+readonly class ControllerInvokeMethodValidator implements ValidatorInterface
 {
     public function validate(ReflectionClass|ReflectionMethod $reflection, Operation $operation): array
     {
-        $errors = [];
-
-        $tags = is_array($operation->tags) ? $operation->tags : [];
-
-        if (count($tags) === 0) {
-            $errors[] = RuleErrorBuilder::message(sprintf('Documentation for "%s" must have at least 1 tag', $tags))
-                ->identifier(RuleIdentifier::identifier('operationTagCountIncorrect'))
-                ->build();
+        if (!$reflection instanceof ReflectionMethod || $reflection->getName() !== '__invoke') {
+            return [];
         }
 
-        return $errors;
+        return [
+            RuleErrorBuilder::message('OpenApi attributes must be applied on class scope')
+                ->identifier(RuleIdentifier::identifier('useClassScopeAttributes'))
+                ->build(),
+        ];
     }
 }

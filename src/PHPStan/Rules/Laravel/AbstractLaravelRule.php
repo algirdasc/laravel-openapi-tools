@@ -19,11 +19,6 @@ use PHPStan\Rules\IdentifierRuleError;
 
 abstract class AbstractLaravelRule
 {
-    /**
-     * @var array<class-string>
-     */
-    private array $validationCache = [];
-
     abstract public function getValidatorTag(): string;
 
     /**

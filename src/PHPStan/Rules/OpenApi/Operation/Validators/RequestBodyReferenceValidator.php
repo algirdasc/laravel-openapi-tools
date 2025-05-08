@@ -10,17 +10,19 @@ use OpenApi\Generator;
 use OpenApiTools\PHPStan\Helpers\Attributes;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
 use OpenApiTools\PHPStan\Rules\OpenApi\Operation\ValidatorInterface;
+use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
+use PHPStan\BetterReflection\Reflection\Adapter\ReflectionMethod;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\RuleErrorBuilder;
 
-class RequestBodyReferenceValidator implements ValidatorInterface
+readonly class RequestBodyReferenceValidator implements ValidatorInterface
 {
     public function __construct(
-        private readonly ReflectionProvider $reflectionProvider,
+        private ReflectionProvider $reflectionProvider,
     ) {
     }
 
-    public function validate(Operation $operation): array
+    public function validate(ReflectionClass|ReflectionMethod $reflection, Operation $operation): array
     {
         $errors = [];
         $requestBody = !Generator::isDefault($operation->requestBody) ? $operation->requestBody : null;
@@ -37,8 +39,11 @@ class RequestBodyReferenceValidator implements ValidatorInterface
             return $errors;
         }
 
-        $reference = $this->reflectionProvider->getClass($contentReference)->getNativeReflection();
-        $schema = Attributes::getAttributes($reference, Schema::class);
+        /**
+         * @var ReflectionClass $reflection
+         */
+        $reflection = $this->reflectionProvider->getClass($contentReference)->getNativeReflection();
+        $schema = Attributes::getAttributes($reflection, Schema::class);
 
         if (empty($schema)) {
             $errors[] = RuleErrorBuilder::message(sprintf('RequestBody reference "%s" does not have schema attribute', $contentReference))

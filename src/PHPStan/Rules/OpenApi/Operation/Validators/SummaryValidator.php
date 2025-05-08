@@ -8,11 +8,13 @@ use OpenApi\Annotations\Operation;
 use OpenApi\Generator;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
 use OpenApiTools\PHPStan\Rules\OpenApi\Operation\ValidatorInterface;
+use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
+use PHPStan\BetterReflection\Reflection\Adapter\ReflectionMethod;
 use PHPStan\Rules\RuleErrorBuilder;
 
-class SummaryValidator implements ValidatorInterface
+readonly class SummaryValidator implements ValidatorInterface
 {
-    public function validate(Operation $operation): array
+    public function validate(ReflectionClass|ReflectionMethod $reflection, Operation $operation): array
     {
         $errors = [];
         $summary = !Generator::isDefault($operation->summary) ? $operation->summary : '';

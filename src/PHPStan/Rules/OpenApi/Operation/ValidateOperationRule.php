@@ -6,18 +6,13 @@ namespace OpenApiTools\PHPStan\Rules\OpenApi\Operation;
 
 use OpenApi\Annotations\Operation;
 use OpenApiTools\PHPStan\Helpers\Attributes;
-use OpenApiTools\PHPStan\Rules\OpenApi\AbstractOpenApiRule;
-use OpenApiTools\PHPStan\Rules\OpenApi\Operation\ValidatorInterface as OperationValidatorInterface;
-use OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\DescriptionValidator;
-use OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\PathParameterValidator;
-use OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\PathValidator;
-use OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\SummaryValidator;
-use OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\TagCountValidator;
-use OpenApiTools\PHPStan\Rules\OpenApi\Schema\ValidatorInterface as SchemaValidatorInterface;
+use OpenApiTools\PHPStan\Rules\OpenApi\Operation\ValidatorInterface;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PHPStan\Analyser\Scope;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionAttribute;
+use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
+use PHPStan\BetterReflection\Reflection\Adapter\ReflectionMethod;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\IdentifierRuleError;
@@ -48,15 +43,18 @@ class ValidateOperationRule implements Rule
 
         $className = (string) $node->namespacedName;
 
+        /**
+         * @var ReflectionClass $reflectionClass
+         */
         $reflectionClass = $this->reflectionProvider->getClass($className)->getNativeReflection();
         $classAttributes = Attributes::getAttributes($reflectionClass, Operation::class);
-        $errors = $this->validateAttributes($classAttributes);
+        $errors = $this->validateAttributes($reflectionClass, $classAttributes);
 
         foreach ($reflectionClass->getMethods() as $reflectionMethod) {
             $methodAttributes = Attributes::getAttributes($reflectionMethod, Operation::class);
             $errors = [
                 ...$errors,
-                ...$this->validateAttributes($methodAttributes),
+                ...$this->validateAttributes($reflectionMethod, $methodAttributes),
             ];
         }
 
@@ -65,15 +63,15 @@ class ValidateOperationRule implements Rule
 
     /**
      * @param array<ReflectionAttribute> $attributes
-     * @return array<IdentifierRuleError>
+     * @return list<IdentifierRuleError>
      * @throws ShouldNotHappenException
      */
-    protected function validateAttributes(array $attributes): array
+    protected function validateAttributes(ReflectionClass|ReflectionMethod $reflection,array $attributes): array
     {
         $errors = [];
 
         /**
-         * @var array<SchemaValidatorInterface|OperationValidatorInterface> $validators
+         * @var array<ValidatorInterface> $validators
          */
         $validators = $this->container->getServicesByTag('openApiTools.validators.openapi.operation');
         foreach ($attributes as $attribute) {
@@ -81,7 +79,7 @@ class ValidateOperationRule implements Rule
             foreach ($validators as $validator) {
                 $errors = [
                     ...$errors,
-                    ...$validator->validate($schemaInstance),
+                    ...$validator->validate($reflection, $schemaInstance),
                 ];
             }
         }

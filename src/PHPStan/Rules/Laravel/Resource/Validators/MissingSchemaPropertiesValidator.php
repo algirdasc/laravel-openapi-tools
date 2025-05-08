@@ -23,6 +23,10 @@ class MissingSchemaPropertiesValidator implements ValidatorInterface
             return [];
         }
 
+        if (!Generator::isDefault($schema->type) && $schema->type !== 'object') {
+            return [];
+        }
+
         if (!Generator::isDefault($schema->properties) && !empty($schema->properties)) {
             return [];
         }

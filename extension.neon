@@ -1,16 +1,23 @@
 rules:
     - OpenApiTools\PHPStan\Rules\OpenApi\Operation\ValidateOperationRule
     - OpenApiTools\PHPStan\Rules\OpenApi\Schema\ValidateSchemaRule
-    - OpenApiTools\PHPStan\Rules\OpenApi\SchemaName\ValidateSchemaNameRule
     - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\ValidateFormRequestRule
     - OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidateResourceRule
 
 services:
     schemaNameGenerator:
-        class: OpenApiTools\PHPStan\Rules\OpenApi\SchemaName\Generators\LaravelSchemaNameGenerator
+        class: OpenApiTools\PHPStan\Rules\OpenApi\Schema\Generators\LaravelSchemaNameGenerator
     propertyNameGenerator:
         class: OpenApiTools\PHPStan\Rules\OpenApi\Schema\Generators\SnakeCasePropertyNameGenerator
 
+    -
+        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\ControllerMethodValidator
+        tags:
+            - openApiTools.validators.openapi.operation
+    -
+        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\ControllerInvokeMethodValidator
+        tags:
+            - openApiTools.validators.openapi.operation
     -
         class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\DescriptionValidator
         tags:
@@ -29,6 +36,14 @@ services:
             - openApiTools.validators.openapi.operation
     -
         class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\TagCountValidator
+        tags:
+            - openApiTools.validators.openapi.operation
+    -
+        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\RequestBodyFormRequestParametersValidator
+        tags:
+            - openApiTools.validators.openapi.operation
+    -
+        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\RequestBodyBuiltinParametersValidator
         tags:
             - openApiTools.validators.openapi.operation
     -
