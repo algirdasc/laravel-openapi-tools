@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OpenApiTools\PHPStan\Helpers;
 
+use PHPStan\BetterReflection\Reflection\Adapter\FakeReflectionAttribute;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionAttribute;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionMethod;
@@ -12,7 +13,8 @@ use PHPStan\BetterReflection\Reflector\Exception\IdentifierNotFound;
 class Attributes
 {
     /**
-     * @return list<ReflectionAttribute>
+     * @param class-string $attributeName
+     * @return array<ReflectionAttribute|FakeReflectionAttribute>
      */
     static public function getAttributes(ReflectionClass|ReflectionMethod $reflection, string $attributeName): array
     {

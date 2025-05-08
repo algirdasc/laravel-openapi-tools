@@ -17,6 +17,7 @@ class SchemaProperties
             return null;
         }
 
+        /** @var Property $property */
         foreach ($schema->properties as $property) {
             if ($property->property === $name) {
                 return $property;

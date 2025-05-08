@@ -41,7 +41,7 @@ class ArrayReturn
     }
 
     /**
-     * @return list<ArrayItem>
+     * @return array<ArrayItem>
      */
     public function getItems(): array
     {
@@ -49,7 +49,7 @@ class ArrayReturn
     }
 
     /**
-     * @param list<ArrayItem> $items
+     * @param array<ArrayItem> $items
      */
     public function setItems(array $items): void
     {

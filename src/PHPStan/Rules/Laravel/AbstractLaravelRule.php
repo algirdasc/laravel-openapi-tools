@@ -9,6 +9,8 @@ use OpenApiTools\PHPStan\DTO\ArrayReturn;
 use OpenApiTools\PHPStan\Helpers\Attributes;
 use OpenApiTools\PHPStan\Rules\Laravel\FormRequest\ValidatorInterface as FormRequestValidatorInterface;
 use OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidatorInterface as ResourceValidatorInterface;;
+
+use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
 use PHPStan\Collectors\Collector;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\Node\CollectedDataNode;
@@ -35,20 +37,8 @@ abstract class AbstractLaravelRule
     ) {
     }
 
-    protected function alreadyValidated(string $class, string $name): bool
-    {
-        $cacheKey = sprintf('%s::%s::%s', static::class, $class, $name);
-        if (in_array($cacheKey, $this->validationCache)) {
-            return true;
-        }
-
-        $this->validationCache[] = $cacheKey;
-
-        return false;
-    }
-
     /**
-     * @return list<IdentifierRuleError>
+     * @return array<IdentifierRuleError>
      */
     protected function validateCollector(CollectedDataNode $node): array
     {
@@ -67,6 +57,9 @@ abstract class AbstractLaravelRule
                     continue;
                 }
 
+                /**
+                 * @var ReflectionClass $reflection
+                 */
                 $reflection = $this->reflectionProvider->getClass($arrayReturn->getClass())->getNativeReflection();
                 $schema = Attributes::getAttributes($reflection, Schema::class)[0] ?? null;
                 /** @var Schema|null $schemaInstance */

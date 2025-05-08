@@ -10,6 +10,7 @@ use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
 use OpenApiTools\PHPStan\Rules\OpenApi\Schema\Generators\SchemaNameGeneratorInterface;
 use OpenApiTools\PHPStan\Rules\OpenApi\Schema\ValidatorInterface;
 use PhpParser\Node\Stmt;
+use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\RuleErrorBuilder;
@@ -26,6 +27,7 @@ readonly class NameValidator implements ValidatorInterface
     {
         $className = (string) $node->namespacedName;
 
+        /** @var ReflectionClass $reflectionClass */
         $reflectionClass = $this->reflectionProvider->getClass($className)->getNativeReflection();
         $classSchema = Attributes::getAttributes($reflectionClass, Schema::class)[0]?->newInstance();
 

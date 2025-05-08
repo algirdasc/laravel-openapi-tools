@@ -11,7 +11,7 @@ class SnakeCasePropertyNameGenerator implements PropertyNameGeneratorInterface
 {
     public function generatePropertyName(string $property): string
     {
-        return Str::snake($name);
+        return Str::snake($property);
     }
 
     public function isDateProperty(string $property): bool

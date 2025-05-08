@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace OpenApiTools\PHPStan\Rules\Laravel\FormRequest\Collectors;
 
 use Illuminate\Foundation\Http\FormRequest;
-use OpenApiTools\PHPStan\Rules\Laravel\CollectsArrays;
+use OpenApiTools\PHPStan\Traits\CollectsArrays;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Collectors\Collector;

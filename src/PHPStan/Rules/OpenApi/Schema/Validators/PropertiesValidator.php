@@ -44,7 +44,7 @@ readonly class PropertiesValidator implements ValidatorInterface
     }
 
     /**
-     * @return list<IdentifierRuleError>
+     * @return array<IdentifierRuleError>
      * @throws ShouldNotHappenException
      */
     private function validateRecursive(Schema|Items $schema): array
@@ -52,7 +52,7 @@ readonly class PropertiesValidator implements ValidatorInterface
         $errors = [];
         $propertyNames = [];
 
-        $properties = is_array($schema->properties) ? $schema->properties : [];
+        $properties = !Generator::isDefault($schema->properties) ? $schema->properties : [];
 
         /**
          * @var PropertyNameGeneratorInterface $propertyNameGenerator

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace OpenApiTools\PHPStan\Rules\Laravel\Resource\Collectors;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use OpenApiTools\PHPStan\Rules\Laravel\CollectsArrays;
+use OpenApiTools\PHPStan\Traits\CollectsArrays;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Collectors\Collector;

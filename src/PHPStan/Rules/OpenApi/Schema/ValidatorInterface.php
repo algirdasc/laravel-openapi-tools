@@ -12,7 +12,7 @@ use PHPStan\ShouldNotHappenException;
 interface ValidatorInterface
 {
     /**
-     * @return list<IdentifierRuleError>
+     * @return array<IdentifierRuleError>
      * @throws ShouldNotHappenException
      */
     public function validate(Stmt\Class_ $node, Schema $schema): array;

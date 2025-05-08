@@ -47,8 +47,8 @@ readonly class ValidateSchemaRule implements Rule
     }
 
     /**
-     * @param list<ReflectionAttribute> $attributes
-     * @return list<IdentifierRuleError>
+     * @param array<ReflectionAttribute> $attributes
+     * @return array<IdentifierRuleError>
      * @throws ShouldNotHappenException
      */
     protected function validateAttributes(Stmt\Class_ $node, array $attributes): array
