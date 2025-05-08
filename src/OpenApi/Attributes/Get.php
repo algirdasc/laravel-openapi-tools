@@ -8,6 +8,7 @@ use App\Http\OpenApi\Parameters\Pagination\PageQueryParameter;
 use App\Http\OpenApi\Parameters\Pagination\PerPageQueryParameter;
 use App\Http\OpenApi\Parameters\Pagination\SortByQueryParameter;
 use App\Http\OpenApi\Parameters\Pagination\SortDirectionQueryParameter;
+use Illuminate\Foundation\Http\FormRequest;
 use OpenApi\Attributes\Attachable;
 use OpenApi\Attributes\ExternalDocumentation;
 use OpenApi\Attributes\Parameter;

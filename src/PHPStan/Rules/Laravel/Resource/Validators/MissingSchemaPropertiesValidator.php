@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace OpenApiTools\PHPStan\Rules\Laravel\FormRequest\Validators;
+namespace OpenApiTools\PHPStan\Rules\Laravel\Resource\Validators;
 
 use OpenApi\Attributes\Schema;
 use OpenApi\Generator;
 use OpenApiTools\PHPStan\DTO\ArrayReturn;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
-use OpenApiTools\PHPStan\Rules\Laravel\FormRequest\ValidatorInterface;
+use OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidatorInterface;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
 
@@ -28,8 +28,8 @@ class MissingSchemaPropertiesValidator implements ValidatorInterface
         }
 
         return [
-            RuleErrorBuilder::message(sprintf('Missing schema properties on FormRequest "%s" class', $arrayReturn->getClass()))
-                ->identifier(RuleIdentifier::identifier('missingRequestSchemaProperties'))
+            RuleErrorBuilder::message(sprintf('Missing schema properties on JsonResource "%s" class', $arrayReturn->getClass()))
+                ->identifier(RuleIdentifier::identifier('missingJsonResourceSchemaProperties'))
                 ->file($arrayReturn->getFile())
                 ->line($arrayReturn->getLine())
                 ->build()

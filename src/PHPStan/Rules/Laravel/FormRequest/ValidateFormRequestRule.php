@@ -9,17 +9,10 @@ use OpenApiTools\PHPStan\Rules\Laravel\FormRequest\Collectors\FormRequestArrayCo
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\CollectedDataNode;
-use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 
 class ValidateFormRequestRule extends AbstractLaravelRule implements Rule
 {
-    /**
-     * @var list<IdentifierRuleError>
-     */
-    protected array $errors = [];
-
-
     public function getNodeType(): string
     {
         return CollectedDataNode::class;

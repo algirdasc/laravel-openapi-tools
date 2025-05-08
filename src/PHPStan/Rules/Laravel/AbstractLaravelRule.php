@@ -8,7 +8,7 @@ use OpenApi\Attributes\Schema;
 use OpenApiTools\PHPStan\DTO\ArrayReturn;
 use OpenApiTools\PHPStan\Helpers\Attributes;
 use OpenApiTools\PHPStan\Rules\Laravel\FormRequest\ValidatorInterface as FormRequestValidatorInterface;
-use PhpParser\Node;
+use OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidatorInterface as ResourceValidatorInterface;;
 use PHPStan\Collectors\Collector;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\Node\CollectedDataNode;
@@ -55,7 +55,7 @@ abstract class AbstractLaravelRule
         $errors = [];
 
         /**
-         * @var array<FormRequestValidatorInterface> $validators
+         * @var array<FormRequestValidatorInterface|ResourceValidatorInterface> $validators
          */
         $validators = $this->container->getServicesByTag(sprintf('openApiTools.validators.%s', $this->getValidatorTag()));
         $collectedData = $node->get($this->getCollector());
