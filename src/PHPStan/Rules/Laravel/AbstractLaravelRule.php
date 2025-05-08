@@ -9,7 +9,7 @@ use OpenApiTools\PHPStan\DTO\ArrayReturn;
 use OpenApiTools\PHPStan\Helpers\Attributes;
 use OpenApiTools\PHPStan\Rules\Laravel\FormRequest\ValidatorInterface as FormRequestValidatorInterface;
 use OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidatorInterface as ResourceValidatorInterface;;
-
+use PhpParser\Node;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
 use PHPStan\Collectors\Collector;
 use PHPStan\DependencyInjection\Container;
@@ -22,7 +22,7 @@ abstract class AbstractLaravelRule
     abstract public function getValidatorTag(): string;
 
     /**
-     * @return class-string<Collector>
+     * @return class-string<Collector<Node\Stmt\Return_, string|null>>
      */
     abstract public function getCollector(): string;
 
@@ -33,19 +33,23 @@ abstract class AbstractLaravelRule
     }
 
     /**
-     * @return array<IdentifierRuleError>
+     * @return list<IdentifierRuleError>
      */
     protected function validateCollector(CollectedDataNode $node): array
     {
         $errors = [];
 
         /**
-         * @var array<FormRequestValidatorInterface|ResourceValidatorInterface> $validators
+         * @var list<FormRequestValidatorInterface|ResourceValidatorInterface> $validators
          */
         $validators = $this->container->getServicesByTag(sprintf('openApiTools.validators.%s', $this->getValidatorTag()));
         $collectedData = $node->get($this->getCollector());
         foreach ($collectedData as $declarations) {
             foreach ($declarations as $declaration) {
+                if ($declaration === null) {
+                    continue;
+                }
+
                 /** @var ArrayReturn $arrayReturn */
                 $arrayReturn = unserialize($declaration);
                 if ($arrayReturn->isParentScoped()) {

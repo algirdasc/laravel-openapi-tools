@@ -14,14 +14,12 @@ class Attributes
 {
     /**
      * @param class-string $attributeName
-     * @return array<ReflectionAttribute>
+     * @return list<ReflectionAttribute>
      */
     static public function getAttributes(ReflectionClass|ReflectionMethod $reflection, string $attributeName): array
     {
         try {
-            /**
-             * @var array<ReflectionAttribute> $attributes
-             */
+            /** @var list<ReflectionAttribute> $attributes */
             $attributes = $reflection->getAttributes($attributeName, ReflectionAttribute::IS_INSTANCEOF);
         } catch (IdentifierNotFound $e) {
             $attributes = [];

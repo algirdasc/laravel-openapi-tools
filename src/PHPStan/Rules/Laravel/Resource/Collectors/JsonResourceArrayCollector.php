@@ -11,6 +11,9 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Collectors\Collector;
 use PHPStan\ShouldNotHappenException;
 
+/**
+ * @implements Collector<Node\Stmt\Return_, string|null>
+ */
 class JsonResourceArrayCollector implements Collector
 {
     use CollectsArrays;
@@ -29,7 +32,7 @@ class JsonResourceArrayCollector implements Collector
             return null;
         }
 
-        if (!$scope->getClassReflection()->isSubclassOf(JsonResource::class)) {
+        if (!$scope->getClassReflection()?->isSubclassOf(JsonResource::class)) {
             return null;
         }
 

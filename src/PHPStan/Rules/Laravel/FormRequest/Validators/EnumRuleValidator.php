@@ -41,7 +41,14 @@ class EnumRuleValidator implements ValidatorInterface
                         continue;
                     }
 
-                    if ($rule->value->class->name !== Rule::class && $rule->value->name->name !== 'in') {
+                    $class = $rule->value->class;
+                    $method = $rule->value->name;
+
+                    if (!$class instanceof Node\Name || !$method instanceof Node\Identifier) {
+                        continue;
+                    }
+
+                    if ($class->name !== Rule::class && $method->name !== 'in') {
                         continue;
                     }
 

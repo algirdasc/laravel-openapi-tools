@@ -11,7 +11,7 @@ use PHPStan\Rules\IdentifierRuleError;
 interface ValidatorInterface
 {
     /**
-     * @return array<IdentifierRuleError>
+     * @return list<IdentifierRuleError>
      */
     public function validate(ArrayReturn $arrayReturn, ?Schema $schema): array;
 }

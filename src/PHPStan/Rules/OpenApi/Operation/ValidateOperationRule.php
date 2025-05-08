@@ -46,9 +46,7 @@ class ValidateOperationRule implements Rule
 
         $className = (string) $node->namespacedName;
 
-        /**
-         * @var ReflectionClass $reflectionClass
-         */
+        /** @var ReflectionClass $reflectionClass */
         $reflectionClass = $this->reflectionProvider->getClass($className)->getNativeReflection();
         $classAttributes = Attributes::getAttributes($reflectionClass, Operation::class);
         $errors = $this->validateAttributes($reflectionClass, $classAttributes);
@@ -65,19 +63,18 @@ class ValidateOperationRule implements Rule
     }
 
     /**
-     * @param array<ReflectionAttribute> $attributes
+     * @param list<ReflectionAttribute> $attributes
      * @return list<IdentifierRuleError>
      * @throws ShouldNotHappenException
      */
-    protected function validateAttributes(ReflectionClass|ReflectionMethod $reflection,array $attributes): array
+    protected function validateAttributes(ReflectionClass|ReflectionMethod $reflection, array $attributes): array
     {
         $errors = [];
 
-        /**
-         * @var array<ValidatorInterface> $validators
-         */
+        /** @var list<ValidatorInterface> $validators */
         $validators = $this->container->getServicesByTag('openApiTools.validators.openapi.operation');
         foreach ($attributes as $attribute) {
+            /** @var Operation $schemaInstance */
             $schemaInstance = $attribute->newInstance();
             foreach ($validators as $validator) {
                 $errors = [

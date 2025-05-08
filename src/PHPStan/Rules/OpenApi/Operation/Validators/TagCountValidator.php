@@ -20,7 +20,7 @@ readonly class TagCountValidator implements ValidatorInterface
         $tags = is_array($operation->tags) ? $operation->tags : [];
 
         if (count($tags) === 0) {
-            $errors[] = RuleErrorBuilder::message(sprintf('Documentation for "%s" must have at least 1 tag', $tags))
+            $errors[] = RuleErrorBuilder::message(sprintf('Path "%s" must have at least 1 tag', $operation->path))
                 ->identifier(RuleIdentifier::identifier('operationTagCountIncorrect'))
                 ->build();
         }

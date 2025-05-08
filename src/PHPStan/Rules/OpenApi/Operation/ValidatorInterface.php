@@ -13,7 +13,7 @@ use PHPStan\ShouldNotHappenException;
 interface ValidatorInterface
 {
     /**
-     * @return array<IdentifierRuleError>
+     * @return list<IdentifierRuleError>
      * @throws ShouldNotHappenException
      */
     public function validate(ReflectionClass|ReflectionMethod $reflection, Operation $operation): array;

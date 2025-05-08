@@ -44,7 +44,7 @@ readonly class PropertiesValidator implements ValidatorInterface
     }
 
     /**
-     * @return array<IdentifierRuleError>
+     * @return list<IdentifierRuleError>
      * @throws ShouldNotHappenException
      */
     private function validateRecursive(Schema|Items $schema): array

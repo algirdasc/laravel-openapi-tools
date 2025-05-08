@@ -10,6 +10,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PHPStan\Analyser\Scope;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionAttribute;
+use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\IdentifierRuleError;
@@ -43,6 +44,7 @@ readonly class ValidateSchemaRule implements Rule
 
         $className = (string) $node->namespacedName;
 
+        /** @var ReflectionClass $reflectionClass */
         $reflectionClass = $this->reflectionProvider->getClass($className)->getNativeReflection();
         $classAttributes = Attributes::getAttributes($reflectionClass, Schema::class);
 
@@ -50,19 +52,18 @@ readonly class ValidateSchemaRule implements Rule
     }
 
     /**
-     * @param array<ReflectionAttribute> $attributes
-     * @return array<IdentifierRuleError>
+     * @param list<ReflectionAttribute> $attributes
+     * @return list<IdentifierRuleError>
      * @throws ShouldNotHappenException
      */
     protected function validateAttributes(Stmt\Class_ $node, array $attributes): array
     {
         $errors = [];
 
-        /**
-         * @var array<ValidatorInterface> $validators
-         */
+        /** @var list<ValidatorInterface> $validators */
         $validators = $this->container->getServicesByTag('openApiTools.validators.openapi.schema');
         foreach ($attributes as $attribute) {
+            /** @var Schema $schemaInstance */
             $schemaInstance = $attribute->newInstance();
             foreach ($validators as $validator) {
                 $errors = [

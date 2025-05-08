@@ -11,6 +11,9 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Collectors\Collector;
 use PHPStan\ShouldNotHappenException;
 
+/**
+ * @implements Collector<Node\Stmt\Return_, string|null>
+ */
 class FormRequestArrayCollector implements Collector
 {
     use CollectsArrays;
@@ -23,13 +26,13 @@ class FormRequestArrayCollector implements Collector
     /**
      * @throws ShouldNotHappenException
      */
-    public function processNode(Node $node, Scope $scope)
+    public function processNode(Node $node, Scope $scope): ?string
     {
         if (!$node instanceof Node\Stmt\Return_) {
             return null;
         }
 
-        if (!$scope->getClassReflection()->isSubclassOf(FormRequest::class)) {
+        if (!$scope->getClassReflection()?->isSubclassOf(FormRequest::class)) {
             return null;
         }
 
