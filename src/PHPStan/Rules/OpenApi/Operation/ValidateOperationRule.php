@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace OpenApiTools\PHPStan\Rules\OpenApi\OperationRules;
+namespace OpenApiTools\PHPStan\Rules\OpenApi\Operation;
 
 use OpenApi\Annotations\Operation;
 use OpenApiTools\PHPStan\Helpers\Attributes;
 use OpenApiTools\PHPStan\Rules\OpenApi\AbstractOpenApiRule;
-use OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\Validators\DescriptionValidator;
-use OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\Validators\PathParameterValidator;
-use OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\Validators\PathValidator;
-use OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\Validators\SummaryValidator;
-use OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\Validators\TagCountValidator;
+use OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\DescriptionValidator;
+use OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\PathParameterValidator;
+use OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\PathValidator;
+use OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\SummaryValidator;
+use OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\TagCountValidator;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PHPStan\Analyser\Scope;
@@ -39,14 +39,17 @@ class ValidateOperationRule extends AbstractOpenApiRule implements Rule
 
         $reflectionClass = $this->reflectionProvider->getClass($className)->getNativeReflection();
         $classAttributes = Attributes::getAttributes($reflectionClass, Operation::class);
-        $this->validateAttributes($classAttributes);
+        $errors = $this->validateAttributes($classAttributes);
 
         foreach ($reflectionClass->getMethods() as $method) {
             $methodAttributes = Attributes::getAttributes($method, Operation::class);
-            $this->validateAttributes($methodAttributes);
+            $errors = [
+                ...$errors,
+                ...$this->validateAttributes($methodAttributes),
+            ];
         }
 
-        return $this->errors;
+        return $errors;
     }
 
     protected function getValidatorTag(): string

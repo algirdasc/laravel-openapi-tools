@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OpenApiTools\PHPStan\Rules\OpenApi\SchemaRules;
+namespace OpenApiTools\PHPStan\Rules\OpenApi\Schema;
 
 use OpenApi\Attributes\Schema;
 use OpenApiTools\PHPStan\Helpers\Attributes;
@@ -33,9 +33,8 @@ class ValidateSchemaRule extends AbstractOpenApiRule implements Rule
 
         $reflectionClass = $this->reflectionProvider->getClass($className)->getNativeReflection();
         $classAttributes = Attributes::getAttributes($reflectionClass, Schema::class);
-        $this->validateAttributes($classAttributes);
 
-        return $this->errors;
+        return $this->validateAttributes($classAttributes);
     }
 
     protected function getValidatorTag(): string

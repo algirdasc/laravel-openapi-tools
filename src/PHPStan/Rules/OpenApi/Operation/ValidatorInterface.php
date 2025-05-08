@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OpenApiTools\PHPStan\Rules\OpenApi\OperationRules;
+namespace OpenApiTools\PHPStan\Rules\OpenApi\Operation;
 
 use OpenApi\Annotations\Operation;
 use PHPStan\Rules\IdentifierRuleError;

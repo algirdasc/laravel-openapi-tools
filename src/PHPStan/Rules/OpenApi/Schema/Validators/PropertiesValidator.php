@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace OpenApiTools\PHPStan\Rules\OpenApi\SchemaRules\Validators;
+namespace OpenApiTools\PHPStan\Rules\OpenApi\Schema\Validators;
 
 use OpenApi\Attributes\Items;
 use OpenApi\Attributes\Schema;
 use OpenApi\Generator;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
-use OpenApiTools\PHPStan\Rules\OpenApi\SchemaRules\ValidatorInterface;
+use OpenApiTools\PHPStan\Rules\OpenApi\Schema\ValidatorInterface;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;

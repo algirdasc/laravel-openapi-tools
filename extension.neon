@@ -1,6 +1,7 @@
 rules:
-    - OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\ValidateOperationRule
-    - OpenApiTools\PHPStan\Rules\OpenApi\SchemaRules\ValidateSchemaRule
+    - OpenApiTools\PHPStan\Rules\OpenApi\Operation\ValidateOperationRule
+    - OpenApiTools\PHPStan\Rules\OpenApi\Schema\ValidateSchemaRule
+    - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\ValidateFormRequestRule
 
 services:
     -
@@ -28,10 +29,6 @@ services:
         tags:
             - openApiTools.validators.openapi.operation
     -
-        class: OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\Validators\ParameterReferenceValidator
-        tags:
-            - openApiTools.validators.openapi.operation
-    -
         class: OpenApiTools\PHPStan\Rules\OpenApi\SchemaRules\Validators\NameValidator
         tags:
             - openApiTools.validators.openapi.schema
@@ -39,3 +36,27 @@ services:
         class: OpenApiTools\PHPStan\Rules\OpenApi\SchemaRules\Validators\PropertiesValidator
         tags:
             - openApiTools.validators.openapi.schema
+    -
+        class: OpenApiTools\PHPStan\Rules\Laravel\FormRequest\Validators\MissingSchemaValidator
+        tags:
+            - openApiTools.validators.laravel.form_request
+    -
+        class: OpenApiTools\PHPStan\Rules\Laravel\FormRequest\Validators\MissingSchemaPropertiesValidator
+        tags:
+            - openApiTools.validators.laravel.form_request
+    -
+        class: OpenApiTools\PHPStan\Rules\Laravel\FormRequest\Validators\RequiredRuleValidator
+        tags:
+            - openApiTools.validators.laravel.form_request
+    -
+        class: OpenApiTools\PHPStan\Rules\Laravel\FormRequest\Validators\NullableRuleValidator
+        tags:
+            - openApiTools.validators.laravel.form_request
+    -
+        class: OpenApiTools\PHPStan\Rules\Laravel\FormRequest\Validators\EnumRuleValidator
+        tags:
+            - openApiTools.validators.laravel.form_request
+    -
+        class: OpenApiTools\PHPStan\Rules\Laravel\FormRequest\Collectors\FormRequestArrayCollector
+        tags:
+            - phpstan.collector

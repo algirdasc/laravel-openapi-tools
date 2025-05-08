@@ -5,7 +5,7 @@
   "license": "GPL-3.0-or-later",
   "require": {
     "php": "^8.2",
-    "illuminate/http": "^11 || ^12",
+    "laravel/framework": "^11 || ^12",
     "phpstan/phpstan": "^2.1",
     "zircote/swagger-php": "^5.0"
   },

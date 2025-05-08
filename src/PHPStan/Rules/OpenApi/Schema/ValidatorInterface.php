@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OpenApiTools\PHPStan\Rules\OpenApi\SchemaRules;
+namespace OpenApiTools\PHPStan\Rules\OpenApi\Schema;
 
 use OpenApi\Attributes\Schema;
 use PHPStan\Rules\IdentifierRuleError;
@@ -10,7 +10,7 @@ use PHPStan\Rules\IdentifierRuleError;
 interface ValidatorInterface
 {
     /**
-     * @return array<IdentifierRuleError>
+     * @return list<IdentifierRuleError>
      */
     public function validate(Schema $schema): array;
 }

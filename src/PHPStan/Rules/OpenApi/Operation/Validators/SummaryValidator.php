@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\Validators;
+namespace OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators;
 
 use OpenApi\Annotations\Operation;
 use OpenApi\Generator;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
-use OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\ValidatorInterface;
+use OpenApiTools\PHPStan\Rules\OpenApi\Operation\ValidatorInterface;
 use PHPStan\Rules\RuleErrorBuilder;
 
 class SummaryValidator implements ValidatorInterface

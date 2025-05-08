@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace OpenApiTools\PHPStan\Rules\OpenApi;
 
-use OpenApiTools\PHPStan\Rules\OpenApi\OperationRules\ValidatorInterface as OperationValidatorInterface;
-use OpenApiTools\PHPStan\Rules\OpenApi\SchemaRules\ValidatorInterface as SchemaValidatorInterface;
+use OpenApiTools\PHPStan\Rules\OpenApi\Operation\ValidatorInterface as OperationValidatorInterface;
+use OpenApiTools\PHPStan\Rules\OpenApi\Schema\ValidatorInterface as SchemaValidatorInterface;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionAttribute;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\Reflection\ReflectionProvider;
@@ -16,11 +16,6 @@ abstract class AbstractOpenApiRule
 {
     abstract protected function getValidatorTag(): string;
 
-    /**
-     * @var list<IdentifierRuleError>
-     */
-    protected array $errors = [];
-
     public function __construct(
         protected readonly ReflectionProvider $reflectionProvider,
         protected readonly Container $container
@@ -29,34 +24,28 @@ abstract class AbstractOpenApiRule
 
     /**
      * @param list<ReflectionAttribute> $attributes
+     * @return list<IdentifierRuleError>
      * @throws ShouldNotHappenException
      */
-    protected function validateAttributes(array $attributes): void
+    protected function validateAttributes(array $attributes): array
     {
-        $tagName = sprintf('openApiTools.validators.%s', $this->getValidatorTag());
+        $errors = [];
 
         /**
          * @var array<SchemaValidatorInterface|OperationValidatorInterface> $validators
          */
-        $validators = $this->container->getServicesByTag($tagName);
-
+        $validators = $this->container->getServicesByTag(sprintf('openApiTools.validators.%s', $this->getValidatorTag()));
         foreach ($attributes as $attribute) {
             $instance = $attribute->newInstance();
 
             foreach ($validators as $validator) {
-                $this->addErrors($validator->validate($instance));
+                $errors = [
+                    ...$errors,
+                    ...$validator->validate($instance),
+                ];
             }
         }
-    }
 
-    /**
-     * @param list<IdentifierRuleError> $errors
-     */
-    protected function addErrors(array $errors): void
-    {
-        $this->errors = [
-            ...$this->errors,
-            ...$errors
-        ];
+        return $errors;
     }
 }
