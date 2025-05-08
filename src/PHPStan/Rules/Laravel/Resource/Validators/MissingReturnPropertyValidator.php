@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace OpenApiTools\PHPStan\Rules\Laravel\Resource\Validators;
 
 use OpenApi\Attributes\Schema;
+use OpenApi\Generator;
 use OpenApiTools\PHPStan\DTO\ArrayReturn;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
 use OpenApiTools\PHPStan\Helpers\SchemaProperties;
@@ -21,7 +22,7 @@ class MissingReturnPropertyValidator implements ValidatorInterface
      */
     public function validate(ArrayReturn $arrayReturn, ?Schema $schema): array
     {
-        if ($schema === null) {
+        if (Generator::isDefault($schema?->properties) || empty($schema?->properties)) {
             return [];
         }
 
@@ -42,8 +43,8 @@ class MissingReturnPropertyValidator implements ValidatorInterface
 
         $returnDiff = array_diff_key($schemaProperties, $returnedProperties);
         foreach ($returnDiff as $property => $line) {
-            $errors[] = RuleErrorBuilder::message(sprintf('Schema property "%s" is not returned in JsonResource "%s" class', $property, $arrayReturn->getClass())) // @phpcs:ignore
-            ->identifier(RuleIdentifier::identifier('missingJsonResourceReturnProperty'))
+            $errors[] = RuleErrorBuilder::message(sprintf('Schema property "%s" is not returned in JsonResource "%s" class', $property, $arrayReturn->getClass()))
+                ->identifier(RuleIdentifier::identifier('missingJsonResourceReturnProperty'))
                 ->file($arrayReturn->getFile())
                 ->line($line)
                 ->build();

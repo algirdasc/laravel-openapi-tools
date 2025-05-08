@@ -75,6 +75,10 @@ services:
         tags:
             - openApiTools.validators.laravel.resource
     -
+        class: OpenApiTools\PHPStan\Rules\Laravel\Resource\Validators\BooleanReturnPropertyValidator
+        tags:
+            - openApiTools.validators.laravel.resource
+    -
         class: OpenApiTools\PHPStan\Rules\Laravel\Resource\Collectors\JsonResourceArrayCollector
         tags:
             - phpstan.collector
