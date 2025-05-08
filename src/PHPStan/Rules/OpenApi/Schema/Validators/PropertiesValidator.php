@@ -8,12 +8,15 @@ use OpenApi\Attributes\Items;
 use OpenApi\Attributes\Schema;
 use OpenApi\Generator;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
+use OpenApiTools\PHPStan\Rules\OpenApi\Schema\Generators\PropertyNameGeneratorInterface;
 use OpenApiTools\PHPStan\Rules\OpenApi\Schema\ValidatorInterface;
+use PhpParser\Node\Stmt;
+use PHPStan\DependencyInjection\Container;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
 
-class PropertiesValidator implements ValidatorInterface
+readonly class PropertiesValidator implements ValidatorInterface
 {
     private const array PROPERTY_TYPES = [
         'null', 'boolean', 'object', 'array', 'number', 'string', 'integer',
@@ -23,11 +26,20 @@ class PropertiesValidator implements ValidatorInterface
         'int32', 'int64', 'float', 'double', 'password', 'date-time',
     ];
 
+    public function __construct(
+        private Container $container,
+    ) {
+    }
+
     /**
      * @throws ShouldNotHappenException
      */
-    public function validate(Schema $schema): array
+    public function validate(Stmt\Class_ $node, Schema $schema): array
     {
+        if (!Generator::isDefault($schema->type) && $schema->type !== 'object') {
+            return [];
+        }
+
         return $this->validateRecursive($schema);
     }
 
@@ -41,6 +53,11 @@ class PropertiesValidator implements ValidatorInterface
         $propertyNames = [];
 
         $properties = is_array($schema->properties) ? $schema->properties : [];
+
+        /**
+         * @var PropertyNameGeneratorInterface $propertyNameGenerator
+         */
+        $propertyNameGenerator = $this->container->getService('propertyNameGenerator');
 
         foreach ($properties as $property) {
             $propertyNames[] = $property->property;
@@ -57,7 +74,25 @@ class PropertiesValidator implements ValidatorInterface
                     ->build();
             }
 
-            // TODO: check for snake case
+            $generatedPropertyName = $propertyNameGenerator->generatePropertyName($property->property);
+            if ($property->property !== $generatedPropertyName) {
+                $errors[] = RuleErrorBuilder::message(sprintf('Property "%s" has incorrect case, expected "%s"', $property->property, $generatedPropertyName))
+                    ->identifier(RuleIdentifier::identifier('schemaPropertyNameCaseIncorrect'))
+                    ->build();
+            }
+
+            $isDateProperty = $propertyNameGenerator->isDateProperty($property->property);
+            if ($isDateProperty && $property->type !== 'string') {
+                $errors[] = RuleErrorBuilder::message(sprintf('Property "%s" has must have "string" type', $property->property))
+                    ->identifier(RuleIdentifier::identifier('schemaDatePropertyTypeMissing'))
+                    ->build();
+            }
+
+            if ($isDateProperty && $property->format !== 'date-time') {
+                $errors[] = RuleErrorBuilder::message(sprintf('Property "%s" has must have "date-time" format', $property->property))
+                    ->identifier(RuleIdentifier::identifier('schemaDatePropertyFormatMissing'))
+                    ->build();
+            }
 
             if ($property->items instanceof Items) {
                 $errors = [

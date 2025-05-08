@@ -1,0 +1,21 @@
+<?php
+
+declare(strict_types=1);
+
+namespace OpenApiTools\PHPStan\Rules\OpenApi\Schema\Generators;
+
+use Illuminate\Support\Str;
+use PhpParser\Node\Stmt;
+
+class SnakeCasePropertyNameGenerator implements PropertyNameGeneratorInterface
+{
+    public function generatePropertyName(string $property): string
+    {
+        return Str::snake($name);
+    }
+
+    public function isDateProperty(string $property): bool
+    {
+        return str_ends_with($property, '_at');
+    }
+}

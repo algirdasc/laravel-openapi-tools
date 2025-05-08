@@ -6,8 +6,10 @@ rules:
     - OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidateResourceRule
 
 services:
-    SchemaNameValidator:
-        class: OpenaApiTools\PHPStan\Rules\OpenApi\SchemaName\LaravelSchemaNameValidator
+    schemaNameGenerator:
+        class: OpenApiTools\PHPStan\Rules\OpenApi\SchemaName\Generators\LaravelSchemaNameGenerator
+    propertyNameGenerator:
+        class: OpenApiTools\PHPStan\Rules\OpenApi\Schema\Generators\SnakeCasePropertyNameGenerator
 
     -
         class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\DescriptionValidator

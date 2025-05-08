@@ -2,42 +2,28 @@
 
 declare(strict_types=1);
 
-namespace OpenApiTools\PHPStan\Rules\OpenApi\SchemaName;
+namespace OpenApiTools\PHPStan\Rules\OpenApi\Schema\Validators;
 
 use OpenApi\Attributes\Schema;
 use OpenApiTools\PHPStan\Helpers\Attributes;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
-use PhpParser\Node;
+use OpenApiTools\PHPStan\Rules\OpenApi\Schema\Generators\SchemaNameGeneratorInterface;
+use OpenApiTools\PHPStan\Rules\OpenApi\Schema\ValidatorInterface;
 use PhpParser\Node\Stmt;
-use PHPStan\Analyser\Scope;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use PHPStan\ShouldNotHappenException;
 
-class ValidateSchemaNameRule implements Rule
+readonly class NameValidator implements ValidatorInterface
 {
     public function __construct(
-        private readonly ReflectionProvider $reflectionProvider,
-        private readonly Container $container,
+        private ReflectionProvider $reflectionProvider,
+        private Container          $container,
     ) {
     }
 
-    public function getNodeType(): string
+    public function validate(Stmt\Class_ $node, Schema $schema): array
     {
-        return Stmt\Class_::class;
-    }
-
-    /**
-     * @throws ShouldNotHappenException
-     */
-    public function processNode(Node $node, Scope $scope): array
-    {
-        if (!$node instanceof Stmt\Class_) {
-            return [];
-        }
-
         $className = (string) $node->namespacedName;
 
         $reflectionClass = $this->reflectionProvider->getClass($className)->getNativeReflection();
@@ -48,11 +34,10 @@ class ValidateSchemaNameRule implements Rule
         }
 
         /**
-         * @var SchemaNameValidatorInterface $validator
+         * @var SchemaNameGeneratorInterface $generator
          */
-        $validator = $this->container->getService('SchemaNameValidator');
-
-        $preferredSchemaName = $validator->getPreferredSchemaName($node);
+        $generator = $this->container->getService('schemaNameGenerator');
+        $preferredSchemaName = $generator->generateSchemaName($node);
         if ($classSchema->schema === $preferredSchemaName) {
             return [];
         }
