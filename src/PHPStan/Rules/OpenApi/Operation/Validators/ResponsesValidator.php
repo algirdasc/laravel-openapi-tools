@@ -24,7 +24,7 @@ readonly class ResponsesValidator implements ValidatorInterface
         $errors = [];
 
         $responses = !Generator::isDefault($operation->responses) ? $operation->responses : [];
-        $hasRequestBody = Generator::isDefault($operation->requestBody);
+        $hasRequestBody = !Generator::isDefault($operation->requestBody);
 
         $successResponseFound = false;
         $errorResponseFound = false;
