@@ -12,7 +12,7 @@ use OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidatorInterface;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
 
-class MissingSchemaPropertiesValidator implements ValidatorInterface
+readonly class MissingSchemaPropertiesValidator implements ValidatorInterface
 {
     /**
      * @throws ShouldNotHappenException

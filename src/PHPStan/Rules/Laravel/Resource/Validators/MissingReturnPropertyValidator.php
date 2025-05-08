@@ -15,14 +15,14 @@ use PhpParser\Node;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
 
-class MissingReturnPropertyValidator implements ValidatorInterface
+readonly class MissingReturnPropertyValidator implements ValidatorInterface
 {
     /**
      * @throws ShouldNotHappenException
      */
     public function validate(ArrayReturn $arrayReturn, ?Schema $schema): array
     {
-        if (Generator::isDefault($schema?->properties) || empty($schema?->properties) || empty($arrayReturn->getItems())) {
+        if (Generator::isDefault($schema?->properties) || empty($schema->properties) || empty($arrayReturn->getItems())) {
             return [];
         }
 
@@ -34,7 +34,7 @@ class MissingReturnPropertyValidator implements ValidatorInterface
          * @var Node\ArrayItem $item
          */
         foreach (RuleGenerator::iterate($arrayReturn) as [$property, $item]) {
-            $returnedProperties[$property] = $item->key->getLine();
+            $returnedProperties[$property] = (int) $item->key?->getLine();
         }
 
         foreach ($schema->properties as $propertySchema) {

@@ -13,14 +13,14 @@ use OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidatorInterface;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
 
-class BooleanReturnPropertyValidator implements ValidatorInterface
+readonly class BooleanReturnPropertyValidator implements ValidatorInterface
 {
     /**
      * @throws ShouldNotHappenException
      */
     public function validate(ArrayReturn $arrayReturn, ?Schema $schema): array
     {
-        if (Generator::isDefault($schema?->properties) || empty($schema?->properties)) {
+        if (Generator::isDefault($schema?->properties) || empty($schema->properties)) {
             return [];
         }
 
@@ -28,7 +28,7 @@ class BooleanReturnPropertyValidator implements ValidatorInterface
 
         foreach ($schema->properties as $property) {
             if ($property->type === 'boolean' && !str_starts_with($property->property, 'is_')) {
-                $errors[] = RuleErrorBuilder::message(sprintf('Schema property "%s" is not returned in JsonResource "%s" class', $property, $arrayReturn->getClass()))
+                $errors[] = RuleErrorBuilder::message(sprintf('Schema property "%s" is not returned in JsonResource "%s" class', $property->property, $arrayReturn->getClass()))
                     ->identifier(RuleIdentifier::identifier('booleanInJsonResourceMustStartWithIs'))
                     ->file($arrayReturn->getFile())
                     ->line($arrayReturn->getLine())

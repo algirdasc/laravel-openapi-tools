@@ -11,7 +11,7 @@ use OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidatorInterface;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
 
-class MissingSchemaValidator implements ValidatorInterface
+readonly class MissingSchemaValidator implements ValidatorInterface
 {
     /**
      * @throws ShouldNotHappenException

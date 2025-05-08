@@ -14,7 +14,7 @@ use PhpParser\Node;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
 
-class MissingSchemaPropertyValidator implements ValidatorInterface
+readonly class MissingSchemaPropertyValidator implements ValidatorInterface
 {
     /**
      * @throws ShouldNotHappenException

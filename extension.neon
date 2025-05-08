@@ -31,14 +31,6 @@ services:
         tags:
             - openApiTools.validators.openapi.operation
     -
-        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\SummaryValidator
-        tags:
-            - openApiTools.validators.openapi.operation
-    -
-        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\TagCountValidator
-        tags:
-            - openApiTools.validators.openapi.operation
-    -
         class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\RequestBodyFormRequestParametersValidator
         tags:
             - openApiTools.validators.openapi.operation
@@ -48,6 +40,14 @@ services:
             - openApiTools.validators.openapi.operation
     -
         class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\RequestBodyReferenceValidator
+        tags:
+            - openApiTools.validators.openapi.operation
+    -
+        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\SummaryValidator
+        tags:
+            - openApiTools.validators.openapi.operation
+    -
+        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\TagCountValidator
         tags:
             - openApiTools.validators.openapi.operation
     -

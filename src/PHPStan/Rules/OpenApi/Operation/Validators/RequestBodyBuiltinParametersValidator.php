@@ -53,6 +53,10 @@ readonly class RequestBodyBuiltinParametersValidator implements ValidatorInterfa
             $orderedParameters[] = $parameter->getName();
         }
 
+        if (!$orderedParameters) {
+            return $errors;
+        }
+
         preg_match_all('/{(.*?)}/', $operation->path, $parameters);
         $parametersDiff = array_diff_assoc($parameters[1], $orderedParameters);
         if ($parametersDiff) {
