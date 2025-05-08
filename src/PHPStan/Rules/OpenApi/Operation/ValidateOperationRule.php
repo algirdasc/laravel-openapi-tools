@@ -26,6 +26,11 @@ class ValidateOperationRule extends AbstractOpenApiRule implements Rule
         return Stmt\Class_::class;
     }
 
+    public function getValidatorTag(): string
+    {
+        return 'openapi.operation';
+    }
+
     /**
      * @throws ShouldNotHappenException
      */
@@ -50,10 +55,5 @@ class ValidateOperationRule extends AbstractOpenApiRule implements Rule
         }
 
         return $errors;
-    }
-
-    protected function getValidatorTag(): string
-    {
-        return 'openapi.operation';
     }
 }

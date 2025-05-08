@@ -33,7 +33,7 @@ class RequestBodyReferenceValidator implements ValidatorInterface
             ? ($requestBody->_unmerged[0]->ref ?? null)
             : ($requestBody->content->ref ?? null);
 
-        if ($contentReference === null) {
+        if ($contentReference === null || Generator::isDefault($contentReference)) {
             return $errors;
         }
 

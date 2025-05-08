@@ -14,7 +14,7 @@ use PHPStan\ShouldNotHappenException;
 
 abstract class AbstractOpenApiRule
 {
-    abstract protected function getValidatorTag(): string;
+    abstract public function getValidatorTag(): string;
 
     public function __construct(
         protected readonly ReflectionProvider $reflectionProvider,
@@ -36,12 +36,11 @@ abstract class AbstractOpenApiRule
          */
         $validators = $this->container->getServicesByTag(sprintf('openApiTools.validators.%s', $this->getValidatorTag()));
         foreach ($attributes as $attribute) {
-            $instance = $attribute->newInstance();
-
+            $schemaInstance = $attribute->newInstance();
             foreach ($validators as $validator) {
                 $errors = [
                     ...$errors,
-                    ...$validator->validate($instance),
+                    ...$validator->validate($schemaInstance),
                 ];
             }
         }

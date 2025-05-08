@@ -22,12 +22,12 @@ abstract class AbstractLaravelRule
      */
     private array $validationCache = [];
 
-    abstract protected function getValidatorTag(): string;
+    abstract public function getValidatorTag(): string;
 
     /**
      * @return class-string<Collector>
      */
-    abstract protected function getCollector(): string;
+    abstract public function getCollector(): string;
 
     public function __construct(
         protected readonly ReflectionProvider $reflectionProvider,
@@ -69,11 +69,13 @@ abstract class AbstractLaravelRule
 
                 $reflection = $this->reflectionProvider->getClass($arrayReturn->getClass())->getNativeReflection();
                 $schema = Attributes::getAttributes($reflection, Schema::class)[0] ?? null;
+                /** @var Schema|null $schemaInstance */
+                $schemaInstance = $schema?->newInstance();
 
                 foreach ($validators as $validator) {
                     $errors = [
                         ...$errors,
-                        ...$validator->validate($arrayReturn, $schema)
+                        ...$validator->validate($arrayReturn, $schemaInstance)
                     ];
                 }
             }

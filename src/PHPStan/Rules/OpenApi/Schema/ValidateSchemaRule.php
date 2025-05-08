@@ -20,6 +20,11 @@ class ValidateSchemaRule extends AbstractOpenApiRule implements Rule
         return Stmt\Class_::class;
     }
 
+    public function getValidatorTag(): string
+    {
+        return 'openapi.schema';
+    }
+
     /**
      * @throws ShouldNotHappenException
      */
@@ -35,10 +40,5 @@ class ValidateSchemaRule extends AbstractOpenApiRule implements Rule
         $classAttributes = Attributes::getAttributes($reflectionClass, Schema::class);
 
         return $this->validateAttributes($classAttributes);
-    }
-
-    protected function getValidatorTag(): string
-    {
-        return 'openapi.schema';
     }
 }

@@ -25,6 +25,16 @@ class ValidateFormRequestRule extends AbstractLaravelRule implements Rule
         return CollectedDataNode::class;
     }
 
+    public function getValidatorTag(): string
+    {
+        return 'laravel.form_request';
+    }
+
+    public function getCollector(): string
+    {
+        return FormRequestArrayCollector::class;
+    }
+
     public function processNode(Node $node, Scope $scope): array
     {
         if (!$node instanceof CollectedDataNode) {
@@ -32,15 +42,5 @@ class ValidateFormRequestRule extends AbstractLaravelRule implements Rule
         }
 
         return $this->validateCollector($node);
-    }
-
-    protected function getValidatorTag(): string
-    {
-        return 'laravel.form_request';
-    }
-
-    protected function getCollector(): string
-    {
-        return FormRequestArrayCollector::class;
     }
 }
