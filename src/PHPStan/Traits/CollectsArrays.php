@@ -23,6 +23,10 @@ trait CollectsArrays
             return null;
         }
 
+        if ($scope->getParentScope() !== null) {
+            return null;
+        }
+
         /**
          * @var ReflectionClass $reflection
          */
@@ -34,7 +38,6 @@ trait CollectsArrays
             file: $classReflection->getFileName() ?: $classReflection->getName(),
             line: $classReflection->getStartLine(),
             schema: $schema,
-            isParentScoped: $scope->getParentScope() !== null,
         );
 
         // if return is not array or current scope has parent scope (sub-return), skip

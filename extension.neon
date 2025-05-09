@@ -19,7 +19,7 @@ rules:
     - OpenApiTools\PHPStan\Rules\Laravel\Resource\BooleanPropertyRule
     - OpenApiTools\PHPStan\Rules\Laravel\Resource\MissingReturnPropertyRule
     - OpenApiTools\PHPStan\Rules\Laravel\Resource\MissingSchemaPropertiesRule
-    - OpenApiTools\PHPStan\Rules\Laravel\Resource\MissingSchemaPropertRule
+    - OpenApiTools\PHPStan\Rules\Laravel\Resource\MissingSchemaPropertyRule
 
 services:
     schemaNameGenerator:

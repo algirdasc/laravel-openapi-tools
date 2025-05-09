@@ -16,7 +16,6 @@ class ReturnStatement
         private readonly string $class,
         private readonly string $file,
         private readonly int    $line,
-        private readonly bool   $isParentScoped,
         private readonly ?Schema $schema,
         private array $items = [],
     ) {
@@ -35,11 +34,6 @@ class ReturnStatement
     public function getLine(): int
     {
         return $this->line;
-    }
-
-    public function isParentScoped(): bool
-    {
-        return $this->isParentScoped;
     }
 
     public function getSchema(): ?Schema
