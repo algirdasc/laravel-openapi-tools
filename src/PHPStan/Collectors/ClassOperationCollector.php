@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace OpenApiTools\PHPStan\Collectors;
 
 use OpenApi\Annotations\Operation;
-use OpenApi\Attributes\Schema;
 use OpenApiTools\PHPStan\DTO\OperationAttribute;
-use OpenApiTools\PHPStan\DTO\SchemaAttribute;
 use OpenApiTools\PHPStan\Helpers\Attributes;
-use OpenApiTools\PHPStan\Helpers\NodeHelper;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
@@ -49,7 +46,7 @@ readonly class ClassOperationCollector implements Collector
                 $resolvedAttributeName = $scope->resolveName($attribute->name);
                 $attributeReflection = $this->reflectionProvider->getClass($resolvedAttributeName);
 
-                if (!$attributeReflection->isSubclassOf(Operation::class)) {
+                if (!$attributeReflection->isSubclassOfClass($this->reflectionProvider->getClass(Operation::class))) {
                     continue;
                 }
 

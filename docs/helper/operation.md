@@ -2,7 +2,7 @@
 
 Operation helpers extends standard OpenApi operation attributes by adding addition features, which help defining API specs.
 
-## queryParameters
+## `queryParameters`
 
 Query parameters adds `FormRequest` schema properties to query parameters without explicitly copying them. Let's say
 you have following Request in your project:
@@ -38,8 +38,8 @@ class MyQueryRequest extends FormRequest
     }
 }
 ```
-
-You can use this request in `queryParameters` and helper class will parse the request schema and add schema properties to query parameters:
+You'd have to copy schema properties to `parameters` in your operation attribute, which would create duplication, and we do not want that, but using `queryParameters` helper class will parse the request schema 
+and add schema properties to query parameters:
 
 ```php
 <?php

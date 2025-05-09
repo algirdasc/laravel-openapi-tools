@@ -2,25 +2,11 @@
 
 This toolkit provides rules for PHPStan and utilities for working with OpenAPI specifications in Laravel framework.
 
+It should help you maintain documentation of your codebase more easily and lower data duplication as much as possible. 
+
 Toolkit uses [PHPStan](https://phpstan.org) to statically check code for errors, leading to Swagger/OpenAPI specification errors.
-Only OpenApi attributes with named arguments is supported and checked.
 
-Rule set includes following checks:
-
-- schema property type & format check
-- property inconsistencies between declared OpenApi schema and `JsonResource` return array or `FormRequest` validation rules (when possible):
-  - does `JsonResource` fields declared in schema and vice versa
-  - does `FormRequest` validations rules declared in schema properties with valid options (`required`, `nullabe`, `enumarable`, etc.)
-- missing or incorrect operation parameters, properties, response types
-  - does response include success, error, unprocessable or authorization errors
-  - is request body provided, when `FormRequest` has validation
-  - is request body referencing to declared schema
-  - is parameter count & type is exactly the same as in controller method and vice versa
-- naming consistency checks:
-  - does returned booleans start with `is_` prefix
-  - does returned dates has set `type` and `format`
-  - does request has all enumerated values listed
-- more...
+__!! Only OpenApi attributes with named arguments is supported and checked !!__
 
 ## Requirements
 
@@ -52,6 +38,51 @@ vendor/bin/phpstan
 
 - [Operation Helpers](/docs/helper/operation.md)
 
+## Rules
+
+- OpenApiTools\PHPStan\Rules\OpenApi\Schema\SchemaNameRule
+  - todo;
+- OpenApiTools\PHPStan\Rules\OpenApi\Schema\PropertiesRule
+  - todo;
+- OpenApiTools\PHPStan\Rules\OpenApi\Schema\RequiredPropertiesRule
+  - todo;
+- OpenApiTools\PHPStan\Rules\OpenApi\Operation\ControllerInvokeMethodRule
+  - todo;
+- OpenApiTools\PHPStan\Rules\OpenApi\Operation\ControllerMethodParametersRule
+  - todo;
+- OpenApiTools\PHPStan\Rules\OpenApi\Operation\ControllerMethodsRule
+  - todo;
+- OpenApiTools\PHPStan\Rules\OpenApi\Operation\DescriptionRule
+  - todo;
+- OpenApiTools\PHPStan\Rules\OpenApi\Operation\PathRule
+  - todo;
+- OpenApiTools\PHPStan\Rules\OpenApi\Operation\RequestBodyReferenceRule
+  - todo;
+- OpenApiTools\PHPStan\Rules\OpenApi\Operation\ResponsesRule
+  - todo;
+- OpenApiTools\PHPStan\Rules\OpenApi\Operation\SummaryRule
+  - todo;
+- OpenApiTools\PHPStan\Rules\OpenApi\Operation\TagCountRule
+  - todo;
+- OpenApiTools\PHPStan\Rules\Laravel\FormRequest\EnumRule
+  - todo;
+- OpenApiTools\PHPStan\Rules\Laravel\FormRequest\MissingSchemaPropertiesRule
+  - todo;
+- OpenApiTools\PHPStan\Rules\Laravel\FormRequest\MissingSchemaRule
+  - todo;
+- OpenApiTools\PHPStan\Rules\Laravel\FormRequest\NullableRule
+  - todo;
+- OpenApiTools\PHPStan\Rules\Laravel\FormRequest\RequiredRule
+  - todo;
+- OpenApiTools\PHPStan\Rules\Laravel\Resource\BooleanPropertyRule
+  - todo;
+- OpenApiTools\PHPStan\Rules\Laravel\Resource\MissingReturnPropertyRule
+  - todo;
+- OpenApiTools\PHPStan\Rules\Laravel\Resource\MissingSchemaPropertiesRule
+  - todo;
+- OpenApiTools\PHPStan\Rules\Laravel\Resource\MissingSchemaPropertyRule
+  - todo;
+  
 ## Customizations
 
 ### Ignoring rules

@@ -35,10 +35,6 @@ readonly class ClassSchemaCollector implements Collector
             return null;
         }
 
-        if (!$scope->isInClass()) {
-            return null;
-        }
-
         $className = (string) $node->namespacedName;
 
         /** @var ReflectionClass $classReflection */
@@ -49,7 +45,7 @@ readonly class ClassSchemaCollector implements Collector
                 $resolvedAttributeName = $scope->resolveName($attribute->name);
                 $attributeReflection = $this->reflectionProvider->getClass($resolvedAttributeName);
 
-                if (!$attributeReflection->isSubclassOf(Schema::class)) {
+                if ($resolvedAttributeName !== Schema::class && !$attributeReflection->isSubclassOf(Schema::class)) {
                     continue;
                 }
 

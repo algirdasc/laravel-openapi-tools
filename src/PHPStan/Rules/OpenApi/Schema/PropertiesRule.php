@@ -11,14 +11,9 @@ use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
 use OpenApiTools\PHPStan\Rules\Abstract\RecursivePropertiesRule;
 use PhpParser\Node;
 use PHPStan\DependencyInjection\Container;
-use PHPStan\Node\CollectedDataNode;
-use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
-/**
- * @implements Rule<CollectedDataNode>
- */
-class PropertiesRule extends RecursivePropertiesRule implements Rule
+class PropertiesRule extends RecursivePropertiesRule
 {
     private const array PROPERTY_TYPES = [
         'null', 'boolean', 'object', 'array', 'number', 'string', 'integer',
