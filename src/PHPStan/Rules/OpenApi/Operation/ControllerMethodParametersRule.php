@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace OpenApiTools\PHPStan\Rules\OpenApi\Operation;
 
-use OpenApi\Annotations\Operation;
 use OpenApiTools\PHPStan\Collectors\ClassOperationCollector;
 use OpenApiTools\PHPStan\Collectors\MethodOperationCollector;
 use OpenApiTools\PHPStan\DTO\OperationAttribute;
@@ -13,19 +12,17 @@ use OpenApiTools\PHPStan\Traits\IteratesOverCollection;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
-use PHPStan\BetterReflection\Reflection\Adapter\ReflectionMethod;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionNamedType;
 use PHPStan\Node\CollectedDataNode;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
-use Throwable;
 
 /**
  * @implements Rule<CollectedDataNode>
  */
-readonly class ControllerMethodParametersValidator implements Rule
+readonly class ControllerMethodParametersRule implements Rule
 {
     use IteratesOverCollection;
 

@@ -20,7 +20,7 @@ use PHPStan\ShouldNotHappenException;
 /**
  * @implements Rule<CollectedDataNode>
  */
-readonly class MissingSchemaPropertyValidator implements Rule
+readonly class MissingSchemaPropertyRule implements Rule
 {
     use IteratesOverCollection;
     use IteratesOverReturnStatement;

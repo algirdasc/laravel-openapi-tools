@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Tests\PHPStan\Rules\OpenApi\Operation;
 
-use OpenApiTools\PHPStan\Rules\OpenApi\Operation\ControllerInvokeMethodValidator;
+use OpenApiTools\PHPStan\Rules\OpenApi\Operation\ControllerInvokeMethodRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use Tests\CustomRuleTestCase;
 
 /**
- * @extends CustomRuleTestCase<ControllerInvokeMethodValidator>
+ * @extends CustomRuleTestCase<ControllerInvokeMethodRule>
  */
 class TagCountRuleTest extends RuleTestCase
 {
     protected function getRule(): Rule
     {
-        return new ControllerInvokeMethodValidator();
+        return new ControllerInvokeMethodRule();
     }
 
     public function testRule(): void

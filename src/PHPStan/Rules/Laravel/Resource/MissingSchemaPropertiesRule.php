@@ -16,7 +16,10 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
 
-readonly class MissingSchemaPropertiesValidator implements Rule
+/**
+ * @implements Rule<CollectedDataNode>
+ */
+readonly class MissingSchemaPropertiesRule implements Rule
 {
     use IteratesOverCollection;
 

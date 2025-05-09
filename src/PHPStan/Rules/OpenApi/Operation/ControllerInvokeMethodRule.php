@@ -18,7 +18,7 @@ use PHPStan\ShouldNotHappenException;
 /**
  * @implements Rule<CollectedDataNode>
  */
-readonly class ControllerInvokeMethodValidator implements Rule
+readonly class ControllerInvokeMethodRule implements Rule
 {
     use IteratesOverCollection;
 
