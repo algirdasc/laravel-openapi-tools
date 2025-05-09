@@ -18,14 +18,6 @@ use PHPStan\ShouldNotHappenException;
 
 readonly class PropertiesValidator implements ValidatorInterface
 {
-    private const array PROPERTY_TYPES = [
-        'null', 'boolean', 'object', 'array', 'number', 'string', 'integer',
-    ];
-
-    private const array PROPERTY_FORMATS = [
-        'int32', 'int64', 'float', 'double', 'password', 'date-time',
-    ];
-
     public function __construct(
         private Container $container,
     ) {

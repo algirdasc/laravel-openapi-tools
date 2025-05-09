@@ -27,7 +27,7 @@ abstract class AbstractSchemaPropertiesRule implements Rule
      * @return list<IdentifierRuleError>
      * @throws ShouldNotHappenException
      */
-    abstract public function validateProperty(Property $property, Node\ArrayItem $node): array;
+    abstract public function validateProperty(Property $property, Node\ArrayItem $node, ?Node\Expr\Array_ $required): array;
 
     public function getNodeType(): string
     {
@@ -52,10 +52,12 @@ abstract class AbstractSchemaPropertiesRule implements Rule
             $schema = $schemaAttribute->getSchema();
             /** @var Node\Expr\Array_ $nodes */
             $nodes = NodeHelper::findInArgsByName($schemaAttribute->getAttribute()->args, 'properties');
+            /** @var Node\Expr\Array_ $required */
+            $required = NodeHelper::findInArgsByName($schemaAttribute->getAttribute()->args, 'required');
 
             $errors = [
                 ...$errors,
-                ...$this->validateProperties($nodes,  $schema->properties),
+                ...$this->validateProperties($nodes,  $schema->properties, $required),
             ];
         }
 
@@ -67,7 +69,7 @@ abstract class AbstractSchemaPropertiesRule implements Rule
      * @return list<IdentifierRuleError>
      * @throws ShouldNotHappenException
      */
-    private function validateProperties(Node\Expr\Array_ $propertyNodes, array|string $properties): array
+    private function validateProperties(Node\Expr\Array_ $propertyNodes, array|string $properties, ?Node\Expr\Array_ $required): array
     {
         if (!is_array($properties)) {
             return [];
@@ -79,31 +81,39 @@ abstract class AbstractSchemaPropertiesRule implements Rule
         foreach ($properties as $property) {
             /** @var Node\ArrayItem $propertyNode */
             $propertyNode = $this->findPropertyNodeFromArray($propertyNodes, $property->property);
+            /** @var Node\Expr\New_ $propertyNodeArgs */
+            $propertyNodeArgs = $propertyNode->value;
 
             if (!Generator::isDefault($property->properties)) {
                 /** @var Node\Expr\Array_ $propertiesNode */
-                $propertiesNode = NodeHelper::findInArgsByName($propertyNode->value->args, 'properties');
+                $propertiesNode = NodeHelper::findInArgsByName($propertyNodeArgs->args, 'properties');
+                /** @var Node\Expr\Array_ $required */
+                $required = NodeHelper::findInArgsByName($propertyNodeArgs->args, 'required');
 
                 $errors = [
                     ...$errors,
-                    ...$this->validateProperties($propertiesNode, $property->properties),
+                    ...$this->validateProperties($propertiesNode, $property->properties, $required),
                 ];
             }
 
             if (!Generator::isDefault($property->items)) {
                 /** @var Node\Expr\New_ $itemsNode */
-                $itemsNode = NodeHelper::findInArgsByName($propertyNode->value->args, 'items');
-
+                $itemsNode = NodeHelper::findInArgsByName($propertyNodeArgs->args, 'items');
                 /** @var Node\Expr\Array_ $propertiesNodes */
                 $propertiesNodes = NodeHelper::findInArgsByName($itemsNode->args, 'properties');
+                /** @var Node\Expr\Array_ $required */
+                $required = NodeHelper::findInArgsByName($itemsNode->args, 'required');
 
                 $errors = [
                     ...$errors,
-                    ...$this->validateProperties($propertiesNodes, $property->items->properties),
+                    ...$this->validateProperties($propertiesNodes, $property->items->properties, $required),
                 ];
             }
 
-            $this->validateProperty($property, $propertyNode);
+            $errors = [
+                ...$errors,
+                ...$this->validateProperty($property, $propertyNode, $required),
+            ];
         }
 
         return $errors;
