@@ -56,7 +56,7 @@ readonly class PathRule implements Rule
             $pathNode = NodeHelper::findInArgsByName($operationAttribute->getAttribute()->args, 'path');
 
             if (!str_starts_with($operation->path, '/')) {
-                $errors[] = RuleErrorBuilder::message(sprintf('Path "%s" must start with /', $operation->path))
+                $errors[] = RuleErrorBuilder::message(sprintf('Path "%s" must start leading slash', $operation->path))
                     ->identifier(RuleIdentifier::identifier('operationPathDoesNotStartWithSlash'))
                     ->file($operationAttribute->getFile())
                     ->line($pathNode?->getLine() ?? $operationAttribute->getAttribute()->getLine())

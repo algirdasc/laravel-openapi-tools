@@ -62,6 +62,8 @@ readonly class MissingReturnPropertyRule implements Rule
                 $schemaProperties[$propertySchema->property] = 0;
             }
 
+            // TODO: recursive check for nested objects
+
             $returnDiff = array_diff_key($schemaProperties, $returnedProperties);
             foreach ($returnDiff as $property => $line) {
                 $errors[] = RuleErrorBuilder::message(sprintf('Schema property "%s" is not returned in JsonResource "%s" class', $property, $returnStatement->getClass()))

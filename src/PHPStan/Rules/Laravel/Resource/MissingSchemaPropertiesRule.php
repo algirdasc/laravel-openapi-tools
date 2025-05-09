@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace OpenApiTools\PHPStan\Rules\Laravel\Resource;
 
 use OpenApi\Generator;
-use OpenApiTools\PHPStan\Collectors\FormRequestRulesReturnCollector;
+use OpenApiTools\PHPStan\Collectors\JsonResourceToArrayReturnCollector;
 use OpenApiTools\PHPStan\DTO\ReturnStatement;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
 use OpenApiTools\PHPStan\Traits\IteratesOverCollection;
@@ -36,7 +36,7 @@ readonly class MissingSchemaPropertiesRule implements Rule
         $errors = [];
 
         /** @var ReturnStatement $returnStatement */
-        foreach ($this->getIterator($node, [FormRequestRulesReturnCollector::class]) as $returnStatement) {
+        foreach ($this->getIterator($node, [JsonResourceToArrayReturnCollector::class]) as $returnStatement) {
             $schema = $returnStatement->getSchema();
             if ($schema === null) {
                 continue;

@@ -48,6 +48,9 @@ readonly class MissingSchemaPropertyRule implements Rule
              * @var string $property
              * @var Node\ArrayItem $item
              */
+
+            // TODO: recursive check for nested objects
+
             foreach ($this->getReturnStatementIterator($returnStatement) as [$property, $item]) {
                 $schemaProperty = SchemaProperties::findByName($schema, $property);
                 if ($schemaProperty === null) {

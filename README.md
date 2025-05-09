@@ -40,48 +40,67 @@ vendor/bin/phpstan
 
 ## Rules
 
-- OpenApiTools\PHPStan\Rules\OpenApi\Schema\SchemaNameRule
-  - todo;
+### Schema
+
 - OpenApiTools\PHPStan\Rules\OpenApi\Schema\PropertiesRule
-  - todo;
+  - Validates property type
+  - Validates property format
+  - Validates property case
+  - Validates property date type & format
 - OpenApiTools\PHPStan\Rules\OpenApi\Schema\RequiredPropertiesRule
-  - todo;
+  - Validates if required properties defined in properties list
+- OpenApiTools\PHPStan\Rules\OpenApi\Schema\SchemaNameRule
+  - Validates naming convention
+
+### Operation
+
 - OpenApiTools\PHPStan\Rules\OpenApi\Operation\ControllerInvokeMethodRule
-  - todo;
+  - Validates `__invoke` method has correct schema scope 
 - OpenApiTools\PHPStan\Rules\OpenApi\Operation\ControllerMethodParametersRule
-  - todo;
+  - Validates if operation attributes has methods
+  - Validates method parameter types
+  - Validates method parameters vs. operation path parameters
 - OpenApiTools\PHPStan\Rules\OpenApi\Operation\ControllerMethodsRule
-  - todo;
+  - Validates controller method count if `__invoke` is used
 - OpenApiTools\PHPStan\Rules\OpenApi\Operation\DescriptionRule
-  - todo;
+  - Validates `description` length
 - OpenApiTools\PHPStan\Rules\OpenApi\Operation\PathRule
-  - todo;
+  - Validates path leading & trailing slash 
+  - Validates whether path parameters defined in operation schema parameters
 - OpenApiTools\PHPStan\Rules\OpenApi\Operation\RequestBodyReferenceRule
-  - todo;
+  - Validates whether `requestBody` is set when `FormRequest` instance provided in method parameters
 - OpenApiTools\PHPStan\Rules\OpenApi\Operation\ResponsesRule
-  - todo;
+  - Validates if `Success` response is provided
+  - Validates if `Error` response is provided
+  - Validates if `Authorization` response is provided
+  - Validates if `Unprocessable` response is provided when `FormRequest` instance provided in method parameters
 - OpenApiTools\PHPStan\Rules\OpenApi\Operation\SummaryRule
-  - todo;
+  - Validates `summary` optimal length
 - OpenApiTools\PHPStan\Rules\OpenApi\Operation\TagCountRule
-  - todo;
+  - Validates `tags` count
+
+### Form Request
+
 - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\EnumRule
-  - todo;
+  - Validates whether `enum` parameter is set in `OA\Property`, depending on validation rules
 - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\MissingSchemaPropertiesRule
-  - todo;
+  - Validates whether `properties` set 
 - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\MissingSchemaRule
-  - todo;
+  - Validates whether `OA\Schema` attribute is set
 - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\NullableRule
-  - todo;
+  - Validates whether `nullable` parameter is set in `OA\Property`, depending on validation rules
 - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\RequiredRule
-  - todo;
+  - Validates whether `required` parameter is set in `OA\Property`, depending on validation rules
+
+### Json Resource
 - OpenApiTools\PHPStan\Rules\Laravel\Resource\BooleanPropertyRule
-  - todo;
+  - Validates `boolean` property to match isset/haser naming convetion - `is_something`, `has_something` 
 - OpenApiTools\PHPStan\Rules\Laravel\Resource\MissingReturnPropertyRule
-  - todo;
+  - Validates whether `OA\Schema` property returned in `toArray()` method (plain array return only)
 - OpenApiTools\PHPStan\Rules\Laravel\Resource\MissingSchemaPropertiesRule
-  - todo;
+  - Validates whether `OA\Schema` contains `properties` parameter (plain array return only)
 - OpenApiTools\PHPStan\Rules\Laravel\Resource\MissingSchemaPropertyRule
-  - todo;
+  - Validates whether returned property is in `OA\Schema` properties (plain array return only)
   
 ## Customizations
 
