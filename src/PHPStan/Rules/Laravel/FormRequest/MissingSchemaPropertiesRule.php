@@ -48,13 +48,11 @@ readonly class MissingSchemaPropertiesRule implements Rule
 
             $file = $returnStatement->getFile();
 
-            $errors[$file] = [
-                RuleErrorBuilder::message(sprintf('Missing schema properties on FormRequest "%s" class', $returnStatement->getClass()))
-                    ->identifier(RuleIdentifier::identifier('missingRequestSchemaProperties'))
-                    ->file($returnStatement->getFile())
-                    ->line($returnStatement->getLine())
-                    ->build()
-            ];
+            $errors[$file] = RuleErrorBuilder::message(sprintf('Missing schema properties on FormRequest "%s" class', $returnStatement->getClass()))
+                ->identifier(RuleIdentifier::identifier('missingRequestSchemaProperties'))
+                ->file($returnStatement->getFile())
+                ->line($returnStatement->getLine())
+                ->build();
         }
 
         return array_values($errors);
