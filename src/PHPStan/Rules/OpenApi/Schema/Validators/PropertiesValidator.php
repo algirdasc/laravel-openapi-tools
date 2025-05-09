@@ -62,38 +62,6 @@ readonly class PropertiesValidator implements ValidatorInterface
         foreach ($properties as $property) {
             $propertyNames[] = $property->property;
 
-            if (!Generator::isDefault($property->type) && !in_array($property->type, self::PROPERTY_TYPES)) {
-                $errors[] = RuleErrorBuilder::message(sprintf('Property "%s" has incorrect type', $property->property))
-                    ->identifier(RuleIdentifier::identifier('schemaPropertyTypeIncorrect'))
-                    ->build();
-            }
-
-            if (!Generator::isDefault($property->format) && !in_array($property->format, self::PROPERTY_FORMATS)) {
-                $errors[] = RuleErrorBuilder::message(sprintf('Property "%s" has incorrect format', $property->property))
-                    ->identifier(RuleIdentifier::identifier('schemaPropertyFormatIncorrect'))
-                    ->build();
-            }
-
-            $generatedPropertyName = $propertyNameGenerator->generatePropertyName($property->property);
-            if ($property->property !== $generatedPropertyName) {
-                $errors[] = RuleErrorBuilder::message(sprintf('Property "%s" has incorrect case, expected "%s"', $property->property, $generatedPropertyName))
-                    ->identifier(RuleIdentifier::identifier('schemaPropertyNameCaseIncorrect'))
-                    ->build();
-            }
-
-            $isDateProperty = $propertyNameGenerator->isDateProperty($property->property);
-            if ($isDateProperty && $property->type !== 'string') {
-                $errors[] = RuleErrorBuilder::message(sprintf('Property "%s" has must have "string" type', $property->property))
-                    ->identifier(RuleIdentifier::identifier('schemaDatePropertyTypeMissing'))
-                    ->build();
-            }
-
-            if ($isDateProperty && $property->format !== 'date-time') {
-                $errors[] = RuleErrorBuilder::message(sprintf('Property "%s" has must have "date-time" format', $property->property))
-                    ->identifier(RuleIdentifier::identifier('schemaDatePropertyFormatMissing'))
-                    ->build();
-            }
-
             if ($property->items instanceof Items) {
                 $errors = [
                     ...$errors,

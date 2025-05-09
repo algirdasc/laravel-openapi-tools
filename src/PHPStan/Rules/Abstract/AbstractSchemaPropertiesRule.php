@@ -23,6 +23,10 @@ abstract class AbstractSchemaPropertiesRule implements Rule
 
     protected string $file = '';
 
+    /**
+     * @return list<IdentifierRuleError>
+     * @throws ShouldNotHappenException
+     */
     abstract public function validateProperty(Property $property, Node\ArrayItem $node): array;
 
     public function getNodeType(): string
