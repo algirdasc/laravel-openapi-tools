@@ -6,7 +6,7 @@ namespace OpenApiTools\PHPStan\DTO;
 
 use PhpParser\Node\ArrayItem;
 
-class ArrayReturn
+class ReturnStatement
 {
     /**
      * @param array<ArrayItem> $items
@@ -16,7 +16,7 @@ class ArrayReturn
         private readonly string $file,
         private readonly int    $line,
         private readonly bool   $isParentScoped,
-        private array  $items = [],
+        private array $items = [],
     ) {
     }
 

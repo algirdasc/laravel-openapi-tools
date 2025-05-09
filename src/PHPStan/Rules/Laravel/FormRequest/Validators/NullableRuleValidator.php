@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace OpenApiTools\PHPStan\Rules\Laravel\FormRequest\Validators;
 
 use OpenApi\Attributes\Schema;
-use OpenApiTools\PHPStan\DTO\ArrayReturn;
+use OpenApiTools\PHPStan\DTO\ReturnStatement;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
 use OpenApiTools\PHPStan\Helpers\SchemaProperties;
 use OpenApiTools\PHPStan\Rules\Laravel\FormRequest\Generators\RuleGenerator;
@@ -19,7 +19,7 @@ class NullableRuleValidator implements ValidatorInterface
     /**
      * @throws ShouldNotHappenException
      */
-    public function validate(ArrayReturn $arrayReturn, ?Schema $schema): array
+    public function validate(ReturnStatement $arrayReturn, ?Schema $schema): array
     {
         if ($schema === null) {
             return [];

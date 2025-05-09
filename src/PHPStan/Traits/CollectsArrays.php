@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace OpenApiTools\PHPStan\Traits;
 
-use OpenApiTools\PHPStan\DTO\ArrayReturn;
+use OpenApiTools\PHPStan\DTO\ReturnStatement;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
@@ -27,7 +27,7 @@ trait CollectsArrays
             throw new ShouldNotHappenException();
         }
 
-        $collectedData = new ArrayReturn(
+        $collectedData = new ReturnStatement(
             class: $classReflection->getName(),
             file: $classReflection->getFileName() ?: $classReflection->getName(),
             line: $classReflection->getStartLine(),

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace OpenApiTools\PHPStan\Rules\Laravel;
 
 use OpenApi\Attributes\Schema;
-use OpenApiTools\PHPStan\DTO\ArrayReturn;
+use OpenApiTools\PHPStan\DTO\ReturnStatement;
 use OpenApiTools\PHPStan\Helpers\Attributes;
 use OpenApiTools\PHPStan\Rules\Laravel\FormRequest\ValidatorInterface as FormRequestValidatorInterface;
-use OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidatorInterface as ResourceValidatorInterface;;
+use OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidatorInterface as ResourceValidatorInterface;
 use PhpParser\Node;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
 use PHPStan\Collectors\Collector;
@@ -16,6 +16,8 @@ use PHPStan\DependencyInjection\Container;
 use PHPStan\Node\CollectedDataNode;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\IdentifierRuleError;
+
+;
 
 abstract class AbstractLaravelRule
 {
@@ -55,7 +57,7 @@ abstract class AbstractLaravelRule
                     continue;
                 }
 
-                /** @var ArrayReturn $arrayReturn */
+                /** @var ReturnStatement $arrayReturn */
                 $arrayReturn = unserialize($declaration);
                 if ($arrayReturn->isParentScoped()) {
                     continue;

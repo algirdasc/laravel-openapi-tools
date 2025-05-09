@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace OpenApiTools\PHPStan\Collectors;
 
-use OpenApi\Annotations\Operation;
 use OpenApi\Attributes\Schema;
 use OpenApiTools\PHPStan\DTO\OperationAttribute;
 use OpenApiTools\PHPStan\DTO\SchemaAttribute;
@@ -55,7 +54,7 @@ readonly class ClassSchemaCollector implements Collector
                 }
 
                 /** @var Schema $schema */
-                $schema = Attributes::getAttributes($classReflection, Operation::class)[$attributeIdx]->newInstance();
+                $schema = Attributes::getAttributes($classReflection, Schema::class)[$attributeIdx]->newInstance();
 
                 return serialize(
                     new SchemaAttribute(

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace OpenApiTools\PHPStan\Rules\Laravel\FormRequest\Generators;
 
-use OpenApiTools\PHPStan\DTO\ArrayReturn;
+use OpenApiTools\PHPStan\DTO\ReturnStatement;
 use PhpParser\Node;
 
 class RuleGenerator
@@ -12,7 +12,7 @@ class RuleGenerator
     /**
      * @return iterable<array{0: string, 1: Node\Expr\ArrayItem}>
      */
-    public static function iterate(ArrayReturn $arrayReturn): iterable
+    public static function iterate(ReturnStatement $arrayReturn): iterable
     {
         foreach ($arrayReturn->getItems() as $item) {
             if ($item->unpack === true) {

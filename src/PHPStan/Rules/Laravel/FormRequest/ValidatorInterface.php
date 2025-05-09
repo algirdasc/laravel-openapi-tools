@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace OpenApiTools\PHPStan\Rules\Laravel\FormRequest;
 
 use OpenApi\Attributes\Schema;
-use OpenApiTools\PHPStan\DTO\ArrayReturn;
+use OpenApiTools\PHPStan\DTO\ReturnStatement;
 use PHPStan\Rules\IdentifierRuleError;
 
 interface ValidatorInterface
@@ -13,5 +13,5 @@ interface ValidatorInterface
     /**
      * @return list<IdentifierRuleError>
      */
-    public function validate(ArrayReturn $arrayReturn, ?Schema $schema): array;
+    public function validate(ReturnStatement $arrayReturn, ?Schema $schema): array;
 }

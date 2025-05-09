@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace OpenApiTools\PHPStan\Rules\Laravel\Resource;
 
-use OpenApiTools\PHPStan\Collectors\JsonResourceArrayCollector;
+use OpenApiTools\PHPStan\Collectors\JsonResourceToArrayReturnCollector;
 use OpenApiTools\PHPStan\Rules\Laravel\AbstractLaravelRule;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
@@ -23,7 +23,7 @@ class ValidateResourceRule extends AbstractLaravelRule implements Rule
 
     public function getCollector(): string
     {
-        return JsonResourceArrayCollector::class;
+        return JsonResourceToArrayReturnCollector::class;
     }
 
     public function processNode(Node $node, Scope $scope): array

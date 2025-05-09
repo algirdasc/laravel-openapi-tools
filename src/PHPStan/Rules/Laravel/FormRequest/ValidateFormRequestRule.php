@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace OpenApiTools\PHPStan\Rules\Laravel\FormRequest;
 
-use OpenApiTools\PHPStan\Collectors\FormRequestArrayCollector;
+use OpenApiTools\PHPStan\Collectors\FormRequestRuleReturnCollector;
 use OpenApiTools\PHPStan\Rules\Laravel\AbstractLaravelRule;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
@@ -23,7 +23,7 @@ class ValidateFormRequestRule extends AbstractLaravelRule implements Rule
 
     public function getCollector(): string
     {
-        return FormRequestArrayCollector::class;
+        return FormRequestRuleReturnCollector::class;
     }
 
     public function processNode(Node $node, Scope $scope): array

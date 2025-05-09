@@ -4,18 +4,14 @@ declare(strict_types=1);
 
 namespace OpenApiTools\PHPStan\Rules\OpenApi\Operation;
 
-use OpenApi\Annotations\Operation;
 use OpenApiTools\PHPStan\Collectors\ClassOperationCollector;
 use OpenApiTools\PHPStan\Collectors\MethodOperationCollector;
 use OpenApiTools\PHPStan\DTO\OperationAttribute;
 use OpenApiTools\PHPStan\Helpers\NodeHelper;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
-use OpenApiTools\PHPStan\Rules\OpenApi\Operation\ValidatorInterface;
 use OpenApiTools\PHPStan\Traits\IteratesOverCollection;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
-use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
-use PHPStan\BetterReflection\Reflection\Adapter\ReflectionMethod;
 use PHPStan\Node\CollectedDataNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
@@ -38,10 +34,6 @@ readonly class TagCountRule implements Rule
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        if (!$node instanceof CollectedDataNode) {
-            return [];
-        }
-
         $errors = [];
 
         /** @var OperationAttribute $operationAttribute */
