@@ -40,7 +40,34 @@ class MyQueryRequest extends FormRequest
 ```
 You'd have to copy schema properties to `parameters` in your operation attribute, which would create duplication, and we do not want that, but using `queryParameters` helper class will parse the request schema 
 and add schema properties to query parameters:
+### From:
+```php
+<?php
 
+declare(strict_types=1);
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\MyQueryRequest;
+use App\Http\Resources\MyResource;
+use OpenApi\Attributes as OA;
+
+#[OA\Get(
+    path: '/api/endpoint',
+    parameters: [
+        new OA\QueryParameter('date_from', required: true, schema: new OA\Schema(type: 'string', format: 'date-time', example: '2025-05-01T00:00:00Z')),
+        new OA\QueryParameter('date_to', required: true, schema: new OA\Schema(type: 'string', format: 'date-time', example: '2025-05-01T00:00:00Z')),
+    ]
+)]
+final class MyController extends Controller
+{
+    public function __invoke(MetricGetRequest $request): MyResource
+    {
+        return new MyResource('some data');
+    }
+}
+```
+### To:
 ```php
 <?php
 

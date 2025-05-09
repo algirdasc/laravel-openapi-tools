@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace OpenApiTools\PHPStan\Rules\OpenApi\Operation;
 
-use OpenApi\Annotations\Operation;
 use OpenApi\Attributes\Schema;
 use OpenApi\Generator;
 use OpenApiTools\PHPStan\Collectors\ClassOperationCollector;
@@ -17,7 +16,6 @@ use OpenApiTools\PHPStan\Traits\IteratesOverCollection;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
-use PHPStan\BetterReflection\Reflection\Adapter\ReflectionMethod;
 use PHPStan\Node\CollectedDataNode;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
@@ -73,7 +71,7 @@ readonly class RequestBodyReferenceRule implements Rule
             $reflection = $this->reflectionProvider->getClass($contentReference)->getNativeReflection();
             $schema = Attributes::getAttributes($reflection, Schema::class);
 
-            if (empty($schema)) {
+            if (!$schema) {
                 $errors[] = RuleErrorBuilder::message(sprintf('RequestBody reference "%s" does not have schema attribute', $contentReference))
                     ->identifier(RuleIdentifier::identifier('operationRequestBodyReferenceHasEmptySchema'))
                     ->file($operationAttribute->getFile())

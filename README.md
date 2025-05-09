@@ -36,10 +36,15 @@ vendor/bin/phpstan
 
 ## Helper classes
 
+Toolkit includes helper class to ease and minimize duplication while defining API documentation in Laravel framework. Usage of them is completely optional, although is recomended.
+
 - [Operation Helpers](/docs/helper/operation.md)
+- [Response Helpers](/docs/helper/response.md)
 - [Request Body Helpers](/docs/helper/request_body.md)
 
 ## Rules
+
+Quick overview of rules provided in toolkit and their functions. List of incomplete and suspect for changes.
 
 ### Schemas - `OA\Schema`
 
@@ -48,6 +53,7 @@ vendor/bin/phpstan
   - Validates property format
   - Validates property case
   - Validates property date type & format
+  - Validated property `ref` class to have schema
 - OpenApiTools\PHPStan\Rules\OpenApi\Schema\RequiredPropertiesRule
   - Validates if required properties defined in properties list
 - OpenApiTools\PHPStan\Rules\OpenApi\Schema\SchemaNameRule
@@ -133,6 +139,19 @@ class MyResource extends JsonResource
 }
 ```
 
+```php
+...
+#[OA\Schema(
+    schema: 'Resources.Books.BookResource',
+    properties: [
+        /** @phpstan-ignore openApiTools.booleanInJsonResourceMustStartWithIs */
+        new OA\Property('truncated', type: 'boolean', example: true),
+    ],
+)]
+class BookResource extends JsonResource
+...
+```
+
 If you want to ignore rules to specific files or file pattern, add `ignoreErrors` to your `phpstan.neon`. 
 Example, how to ignore `openApiTools.missingRequestSchemaAttribute` errors:
 ```yaml
@@ -142,6 +161,8 @@ Example, how to ignore `openApiTools.missingRequestSchemaAttribute` errors:
           paths:
             - app/Path/To/Directory/*
 ```
+
+More on error ignoring - [PHPStan documentation](https://phpstan.org/user-guide/ignoring-errors)
 
 ### Schema naming rule override
 

@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace OpenApiTools\PHPStan\Rules\OpenApi\Schema;
 
 use OpenApi\Annotations\Property;
+use OpenApi\Attributes\Schema;
 use OpenApi\Generator;
 use OpenApiTools\PHPStan\Generators\PropertyNameGeneratorInterface;
+use OpenApiTools\PHPStan\Helpers\Attributes;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
 use OpenApiTools\PHPStan\Rules\Abstract\RecursivePropertiesRule;
 use PhpParser\Node;
+use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
 use PHPStan\DependencyInjection\Container;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\RuleErrorBuilder;
 
 class PropertiesRule extends RecursivePropertiesRule
@@ -26,7 +30,8 @@ class PropertiesRule extends RecursivePropertiesRule
     private PropertyNameGeneratorInterface $propertyNameGenerator;
 
     public function __construct(
-        private readonly Container $container,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly Container          $container,
     ) {
         $this->propertyNameGenerator = $this->container->getService('propertyNameGenerator');
     }
@@ -75,6 +80,22 @@ class PropertiesRule extends RecursivePropertiesRule
                 ->file($this->file)
                 ->line($node->getLine())
                 ->build();
+        }
+
+        if (!Generator::isDefault($property->ref) && is_string($property->ref)) {
+            /**
+             * @var ReflectionClass $reflection
+             */
+            $reflection = $this->reflectionProvider->getClass($property->ref)->getNativeReflection();
+            $schema = Attributes::getAttributes($reflection, Schema::class);
+
+            if (!$schema) {
+                $errors[] = RuleErrorBuilder::message(sprintf('Property "%s" reference "%s" does not have schema attribute', $property->property, $property->ref))
+                    ->identifier(RuleIdentifier::identifier('operationRequestBodyReferenceHasEmptySchema'))
+                    ->file($this->file)
+                    ->line($node->getLine())
+                    ->build();
+            }
         }
 
         return $errors;
