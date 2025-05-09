@@ -1,7 +1,8 @@
 ules:
-    - OpenApiTools\PHPStan\Rules\OpenApi\Operation\ValidateOperationRule
     - OpenApiTools\PHPStan\Rules\OpenApi\Schema\SchemaNameRule
     - OpenApiTools\PHPStan\Rules\OpenApi\Schema\PropertiesRule
+    - OpenApiTools\PHPStan\Rules\OpenApi\Schema\RequiredPropertiesRule
+    - OpenApiTools\PHPStan\Rules\OpenApi\Operation\ValidateOperationRule
     - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\ValidateFormRequestRule
     - OpenApiTools\PHPStan\Rules\Laravel\Resource\BooleanPropertyRule
     - OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidateResourceSchemaRule
@@ -65,10 +66,6 @@ services:
         class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\TagCountValidator
         tags:
             - openApiTools.validators.openapi.operation
-    -
-        class: OpenApiTools\PHPStan\Rules\OpenApi\Schema\Validators\PropertiesValidator
-        tags:
-            - openApiTools.validators.openapi.schema
     -
         class: OpenApiTools\PHPStan\Rules\Laravel\FormRequest\Validators\MissingSchemaValidator
         tags:

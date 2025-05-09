@@ -29,7 +29,7 @@ class BooleanPropertyRule extends AbstractSchemaPropertiesRule implements Rule
         $this->propertyNameGenerator = $this->container->getService('propertyNameGenerator');
     }
 
-    public function validateProperty(Property $property, Node\ArrayItem $node, ?Node\Expr\Array_ $required): array
+    public function validateProperty(Property $property, Node\ArrayItem $node): array
     {
         $errors = [];
 

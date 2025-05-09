@@ -20,7 +20,7 @@ use PHPStan\ShouldNotHappenException;
 /**
  * @implements Rule<CollectedDataNode>
  */
-class PropertiesRules extends AbstractSchemaPropertiesRule implements Rule
+class PropertiesRule extends AbstractSchemaPropertiesRule implements Rule
 {
     private const array PROPERTY_TYPES = [
         'null', 'boolean', 'object', 'array', 'number', 'string', 'integer',
@@ -38,7 +38,7 @@ class PropertiesRules extends AbstractSchemaPropertiesRule implements Rule
         $this->propertyNameGenerator = $this->container->getService('propertyNameGenerator');
     }
 
-    public function validateProperty(Property $property, Node\ArrayItem $node, ?Node\Expr\Array_ $required): array
+    public function validateProperty(Property $property, Node\ArrayItem $node): array
     {
         $errors = [];
 
