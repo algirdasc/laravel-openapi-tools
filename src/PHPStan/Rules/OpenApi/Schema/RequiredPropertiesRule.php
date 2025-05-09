@@ -22,7 +22,7 @@ use PHPStan\ShouldNotHappenException;
 /**
  * @implements Rule<Node\Stmt\Class_>
  */
-class RequiredPropertiesRule implements Rule
+readonly class RequiredPropertiesRule implements Rule
 {
     public function __construct(
         protected ReflectionProvider $reflectionProvider,

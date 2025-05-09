@@ -3,6 +3,7 @@
 This toolkit provides rules for PHPStan and utilities for working with OpenAPI specifications in Laravel framework.
 
 Toolkit uses [PHPStan](https://phpstan.org) to statically check code for errors, leading to Swagger/OpenAPI specification errors.
+Only OpenApi attributes with named arguments is supported and checked.
 
 Rule set includes following checks:
 

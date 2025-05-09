@@ -53,6 +53,10 @@ abstract class AbstractSchemaPropertiesRule implements Rule
             $this->file = $schemaAttribute->getFile();
 
             $schema = $schemaAttribute->getSchema();
+            if (Generator::isDefault($schema->properties)) {
+                continue;
+            }
+
             /** @var Node\Expr\Array_ $nodes */
             $nodes = NodeHelper::findInArgsByName($schemaAttribute->getAttribute()->args, 'properties');
 
@@ -95,15 +99,15 @@ abstract class AbstractSchemaPropertiesRule implements Rule
                 ];
             }
 
-            if (!Generator::isDefault($property->items)) {
+            if (!Generator::isDefault($property->items) && !Generator::isDefault($property->items->properties)) {
                 /** @var Node\Expr\New_ $itemsNode */
                 $itemsNode = NodeHelper::findInArgsByName($propertyNodeArgs->args, 'items');
-                /** @var Node\Expr\Array_ $propertiesNodes */
-                $propertiesNodes = NodeHelper::findInArgsByName($itemsNode->args, 'properties');
+                /** @var Node\Expr\Array_ $propertiesNode */
+                $propertiesNode = NodeHelper::findInArgsByName($itemsNode->args, 'properties');
 
                 $errors = [
                     ...$errors,
-                    ...$this->validateProperties($propertiesNodes, $property->items->properties),
+                    ...$this->validateProperties($propertiesNode, $property->items->properties),
                 ];
             }
 

@@ -1,8 +1,9 @@
-ules:
+rules:
     - OpenApiTools\PHPStan\Rules\OpenApi\Schema\SchemaNameRule
     - OpenApiTools\PHPStan\Rules\OpenApi\Schema\PropertiesRule
     - OpenApiTools\PHPStan\Rules\OpenApi\Schema\RequiredPropertiesRule
     - OpenApiTools\PHPStan\Rules\OpenApi\Operation\ValidateOperationRule
+    - OpenApiTools\PHPStan\Rules\OpenApi\Operation\OperationPathRule
     - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\ValidateFormRequestRule
     - OpenApiTools\PHPStan\Rules\Laravel\Resource\BooleanPropertyRule
     - OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidateResourceSchemaRule
