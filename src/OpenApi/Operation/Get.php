@@ -47,7 +47,7 @@ class Get extends OA\Get
         ?RequestBody $requestBody = null,
         ?array $tags = null,
         ?array $parameters = [],
-        mixed $queryParameters = null,
+        mixed $queryParameters = [],
         ?array $responses = null,
         ?array $callbacks = null,
         ?ExternalDocumentation $externalDocs = null,
@@ -56,9 +56,7 @@ class Get extends OA\Get
         ?array $x = null,
         ?array $attachables = null
     ) {
-        if ($queryParameters !== null) {
-            $queryParameters = $this->getQueryParameters($queryParameters);
-        }
+        $queryParameters = $this->getQueryParameters($queryParameters);
 
         parent::__construct(
             path: $path,
@@ -83,12 +81,16 @@ class Get extends OA\Get
     }
 
     /**
-     * @param array<Parameter>|class-string<FormRequest> $queryParameters
+     * @param array<Parameter>|class-string<FormRequest>|null $queryParameters
      * @return array<Parameter>
      * @throws ReflectionException
      */
-    private function getQueryParameters(array|string $queryParameters): array
+    private function getQueryParameters(mixed $queryParameters): array
     {
+        if (!$queryParameters) {
+            return [];
+        }
+
         if (is_string($queryParameters)) {
             $attributes = (new \ReflectionClass($queryParameters))->getAttributes(OA\Schema::class);
             if (!$attributes) {
