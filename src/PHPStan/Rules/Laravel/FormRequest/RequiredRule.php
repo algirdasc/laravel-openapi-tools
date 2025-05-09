@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OpenApiTools\PHPStan\Rules\Laravel\FormRequest;
 
+use OpenApi\Generator;
 use OpenApiTools\PHPStan\Collectors\FormRequestRulesReturnCollector;
 use OpenApiTools\PHPStan\DTO\ReturnStatement;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
@@ -43,6 +44,8 @@ readonly class RequiredRule implements Rule
                 continue;
             }
 
+            $required = !Generator::isDefault($schema->required) ? $schema->required : [];
+
             /**
              * @var string $property
              * @var Node\ArrayItem $item
@@ -60,7 +63,7 @@ readonly class RequiredRule implements Rule
                     $isRequired = str_contains($item->value->value, 'required');
                 }
 
-                if ($isRequired && is_array($schema->required) && !in_array($property, $schema->required, true)) {
+                if ($isRequired && !in_array($property, $required, true)) {
                     $errors[] = RuleErrorBuilder::message(sprintf('Property "%s" is required in rules, but not in schema', $property))
                         ->identifier(RuleIdentifier::identifier('requestPropertyRequiredInRulesButNotInSchema'))
                         ->file($returnStatement->getFile())

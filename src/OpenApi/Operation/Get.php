@@ -15,6 +15,7 @@ use OpenApi\Attributes\Server;
 use OpenApi\Generator;
 use ReflectionException;
 
+#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 class Get extends OA\Get
 {
     /**
@@ -68,7 +69,7 @@ class Get extends OA\Get
             requestBody: $requestBody,
             tags: $tags,
             parameters: [
-                ...$parameters,
+                ...$parameters ?? [],
                 ...$queryParameters,
             ],
             responses: $responses,
@@ -104,6 +105,7 @@ class Get extends OA\Get
                 $queryParameters[] = new OA\QueryParameter(
                     name: $property->property,
                     description: !Generator::isDefault($property->description) ? $property->description : null,
+                    required: in_array($property->property,$schema['required'] ?? [], true),
                     schema: new OA\Schema(
                         properties: !Generator::isDefault($property->properties) ? $property->properties : null,
                         type: !Generator::isDefault($property->type) ? $property->type : null,
