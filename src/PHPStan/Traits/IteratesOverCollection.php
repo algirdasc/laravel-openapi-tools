@@ -10,18 +10,24 @@ use PHPStan\Collectors\Collector;
 trait IteratesOverCollection
 {
     /**
-     * @param class-string<Collector> $collector
+     * @param array<class-string<Collector>>|class-string<Collector> $collectors
      */
-    public function getIterator(Node $node, string $collector): iterable
+    public function getIterator(Node $node, array|string $collectors): iterable
     {
-        $collectedData = $node->get($collector);
-        foreach ($collectedData as $declarations) {
-            foreach ($declarations as $declaration) {
-                if ($declaration === null) {
-                    continue;
-                }
+        if (!is_array($collectors)) {
+            $collectors = [$collectors];
+        }
 
-                yield unserialize($declaration);
+        foreach ($collectors as $collector) {
+            $collectedData = $node->get($collector);
+            foreach ($collectedData as $declarations) {
+                foreach ($declarations as $declaration) {
+                    if ($declaration === null) {
+                        continue;
+                    }
+
+                    yield unserialize($declaration);
+                }
             }
         }
     }

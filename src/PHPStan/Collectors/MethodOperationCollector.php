@@ -45,9 +45,10 @@ readonly class MethodOperationCollector implements Collector
         }
 
         $className = $scope->getClassReflection()->getName();
+        $methodName = $node->name->toString();
         /** @var ReflectionClass $classReflection */
         $classReflection = $this->reflectionProvider->getClass($className)->getNativeReflection();
-        $methodReflection = $classReflection->getMethod($node->name->toString());
+        $methodReflection = $classReflection->getMethod($methodName);
 
         foreach ($node->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attributeIdx => $attribute) {
@@ -64,6 +65,7 @@ readonly class MethodOperationCollector implements Collector
                 return serialize(
                     new OperationAttribute(
                         class: $className,
+                        method: $methodName,
                         file: $scope->getFile(),
                         operation: $operation,
                         attribute: $attribute,

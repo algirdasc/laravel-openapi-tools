@@ -40,11 +40,7 @@ readonly class ClassOperationCollector implements Collector
             return null;
         }
 
-        if (!$scope->isInClass()) {
-            return null;
-        }
-
-        $className = $scope->getClassReflection()->getName();
+        $className = (string) $node->namespacedName;
         /** @var ReflectionClass $classReflection */
         $classReflection = $this->reflectionProvider->getClass($className)->getNativeReflection();
 
@@ -63,6 +59,7 @@ readonly class ClassOperationCollector implements Collector
                 return serialize(
                     new OperationAttribute(
                         class: $className,
+                        method: '__invoke',
                         file: $scope->getFile(),
                         operation: $operation,
                         attribute: $attribute,

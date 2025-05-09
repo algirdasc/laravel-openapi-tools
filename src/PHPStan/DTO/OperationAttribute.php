@@ -11,6 +11,7 @@ readonly class OperationAttribute
 {
     public function __construct(
         private string $class,
+        private string $method,
         private string $file,
         private Operation $operation,
         private Attribute $attribute
@@ -21,6 +22,12 @@ readonly class OperationAttribute
     {
         return $this->class;
     }
+
+    public function getMethod(): string
+    {
+        return $this->method;
+    }
+
 
     public function getFile(): string
     {

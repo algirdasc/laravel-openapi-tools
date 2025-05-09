@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace OpenApiTools\PHPStan\Rules\OpenApi\Operation;
 
 use OpenApi\Annotations\Operation;
+use OpenApi\Attributes\Schema;
 use OpenApi\Generator;
 use OpenApiTools\PHPStan\Collectors\ClassOperationCollector;
 use OpenApiTools\PHPStan\Collectors\MethodOperationCollector;
 use OpenApiTools\PHPStan\DTO\OperationAttribute;
+use OpenApiTools\PHPStan\Helpers\Attributes;
 use OpenApiTools\PHPStan\Helpers\NodeHelper;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
-use OpenApiTools\PHPStan\Rules\OpenApi\Operation\ValidatorInterface;
 use OpenApiTools\PHPStan\Traits\IteratesOverCollection;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
@@ -26,14 +27,13 @@ use PHPStan\ShouldNotHappenException;
 /**
  * @implements Rule<CollectedDataNode>
  */
-readonly class SummaryRule implements Rule
+readonly class RequestBodyReferenceRule implements Rule
 {
     use IteratesOverCollection;
 
     public function __construct(
         private ReflectionProvider $reflectionProvider,
-    )
-    {
+    ) {
     }
 
     public function getNodeType(): string
@@ -46,32 +46,38 @@ readonly class SummaryRule implements Rule
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        if (!$node instanceof CollectedDataNode) {
-            return [];
-        }
-
         $errors = [];
 
         /** @var OperationAttribute $operationAttribute */
         foreach ($this->getIterator($node, [MethodOperationCollector::class, ClassOperationCollector::class]) as $operationAttribute) {
             $operation = $operationAttribute->getOperation();
-            $summaryNode = NodeHelper::findInArgsByName($operationAttribute->getAttribute()->args, 'summary');
 
-            $summary = !Generator::isDefault($operation->summary) ? $operation->summary : '';
-
-            if (strlen($summary) < 10) {
-                $errors[] = RuleErrorBuilder::message(sprintf('Path "%s" summary is too short, must be at least 10 chars', $operation->path))
-                    ->identifier(RuleIdentifier::identifier('operationSummaryTooShort'))
-                    ->file($operationAttribute->getFile())
-                    ->line($summaryNode?->getLine() ?? $operationAttribute->getAttribute()->getLine())
-                    ->build();
+            $requestBody = !Generator::isDefault($operation->requestBody) ? $operation->requestBody : null;
+            if ($requestBody === null) {
+                continue;
             }
 
-            if (strlen($summary) > 64) {
-                $errors[] = RuleErrorBuilder::message(sprintf('Path "%s" summary is too long, must be up to 64 chars', $operation->path))
-                    ->identifier(RuleIdentifier::identifier('operationSummaryTooLong'))
+            $requestBodyNode = NodeHelper::findInArgsByName($operationAttribute->getAttribute()->args, 'requestBody');
+
+            $contentReference = Generator::isDefault($requestBody->content)
+                ? ($requestBody->_unmerged[0]->ref ?? null)
+                : ($requestBody->content->ref ?? null);
+
+            if ($contentReference === null || Generator::isDefault($contentReference)) {
+                return $errors;
+            }
+
+            /**
+             * @var ReflectionClass $reflection
+             */
+            $reflection = $this->reflectionProvider->getClass($contentReference)->getNativeReflection();
+            $schema = Attributes::getAttributes($reflection, Schema::class);
+
+            if (empty($schema)) {
+                $errors[] = RuleErrorBuilder::message(sprintf('RequestBody reference "%s" does not have schema attribute', $contentReference))
+                    ->identifier(RuleIdentifier::identifier('operationRequestBodyReferenceHasEmptySchema'))
                     ->file($operationAttribute->getFile())
-                    ->line($summaryNode?->getLine() ?? $operationAttribute->getAttribute()->getLine())
+                    ->line($requestBodyNode?->getLine() ?? $operationAttribute->getAttribute()->getLine())
                     ->build();
             }
         }

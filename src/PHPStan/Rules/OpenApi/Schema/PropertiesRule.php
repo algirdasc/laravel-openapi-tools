@@ -12,10 +12,8 @@ use OpenApiTools\PHPStan\Rules\Abstract\RecursivePropertiesRule;
 use PhpParser\Node;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\Node\CollectedDataNode;
-use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use PHPStan\ShouldNotHappenException;
 
 /**
  * @implements Rule<CollectedDataNode>
