@@ -17,8 +17,9 @@ rules:
     - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\NullableRule
     - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\RequiredRule
     - OpenApiTools\PHPStan\Rules\Laravel\Resource\BooleanPropertyRule
-    - OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidateResourceSchemaRule
-    - OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidateResourceRule
+    - OpenApiTools\PHPStan\Rules\Laravel\Resource\MissingReturnPropertyValidator
+    - OpenApiTools\PHPStan\Rules\Laravel\Resource\MissingSchemaPropertiesValidator
+    - OpenApiTools\PHPStan\Rules\Laravel\Resource\MissingSchemaPropertyValidator
 
 services:
     schemaNameGenerator:

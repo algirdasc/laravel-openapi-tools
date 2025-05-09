@@ -27,7 +27,7 @@ trait CollectsArrays
          * @var ReflectionClass $reflection
          */
         $reflection = $classReflection = $scope->getClassReflection()?->getNativeReflection();
-        $schema = Attributes::getAttributes($reflection, Schema::class)[0] ?? null;
+        $schema = Attributes::getAttributes($reflection, Schema::class)[0]?->newInstance() ?? null;
 
         $collectedData = new ReturnStatement(
             class: $classReflection->getName(),
