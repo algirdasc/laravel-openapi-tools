@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OpenApiTools\PHPStan\Collectors;
 
+use OpenApi\Annotations\Operation;
 use OpenApi\Attributes\Schema;
 use OpenApiTools\PHPStan\DTO\SchemaAttribute;
 use OpenApiTools\PHPStan\Helpers\Attributes;
@@ -34,26 +35,32 @@ readonly class SchemaCollector implements Collector
             return null;
         }
 
+        if (!$scope->isInClass()) {
+            return null;
+        }
+
         $class = (string) $node->namespacedName;
 
         foreach ($node->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attribute) {
                 $resolvedAttributeName = $scope->resolveName($attribute->name);
-                if ($resolvedAttributeName === Schema::class) {
-                    /** @var ReflectionClass $reflection */
-                    $reflection = $this->reflectionProvider->getClass($class)->getNativeReflection();
-                    /** @var Schema $schema */
-                    $schema = Attributes::getAttributes($reflection, Schema::class)[0]->newInstance();
+                $attributeReflection = $this->reflectionProvider->getClass($resolvedAttributeName);
 
-                    return serialize(
-                        new SchemaAttribute(
-                            class: $class,
-                            file: $scope->getFile(),
-                            schema: $schema,
-                            attribute: $attribute,
-                        )
-                    );
+                if (!$attributeReflection->isSubclassOf(Schema::class)) {
+                    continue;
                 }
+
+                /** @var Schema $schema */
+                $schema = $attributeReflection->getNativeReflection()->newInstance();
+
+                return serialize(
+                    new SchemaAttribute(
+                        class: $class,
+                        file: $scope->getFile(),
+                        schema: $schema,
+                        attribute: $attribute,
+                    )
+                );
             }
         }
 

@@ -49,7 +49,7 @@ readonly class RequiredPropertiesRule implements Rule
         /** @var ReflectionClass $reflectionClass */
         $reflectionClass = $this->reflectionProvider->getClass($className)->getNativeReflection();
         /** @var Schema|null $schema */
-        $schema = Attributes::getAttributes($reflectionClass, Schema::class)[0]->newInstance() ?? null;
+        $schema = Attributes::getAttributes($reflectionClass, Schema::class)[0]?->newInstance() ?? null;
 
         if ($schema === null) {
             return [];

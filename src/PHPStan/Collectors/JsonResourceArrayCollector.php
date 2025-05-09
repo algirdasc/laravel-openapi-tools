@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace OpenApiTools\PHPStan\Rules\Laravel\FormRequest\Collectors;
+namespace OpenApiTools\PHPStan\Collectors;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Resources\Json\JsonResource;
 use OpenApiTools\PHPStan\Traits\CollectsArrays;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
@@ -14,7 +14,7 @@ use PHPStan\ShouldNotHappenException;
 /**
  * @implements Collector<Node\Stmt\Return_, string|null>
  */
-class FormRequestArrayCollector implements Collector
+readonly class JsonResourceArrayCollector implements Collector
 {
     use CollectsArrays;
 
@@ -32,12 +32,12 @@ class FormRequestArrayCollector implements Collector
             return null;
         }
 
-        if (!$scope->getClassReflection()?->isSubclassOf(FormRequest::class)) {
+        if (!$scope->getClassReflection()?->isSubclassOf(JsonResource::class)) {
             return null;
         }
 
         $function = $scope->getFunction();
-        if ($function === null || $function->getName() !== 'rules') {
+        if ($function === null || $function->getName() !== 'toArray') {
             return null;
         }
 

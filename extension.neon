@@ -2,8 +2,8 @@ rules:
     - OpenApiTools\PHPStan\Rules\OpenApi\Schema\SchemaNameRule
     - OpenApiTools\PHPStan\Rules\OpenApi\Schema\PropertiesRule
     - OpenApiTools\PHPStan\Rules\OpenApi\Schema\RequiredPropertiesRule
-    - OpenApiTools\PHPStan\Rules\OpenApi\Operation\ValidateOperationRule
-    - OpenApiTools\PHPStan\Rules\OpenApi\Operation\OperationPathRule
+    - OpenApiTools\PHPStan\Rules\OpenApi\Operation\PathRule
+    - OpenApiTools\PHPStan\Rules\OpenApi\Operation\DescriptionRule
     - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\ValidateFormRequestRule
     - OpenApiTools\PHPStan\Rules\Laravel\Resource\BooleanPropertyRule
     - OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidateResourceSchemaRule
@@ -14,96 +14,19 @@ services:
         class: OpenApiTools\PHPStan\Generators\LaravelSchemaNameGenerator
     propertyNameGenerator:
         class: OpenApiTools\PHPStan\Generators\SnakeCasePropertyNameGenerator
-    -
+    schemaCollector:
         class: OpenApiTools\PHPStan\Collectors\SchemaCollector
         tags:
             - phpstan.collector
-
-    -
-        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\ControllerInvokeMethodValidator
-        tags:
-            - openApiTools.validators.openapi.operation
-    -
-        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\ControllerMethodParametersValidator
-        tags:
-            - openApiTools.validators.openapi.operation
-    -
-        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\ControllerMethodsValidator
-        tags:
-            - openApiTools.validators.openapi.operation
-    -
-        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\ControllerInvokeMethodValidator
-        tags:
-            - openApiTools.validators.openapi.operation
-    -
-        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\DescriptionValidator
-        tags:
-            - openApiTools.validators.openapi.operation
-    -
-        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\PathParameterValidator
-        tags:
-            - openApiTools.validators.openapi.operation
-    -
-        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\PathValidator
-        tags:
-            - openApiTools.validators.openapi.operation
-    -
-        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\RequestBodyFormRequestParametersValidator
-        tags:
-            - openApiTools.validators.openapi.operation
-    -
-        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\RequestBodyReferenceValidator
-        tags:
-            - openApiTools.validators.openapi.operation
-    -
-        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\ResponsesValidator
-        tags:
-            - openApiTools.validators.openapi.operation
-    -
-        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\SummaryValidator
-        tags:
-            - openApiTools.validators.openapi.operation
-    -
-        class: OpenApiTools\PHPStan\Rules\OpenApi\Operation\Validators\TagCountValidator
-        tags:
-            - openApiTools.validators.openapi.operation
-    -
-        class: OpenApiTools\PHPStan\Rules\Laravel\FormRequest\Validators\MissingSchemaValidator
-        tags:
-            - openApiTools.validators.laravel.form_request
-    -
-        class: OpenApiTools\PHPStan\Rules\Laravel\FormRequest\Validators\MissingSchemaPropertiesValidator
-        tags:
-            - openApiTools.validators.laravel.form_request
-    -
-        class: OpenApiTools\PHPStan\Rules\Laravel\FormRequest\Validators\RequiredRuleValidator
-        tags:
-            - openApiTools.validators.laravel.form_request
-    -
-        class: OpenApiTools\PHPStan\Rules\Laravel\FormRequest\Validators\NullableRuleValidator
-        tags:
-            - openApiTools.validators.laravel.form_request
-    -
-        class: OpenApiTools\PHPStan\Rules\Laravel\FormRequest\Validators\EnumRuleValidator
-        tags:
-            - openApiTools.validators.laravel.form_request
-    -
-        class: OpenApiTools\PHPStan\Rules\Laravel\FormRequest\Collectors\FormRequestArrayCollector
+    operationCollector:
+        class: OpenApiTools\PHPStan\Collectors\OperationCollector
         tags:
             - phpstan.collector
-    -
-        class: OpenApiTools\PHPStan\Rules\Laravel\Resource\Validators\MissingSchemaPropertiesValidator
+    jsonResourceCollector:
+        class: OpenApiTools\PHPStan\Collectors\JsonResourceArrayCollector
         tags:
-            - openApiTools.validators.laravel.resource
-    -
-        class: OpenApiTools\PHPStan\Rules\Laravel\Resource\Validators\MissingSchemaPropertyValidator
-        tags:
-            - openApiTools.validators.laravel.resource
-    -
-        class: OpenApiTools\PHPStan\Rules\Laravel\Resource\Validators\MissingReturnPropertyValidator
-        tags:
-            - openApiTools.validators.laravel.resource
-    -
-        class: OpenApiTools\PHPStan\Rules\Laravel\Resource\Collectors\JsonResourceArrayCollector
+            - phpstan.collector
+    formRequestCollector:
+        class: OpenApiTools\PHPStan\Collectors\FormRequestArrayCollector
         tags:
             - phpstan.collector

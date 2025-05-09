@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace OpenApiTools\PHPStan\Rules\Laravel\FormRequest;
 
+use OpenApiTools\PHPStan\Collectors\FormRequestArrayCollector;
 use OpenApiTools\PHPStan\Rules\Laravel\AbstractLaravelRule;
-use OpenApiTools\PHPStan\Rules\Laravel\FormRequest\Collectors\FormRequestArrayCollector;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\CollectedDataNode;

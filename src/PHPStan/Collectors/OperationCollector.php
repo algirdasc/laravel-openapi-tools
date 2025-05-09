@@ -6,6 +6,7 @@ namespace OpenApiTools\PHPStan\Collectors;
 
 use OpenApi\Annotations\Operation;
 use OpenApi\Attributes\Schema;
+use OpenApiTools\PHPStan\DTO\OperationAttribute;
 use OpenApiTools\PHPStan\DTO\SchemaAttribute;
 use OpenApiTools\PHPStan\Helpers\Attributes;
 use PhpParser\Node;
@@ -35,28 +36,30 @@ readonly class OperationCollector implements Collector
             return null;
         }
 
-        $class = (string) $node->namespacedName;
+        if (!$scope->isInClass()) {
+            return null;
+        }
 
         foreach ($node->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attribute) {
                 $resolvedAttributeName = $scope->resolveName($attribute->name);
-                if ($resolvedAttributeName === Operation::class) {
+                $attributeReflection = $this->reflectionProvider->getClass($resolvedAttributeName);
 
-                    $reflection = $scope->getMethodReflection($node->getType(), $node->name->name);
-                    /** @var ReflectionClass $reflection */
-                    $reflection = $this->reflectionProvider->getClass($class)->getNativeReflection();
-                    /** @var Schema $schema */
-                    $schema = Attributes::getAttributes($reflection, Schema::class)[0]->newInstance();
-
-                    return serialize(
-                        new SchemaAttribute(
-                            class: $class,
-                            file: $scope->getFile(),
-                            schema: $schema,
-                            attribute: $attribute,
-                        )
-                    );
+                if (!$attributeReflection->isSubclassOf(Operation::class)) {
+                    continue;
                 }
+
+                /** @var Operation $operation */
+                $operation = $attributeReflection->getNativeReflection()->newInstance();
+
+                return serialize(
+                    new OperationAttribute(
+                        class: $scope->getClassReflection()->getName(),
+                        file: $scope->getFile(),
+                        operation: $operation,
+                        attribute: $attribute,
+                    )
+                );
             }
         }
 
