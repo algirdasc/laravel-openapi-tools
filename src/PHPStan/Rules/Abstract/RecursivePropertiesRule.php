@@ -6,7 +6,7 @@ namespace OpenApiTools\PHPStan\Rules\Abstract;
 
 use OpenApi\Annotations\Property;
 use OpenApi\Generator;
-use OpenApiTools\PHPStan\Collectors\SchemaCollector;
+use OpenApiTools\PHPStan\Collectors\ClassSchemaCollector;
 use OpenApiTools\PHPStan\DTO\SchemaAttribute;
 use OpenApiTools\PHPStan\Helpers\NodeHelper;
 use OpenApiTools\PHPStan\Traits\IteratesOverCollection;
@@ -20,7 +20,7 @@ use PHPStan\ShouldNotHappenException;
 /**
  * @implements Rule<CollectedDataNode>
  */
-abstract class AbstractSchemaPropertiesRule implements Rule
+abstract class RecursivePropertiesRule implements Rule
 {
     use IteratesOverCollection;
 
@@ -49,7 +49,7 @@ abstract class AbstractSchemaPropertiesRule implements Rule
         $errors = [];
 
         /** @var SchemaAttribute $schemaAttribute */
-        foreach ($this->getIterator($node, SchemaCollector::class) as $schemaAttribute) {
+        foreach ($this->getIterator($node, ClassSchemaCollector::class) as $schemaAttribute) {
             $this->file = $schemaAttribute->getFile();
 
             $schema = $schemaAttribute->getSchema();

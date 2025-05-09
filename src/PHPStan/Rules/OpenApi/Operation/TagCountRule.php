@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace OpenApiTools\PHPStan\Rules\OpenApi\Operation;
 
 use OpenApi\Annotations\Operation;
-use OpenApiTools\PHPStan\Collectors\OperationCollector;
+use OpenApiTools\PHPStan\Collectors\MethodOperationCollector;
 use OpenApiTools\PHPStan\DTO\OperationAttribute;
 use OpenApiTools\PHPStan\Helpers\NodeHelper;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
@@ -44,7 +44,7 @@ readonly class TagCountRule implements Rule
         $errors = [];
 
         /** @var OperationAttribute $operationAttribute */
-        foreach ($this->getIterator($node, OperationCollector::class) as $operationAttribute) {
+        foreach ($this->getIterator($node, MethodOperationCollector::class) as $operationAttribute) {
             $operation = $operationAttribute->getOperation();
             $tagNode = NodeHelper::findInArgsByName($operationAttribute->getAttribute()->args, 'tags');
 

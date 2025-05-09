@@ -8,7 +8,7 @@ use OpenApi\Annotations\Property;
 use OpenApi\Generator;
 use OpenApiTools\PHPStan\Generators\PropertyNameGeneratorInterface;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
-use OpenApiTools\PHPStan\Rules\Abstract\AbstractSchemaPropertiesRule;
+use OpenApiTools\PHPStan\Rules\Abstract\RecursivePropertiesRule;
 use PhpParser\Node;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\Node\CollectedDataNode;
@@ -20,7 +20,7 @@ use PHPStan\ShouldNotHappenException;
 /**
  * @implements Rule<CollectedDataNode>
  */
-class PropertiesRule extends AbstractSchemaPropertiesRule implements Rule
+class PropertiesRule extends RecursivePropertiesRule implements Rule
 {
     private const array PROPERTY_TYPES = [
         'null', 'boolean', 'object', 'array', 'number', 'string', 'integer',

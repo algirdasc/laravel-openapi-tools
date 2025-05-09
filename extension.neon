@@ -16,12 +16,16 @@ services:
         class: OpenApiTools\PHPStan\Generators\LaravelSchemaNameGenerator
     propertyNameGenerator:
         class: OpenApiTools\PHPStan\Generators\SnakeCasePropertyNameGenerator
-    schemaCollector:
-        class: OpenApiTools\PHPStan\Collectors\SchemaCollector
+    classSchemaCollector:
+        class: OpenApiTools\PHPStan\Collectors\ClassSchemaCollector
         tags:
             - phpstan.collector
-    operationCollector:
-        class: OpenApiTools\PHPStan\Collectors\OperationCollector
+    classOperationCollector:
+        class: OpenApiTools\PHPStan\Collectors\ClassOperationCollector
+        tags:
+            - phpstan.collector
+    methodOperationCollector:
+        class: OpenApiTools\PHPStan\Collectors\MethodOperationCollector
         tags:
             - phpstan.collector
     jsonResourceCollector:

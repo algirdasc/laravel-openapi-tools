@@ -7,7 +7,7 @@ namespace OpenApiTools\PHPStan\Rules\Laravel\Resource;
 use OpenApi\Annotations\Property;
 use OpenApiTools\PHPStan\Generators\PropertyNameGeneratorInterface;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
-use OpenApiTools\PHPStan\Rules\Abstract\AbstractSchemaPropertiesRule;
+use OpenApiTools\PHPStan\Rules\Abstract\RecursivePropertiesRule;
 use PhpParser\Node;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\Node\CollectedDataNode;
@@ -19,7 +19,7 @@ use PHPStan\ShouldNotHappenException;
 /**
  * @implements Rule<CollectedDataNode>
  */
-class BooleanPropertyRule extends AbstractSchemaPropertiesRule implements Rule
+class BooleanPropertyRule extends RecursivePropertiesRule implements Rule
 {
     private PropertyNameGeneratorInterface $propertyNameGenerator;
 

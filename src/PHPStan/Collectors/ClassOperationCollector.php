@@ -6,8 +6,10 @@ namespace OpenApiTools\PHPStan\Collectors;
 
 use OpenApi\Annotations\Operation;
 use OpenApi\Attributes\Schema;
+use OpenApiTools\PHPStan\DTO\OperationAttribute;
 use OpenApiTools\PHPStan\DTO\SchemaAttribute;
 use OpenApiTools\PHPStan\Helpers\Attributes;
+use OpenApiTools\PHPStan\Helpers\NodeHelper;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
@@ -15,9 +17,9 @@ use PHPStan\Collectors\Collector;
 use PHPStan\Reflection\ReflectionProvider;
 
 /**
- * @implements Collector<Node\Stmt\Class_, string|null>
+ * @implements Collector<Node\Stmt\Class_, OperationAttribute|null>
  */
-readonly class SchemaCollector implements Collector
+readonly class ClassOperationCollector implements Collector
 {
     public function __construct(
         private ReflectionProvider $reflectionProvider,
@@ -29,6 +31,9 @@ readonly class SchemaCollector implements Collector
         return Node\Stmt\Class_::class;
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function processNode(Node $node, Scope $scope): ?string
     {
         if (!$node instanceof Node\Stmt\Class_) {
@@ -39,8 +44,7 @@ readonly class SchemaCollector implements Collector
             return null;
         }
 
-        $className = (string) $node->namespacedName;
-
+        $className = $scope->getClassReflection()->getName();
         /** @var ReflectionClass $classReflection */
         $classReflection = $this->reflectionProvider->getClass($className)->getNativeReflection();
 
@@ -49,18 +53,18 @@ readonly class SchemaCollector implements Collector
                 $resolvedAttributeName = $scope->resolveName($attribute->name);
                 $attributeReflection = $this->reflectionProvider->getClass($resolvedAttributeName);
 
-                if (!$attributeReflection->isSubclassOf(Schema::class)) {
+                if (!$attributeReflection->isSubclassOf(Operation::class)) {
                     continue;
                 }
 
-                /** @var Schema $schema */
-                $schema = Attributes::getAttributes($classReflection, Operation::class)[$attributeIdx]->newInstance();
+                /** @var Operation $operation */
+                $operation = Attributes::getAttributes($classReflection, Operation::class)[$attributeIdx]->newInstance();
 
                 return serialize(
-                    new SchemaAttribute(
+                    new OperationAttribute(
                         class: $className,
                         file: $scope->getFile(),
-                        schema: $schema,
+                        operation: $operation,
                         attribute: $attribute,
                     )
                 );

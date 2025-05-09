@@ -6,7 +6,7 @@ namespace OpenApiTools\PHPStan\Rules\OpenApi\Operation;
 
 use OpenApi\Attributes\Parameter;
 use OpenApi\Generator;
-use OpenApiTools\PHPStan\Collectors\OperationCollector;
+use OpenApiTools\PHPStan\Collectors\MethodOperationCollector;
 use OpenApiTools\PHPStan\DTO\OperationAttribute;
 use OpenApiTools\PHPStan\Helpers\Attributes;
 use OpenApiTools\PHPStan\Helpers\NodeHelper;
@@ -45,7 +45,7 @@ readonly class DescriptionRule implements Rule
         $errors = [];
 
         /** @var OperationAttribute $operationAttribute */
-        foreach ($this->getIterator($node, OperationCollector::class) as $operationAttribute) {
+        foreach ($this->getIterator($node, MethodOperationCollector::class) as $operationAttribute) {
             $operation = $operationAttribute->getOperation();
 
             $description = !Generator::isDefault($operation->description) ? $operation->description : '';
