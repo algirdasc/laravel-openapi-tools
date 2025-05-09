@@ -37,10 +37,11 @@ vendor/bin/phpstan
 ## Helper classes
 
 - [Operation Helpers](/docs/helper/operation.md)
+- [Request Body Helpers](/docs/helper/request_body.md)
 
 ## Rules
 
-### Schema
+### Schemas - `OA\Schema`
 
 - OpenApiTools\PHPStan\Rules\OpenApi\Schema\PropertiesRule
   - Validates property type
@@ -52,7 +53,7 @@ vendor/bin/phpstan
 - OpenApiTools\PHPStan\Rules\OpenApi\Schema\SchemaNameRule
   - Validates naming convention
 
-### Operation
+### Operation - `OA\Get`, `OA\Post`,`OA\Put`,`OA\Patch`,`OA\Delete`
 
 - OpenApiTools\PHPStan\Rules\OpenApi\Operation\ControllerInvokeMethodRule
   - Validates `__invoke` method has correct schema scope 
@@ -79,7 +80,7 @@ vendor/bin/phpstan
 - OpenApiTools\PHPStan\Rules\OpenApi\Operation\TagCountRule
   - Validates `tags` count
 
-### Form Request
+### Form Request - `Illuminate\Foundation\Http\FormRequest`
 
 - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\EnumRule
   - Validates whether `enum` parameter is set in `OA\Property`, depending on validation rules
@@ -92,7 +93,7 @@ vendor/bin/phpstan
 - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\RequiredRule
   - Validates whether `required` parameter is set in `OA\Property`, depending on validation rules
 
-### Json Resource
+### Json Resource - `Illuminate\Http\Resources\Json\JsonResource`
 - OpenApiTools\PHPStan\Rules\Laravel\Resource\BooleanPropertyRule
   - Validates `boolean` property to match isset/haser naming convetion - `is_something`, `has_something` 
 - OpenApiTools\PHPStan\Rules\Laravel\Resource\MissingReturnPropertyRule

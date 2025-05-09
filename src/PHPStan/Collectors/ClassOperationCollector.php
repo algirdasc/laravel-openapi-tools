@@ -46,7 +46,7 @@ readonly class ClassOperationCollector implements Collector
                 $resolvedAttributeName = $scope->resolveName($attribute->name);
                 $attributeReflection = $this->reflectionProvider->getClass($resolvedAttributeName);
 
-                if (!$attributeReflection->isSubclassOfClass($this->reflectionProvider->getClass(Operation::class))) {
+                if ($resolvedAttributeName !== Operation::class && !$attributeReflection->isSubclassOf(Operation::class)) {
                     continue;
                 }
 
