@@ -42,14 +42,14 @@ abstract class RecursivePropertiesRule implements Rule
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        if (!$node instanceof CollectedDataNode) {
-            return [];
-        }
-
         $errors = [];
 
         /** @var SchemaAttribute $schemaAttribute */
         foreach ($this->getIterator($node, ClassSchemaCollector::class) as $schemaAttribute) {
+            if (!$this->filterBySchemaAttribute($schemaAttribute)) {
+                continue;
+            }
+
             $this->file = $schemaAttribute->getFile();
 
             $schema = $schemaAttribute->getSchema();
@@ -69,12 +69,17 @@ abstract class RecursivePropertiesRule implements Rule
         return $errors;
     }
 
+    protected function filterBySchemaAttribute(SchemaAttribute $schemaAttribute): bool
+    {
+        return true;
+    }
+
     /**
      * @param array<Property>|string $properties
      * @return list<IdentifierRuleError>
      * @throws ShouldNotHappenException
      */
-    private function validateProperties(Node\Expr\Array_ $propertyNodes, array|string $properties): array
+    protected function validateProperties(Node\Expr\Array_ $propertyNodes, array|string $properties): array
     {
         if (!is_array($properties)) {
             return [];
