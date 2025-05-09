@@ -8,8 +8,8 @@ use OpenApi\Attributes\Schema;
 use OpenApi\Generator;
 use OpenApiTools\PHPStan\DTO\ReturnStatement;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
-use OpenApiTools\PHPStan\Rules\Laravel\FormRequest\Generators\RuleGenerator;
 use OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidatorInterface;
+use OpenApiTools\PHPStan\Traits\IteratesOverReturnStatement;
 use PhpParser\Node;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
@@ -32,7 +32,7 @@ readonly class MissingReturnPropertyValidator implements ValidatorInterface
          * @var string $property
          * @var Node\ArrayItem $item
          */
-        foreach (RuleGenerator::iterate($arrayReturn) as [$property, $item]) {
+        foreach (IteratesOverReturnStatement::iterate($arrayReturn) as [$property, $item]) {
             $returnedProperties[$property] = (int) $item->key?->getLine();
         }
 

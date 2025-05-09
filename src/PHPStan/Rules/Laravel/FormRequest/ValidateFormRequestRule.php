@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace OpenApiTools\PHPStan\Rules\Laravel\FormRequest;
 
-use OpenApiTools\PHPStan\Collectors\FormRequestRuleReturnCollector;
+use OpenApiTools\PHPStan\Collectors\FormRequestRulesReturnCollector;
 use OpenApiTools\PHPStan\Rules\Laravel\AbstractLaravelRule;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
@@ -12,6 +12,7 @@ use PHPStan\Node\CollectedDataNode;
 use PHPStan\Rules\Rule;
 
 /**
+ * @deprecated
  * @implements Rule<CollectedDataNode>
  */
 class ValidateFormRequestRule extends AbstractLaravelRule implements Rule
@@ -23,7 +24,7 @@ class ValidateFormRequestRule extends AbstractLaravelRule implements Rule
 
     public function getCollector(): string
     {
-        return FormRequestRuleReturnCollector::class;
+        return FormRequestRulesReturnCollector::class;
     }
 
     public function processNode(Node $node, Scope $scope): array

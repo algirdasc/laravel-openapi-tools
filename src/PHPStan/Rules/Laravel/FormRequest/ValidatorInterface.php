@@ -8,6 +8,9 @@ use OpenApi\Attributes\Schema;
 use OpenApiTools\PHPStan\DTO\ReturnStatement;
 use PHPStan\Rules\IdentifierRuleError;
 
+/**
+ * @deprecated
+ */
 interface ValidatorInterface
 {
     /**

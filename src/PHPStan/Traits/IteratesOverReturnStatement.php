@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace OpenApiTools\PHPStan\Rules\Laravel\FormRequest\Generators;
+namespace OpenApiTools\PHPStan\Traits;
 
 use OpenApiTools\PHPStan\DTO\ReturnStatement;
 use PhpParser\Node;
 
-class RuleGenerator
+trait IteratesOverReturnStatement
 {
     /**
      * @return iterable<array{0: string, 1: Node\Expr\ArrayItem}>
      */
-    public static function iterate(ReturnStatement $arrayReturn): iterable
+    public function getReturnStatementIterator(ReturnStatement $returnStatement): iterable
     {
-        foreach ($arrayReturn->getItems() as $item) {
+        foreach ($returnStatement->getItems() as $item) {
             if ($item->unpack === true) {
                 // we cannot unpack array items :(
                 continue;

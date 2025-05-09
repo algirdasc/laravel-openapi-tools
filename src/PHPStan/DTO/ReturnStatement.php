@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OpenApiTools\PHPStan\DTO;
 
+use OpenApi\Attributes\Schema;
 use PhpParser\Node\ArrayItem;
 
 class ReturnStatement
@@ -16,6 +17,7 @@ class ReturnStatement
         private readonly string $file,
         private readonly int    $line,
         private readonly bool   $isParentScoped,
+        private readonly ?Schema $schema,
         private array $items = [],
     ) {
     }
@@ -38,6 +40,11 @@ class ReturnStatement
     public function isParentScoped(): bool
     {
         return $this->isParentScoped;
+    }
+
+    public function getSchema(): ?Schema
+    {
+        return $this->schema;
     }
 
     /**

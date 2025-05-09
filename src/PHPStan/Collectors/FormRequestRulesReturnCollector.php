@@ -14,7 +14,7 @@ use PHPStan\ShouldNotHappenException;
 /**
  * @implements Collector<Node\Stmt\Return_, string|null>
  */
-readonly class FormRequestRuleReturnCollector implements Collector
+readonly class FormRequestRulesReturnCollector implements Collector
 {
     use CollectsArrays;
 

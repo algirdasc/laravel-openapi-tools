@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OpenApiTools\PHPStan\Rules\Laravel\FormRequest;
 
+use OpenApi\Generator;
 use OpenApiTools\PHPStan\Collectors\FormRequestRulesReturnCollector;
 use OpenApiTools\PHPStan\DTO\ReturnStatement;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
@@ -18,7 +19,7 @@ use PHPStan\ShouldNotHappenException;
 /**
  * @implements Rule<CollectedDataNode>
  */
-readonly class MissingSchemaRule implements Rule
+readonly class MissingSchemaPropertiesRule implements Rule
 {
     use IteratesOverCollection;
 
@@ -36,13 +37,22 @@ readonly class MissingSchemaRule implements Rule
 
         /** @var ReturnStatement $returnStatement */
         foreach ($this->getIterator($node, [FormRequestRulesReturnCollector::class]) as $fileId => $returnStatement) {
-            if ($returnStatement->getSchema() === null) {
-                $errors[$fileId] = RuleErrorBuilder::message(sprintf('Missing schema attribute on FormRequest "%s" class', $returnStatement->getClass()))
-                    ->identifier(RuleIdentifier::identifier('missingRequestSchemaAttribute'))
+            $schema = $returnStatement->getSchema();
+            if ($schema === null) {
+                continue;
+            }
+
+            if (!Generator::isDefault($schema->properties) && !empty($schema->properties)) {
+                continue;
+            }
+
+            $errors[$fileId] = [
+                RuleErrorBuilder::message(sprintf('Missing schema properties on FormRequest "%s" class', $returnStatement->getClass()))
+                    ->identifier(RuleIdentifier::identifier('missingRequestSchemaProperties'))
                     ->file($returnStatement->getFile())
                     ->line($returnStatement->getLine())
-                    ->build();
-            }
+                    ->build()
+            ];
         }
 
         return $errors;

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace OpenApiTools\PHPStan\Traits;
 
+use OpenApi\Attributes\Schema;
 use OpenApiTools\PHPStan\DTO\ReturnStatement;
+use OpenApiTools\PHPStan\Helpers\Attributes;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
@@ -21,16 +23,17 @@ trait CollectsArrays
             return null;
         }
 
-        /** @var ReflectionClass|null $classReflection */
-        $classReflection = $scope->getClassReflection()?->getNativeReflection();
-        if ($classReflection === null) {
-            throw new ShouldNotHappenException();
-        }
+        /**
+         * @var ReflectionClass $reflection
+         */
+        $reflection = $classReflection = $scope->getClassReflection()?->getNativeReflection();
+        $schema = Attributes::getAttributes($reflection, Schema::class)[0] ?? null;
 
         $collectedData = new ReturnStatement(
             class: $classReflection->getName(),
             file: $classReflection->getFileName() ?: $classReflection->getName(),
             line: $classReflection->getStartLine(),
+            schema: $schema,
             isParentScoped: $scope->getParentScope() !== null,
         );
 

@@ -11,7 +11,11 @@ rules:
     - OpenApiTools\PHPStan\Rules\OpenApi\Operation\ResponsesRule
     - OpenApiTools\PHPStan\Rules\OpenApi\Operation\SummaryRule
     - OpenApiTools\PHPStan\Rules\OpenApi\Operation\TagCountRule
+    - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\EnumRule
+    - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\MissingSchemaPropertiesRule
     - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\MissingSchemaRule
+    - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\NullableRule
+    - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\RequiredRule
     - OpenApiTools\PHPStan\Rules\Laravel\Resource\BooleanPropertyRule
     - OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidateResourceSchemaRule
     - OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidateResourceRule
@@ -33,11 +37,11 @@ services:
         class: OpenApiTools\PHPStan\Collectors\MethodOperationCollector
         tags:
             - phpstan.collector
-    jsonResourceCollector:
-        class: OpenApiTools\PHPStan\Collectors\JsonResourceArrayCollector
+    jsonResourceToArrayReturnCollector:
+        class: OpenApiTools\PHPStan\Collectors\JsonResourceToArrayReturnCollector
         tags:
             - phpstan.collector
-    formRequestCollector:
-        class: OpenApiTools\PHPStan\Collectors\FormRequestArrayCollector
+    formRequestRulesReturnCollector:
+        class: OpenApiTools\PHPStan\Collectors\FormRequestRulesReturnCollector
         tags:
             - phpstan.collector

@@ -8,8 +8,8 @@ use OpenApi\Attributes\Schema;
 use OpenApiTools\PHPStan\DTO\ReturnStatement;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
 use OpenApiTools\PHPStan\Helpers\SchemaProperties;
-use OpenApiTools\PHPStan\Rules\Laravel\FormRequest\Generators\RuleGenerator;
 use OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidatorInterface;
+use OpenApiTools\PHPStan\Traits\IteratesOverReturnStatement;
 use PhpParser\Node;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
@@ -31,7 +31,7 @@ readonly class MissingSchemaPropertyValidator implements ValidatorInterface
          * @var string $property
          * @var Node\ArrayItem $item
          */
-        foreach (RuleGenerator::iterate($arrayReturn) as [$property, $item]) {
+        foreach (IteratesOverReturnStatement::iterate($arrayReturn) as [$property, $item]) {
             $schemaProperty = SchemaProperties::findByName($schema, $property);
             if ($schemaProperty === null) {
                 RuleErrorBuilder::message(sprintf('Returned property "%s" is not defined in schema "%s" class', $property, $arrayReturn->getClass()))
