@@ -39,10 +39,13 @@ readonly class SchemaCollector implements Collector
             return null;
         }
 
-        $class = (string) $node->namespacedName;
+        $className = (string) $node->namespacedName;
+
+        /** @var ReflectionClass $classReflection */
+        $classReflection = $this->reflectionProvider->getClass($className)->getNativeReflection();
 
         foreach ($node->attrGroups as $attrGroup) {
-            foreach ($attrGroup->attrs as $attribute) {
+            foreach ($attrGroup->attrs as $attributeIdx => $attribute) {
                 $resolvedAttributeName = $scope->resolveName($attribute->name);
                 $attributeReflection = $this->reflectionProvider->getClass($resolvedAttributeName);
 
@@ -51,11 +54,11 @@ readonly class SchemaCollector implements Collector
                 }
 
                 /** @var Schema $schema */
-                $schema = $attributeReflection->getNativeReflection()->newInstance();
+                $schema = Attributes::getAttributes($classReflection, Operation::class)[$attributeIdx]->newInstance();
 
                 return serialize(
                     new SchemaAttribute(
-                        class: $class,
+                        class: $className,
                         file: $scope->getFile(),
                         schema: $schema,
                         attribute: $attribute,

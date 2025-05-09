@@ -9,6 +9,7 @@ use OpenApi\Attributes\Schema;
 use OpenApiTools\PHPStan\DTO\OperationAttribute;
 use OpenApiTools\PHPStan\DTO\SchemaAttribute;
 use OpenApiTools\PHPStan\Helpers\Attributes;
+use OpenApiTools\PHPStan\Helpers\NodeHelper;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
@@ -30,6 +31,9 @@ readonly class OperationCollector implements Collector
         return Node\Stmt\ClassMethod::class;
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function processNode(Node $node, Scope $scope): ?string
     {
         if (!$node instanceof Node\Stmt\ClassMethod) {
@@ -40,8 +44,13 @@ readonly class OperationCollector implements Collector
             return null;
         }
 
+        $className = $scope->getClassReflection()->getName();
+        /** @var ReflectionClass $classReflection */
+        $classReflection = $this->reflectionProvider->getClass($className)->getNativeReflection();
+        $methodReflection = $classReflection->getMethod($node->name->toString());
+
         foreach ($node->attrGroups as $attrGroup) {
-            foreach ($attrGroup->attrs as $attribute) {
+            foreach ($attrGroup->attrs as $attributeIdx => $attribute) {
                 $resolvedAttributeName = $scope->resolveName($attribute->name);
                 $attributeReflection = $this->reflectionProvider->getClass($resolvedAttributeName);
 
@@ -50,11 +59,11 @@ readonly class OperationCollector implements Collector
                 }
 
                 /** @var Operation $operation */
-                $operation = $attributeReflection->getNativeReflection()->newInstance();
+                $operation = Attributes::getAttributes($methodReflection, Operation::class)[$attributeIdx]->newInstance();
 
                 return serialize(
                     new OperationAttribute(
-                        class: $scope->getClassReflection()->getName(),
+                        class: $className,
                         file: $scope->getFile(),
                         operation: $operation,
                         attribute: $attribute,

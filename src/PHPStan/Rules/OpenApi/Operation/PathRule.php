@@ -9,6 +9,7 @@ use OpenApi\Generator;
 use OpenApiTools\PHPStan\Collectors\OperationCollector;
 use OpenApiTools\PHPStan\DTO\OperationAttribute;
 use OpenApiTools\PHPStan\Helpers\Attributes;
+use OpenApiTools\PHPStan\Helpers\NodeHelper;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
 use OpenApiTools\PHPStan\Traits\IteratesOverCollection;
 use PhpParser\Node;
@@ -51,12 +52,13 @@ readonly class PathRule implements Rule
         /** @var OperationAttribute $operationAttribute */
         foreach ($this->getIterator($node, OperationCollector::class) as $operationAttribute) {
             $operation = $operationAttribute->getOperation();
+            $pathNode = NodeHelper::findInArgsByName($operationAttribute->getAttribute()->args, 'path');
 
             if (!str_starts_with($operation->path, '/')) {
                 $errors[] = RuleErrorBuilder::message(sprintf('Path "%s" must start with /', $operation->path))
                     ->identifier(RuleIdentifier::identifier('operationPathDoesNotStartWithSlash'))
                     ->file($operationAttribute->getFile())
-                    ->line($operationAttribute->getAttribute()->getLine())
+                    ->line($pathNode?->getLine() ?? $operationAttribute->getAttribute()->getLine())
                     ->build();
             }
 
@@ -64,7 +66,7 @@ readonly class PathRule implements Rule
                 $errors[] = RuleErrorBuilder::message(sprintf('Path "%s" must not end with trailing slash', $operation->path))
                     ->identifier(RuleIdentifier::identifier('operationPathMustNotEndWithSlash'))
                     ->file($operationAttribute->getFile())
-                    ->line($operationAttribute->getAttribute()->getLine())
+                    ->line($pathNode?->getLine() ?? $operationAttribute->getAttribute()->getLine())
                     ->build();
             }
 
@@ -97,7 +99,7 @@ readonly class PathRule implements Rule
                     $errors[] = RuleErrorBuilder::message(sprintf('Path parameter "%s" is missing in operation "%s" parameters', $pathParameter, $operation->path))
                         ->identifier(RuleIdentifier::identifier('pathParameterMissingInSchemaParameters'))
                         ->file($operationAttribute->getFile())
-                        ->line($operationAttribute->getAttribute()->getLine())
+                        ->line($pathNode?->getLine() ?? $operationAttribute->getAttribute()->getLine())
                         ->build();
                 }
             }

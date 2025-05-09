@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace OpenApiTools\PHPStan\Rules\OpenApi\Operation;
 
-use OpenApi\Attributes\Parameter;
-use OpenApi\Generator;
+use OpenApi\Annotations\Operation;
 use OpenApiTools\PHPStan\Collectors\OperationCollector;
 use OpenApiTools\PHPStan\DTO\OperationAttribute;
-use OpenApiTools\PHPStan\Helpers\Attributes;
 use OpenApiTools\PHPStan\Helpers\NodeHelper;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
+use OpenApiTools\PHPStan\Rules\OpenApi\Operation\ValidatorInterface;
 use OpenApiTools\PHPStan\Traits\IteratesOverCollection;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
+use PHPStan\BetterReflection\Reflection\Adapter\ReflectionMethod;
 use PHPStan\Node\CollectedDataNode;
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
@@ -24,7 +23,7 @@ use PHPStan\ShouldNotHappenException;
 /**
  * @implements Rule<CollectedDataNode>
  */
-readonly class DescriptionRule implements Rule
+readonly class TagCountRule implements Rule
 {
     use IteratesOverCollection;
 
@@ -47,15 +46,15 @@ readonly class DescriptionRule implements Rule
         /** @var OperationAttribute $operationAttribute */
         foreach ($this->getIterator($node, OperationCollector::class) as $operationAttribute) {
             $operation = $operationAttribute->getOperation();
+            $tagNode = NodeHelper::findInArgsByName($operationAttribute->getAttribute()->args, 'tags');
 
-            $description = !Generator::isDefault($operation->description) ? $operation->description : '';
-            $descriptionNode = NodeHelper::findInArgsByName($operationAttribute->getAttribute()->args, 'description');
+            $tags = is_array($operation->tags) ? $operation->tags : [];
 
-            if (strlen($description) < 20) {
-                $errors[] = RuleErrorBuilder::message(sprintf('Path "%s" description is too short, must be at least 20 chars', $operation->path))
-                    ->identifier(RuleIdentifier::identifier('operationDescriptionTooShort'))
+            if (count($tags) === 0) {
+                $errors[] = RuleErrorBuilder::message(sprintf('Path "%s" must have at least 1 tag', $operation->path))
+                    ->identifier(RuleIdentifier::identifier('operationTagCountIncorrect'))
                     ->file($operationAttribute->getFile())
-                    ->line($descriptionNode?->getLine() ?? $operationAttribute->getAttribute()->getLine())
+                    ->line($tagNode?->getLine() ?? $operationAttribute->getAttribute()->getLine())
                     ->build();
             }
         }

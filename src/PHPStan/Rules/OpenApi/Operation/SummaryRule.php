@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace OpenApiTools\PHPStan\Rules\OpenApi\Operation;
 
-use OpenApi\Attributes\Parameter;
+use OpenApi\Annotations\Operation;
 use OpenApi\Generator;
 use OpenApiTools\PHPStan\Collectors\OperationCollector;
 use OpenApiTools\PHPStan\DTO\OperationAttribute;
-use OpenApiTools\PHPStan\Helpers\Attributes;
 use OpenApiTools\PHPStan\Helpers\NodeHelper;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
+use OpenApiTools\PHPStan\Rules\OpenApi\Operation\ValidatorInterface;
 use OpenApiTools\PHPStan\Traits\IteratesOverCollection;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
+use PHPStan\BetterReflection\Reflection\Adapter\ReflectionMethod;
 use PHPStan\Node\CollectedDataNode;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
@@ -24,9 +25,15 @@ use PHPStan\ShouldNotHappenException;
 /**
  * @implements Rule<CollectedDataNode>
  */
-readonly class DescriptionRule implements Rule
+readonly class SummaryRule implements Rule
 {
     use IteratesOverCollection;
+
+    public function __construct(
+        private ReflectionProvider $reflectionProvider,
+    )
+    {
+    }
 
     public function getNodeType(): string
     {
@@ -47,15 +54,23 @@ readonly class DescriptionRule implements Rule
         /** @var OperationAttribute $operationAttribute */
         foreach ($this->getIterator($node, OperationCollector::class) as $operationAttribute) {
             $operation = $operationAttribute->getOperation();
+            $summaryNode = NodeHelper::findInArgsByName($operationAttribute->getAttribute()->args, 'summary');
 
-            $description = !Generator::isDefault($operation->description) ? $operation->description : '';
-            $descriptionNode = NodeHelper::findInArgsByName($operationAttribute->getAttribute()->args, 'description');
+            $summary = !Generator::isDefault($operation->summary) ? $operation->summary : '';
 
-            if (strlen($description) < 20) {
-                $errors[] = RuleErrorBuilder::message(sprintf('Path "%s" description is too short, must be at least 20 chars', $operation->path))
-                    ->identifier(RuleIdentifier::identifier('operationDescriptionTooShort'))
+            if (strlen($summary) < 10) {
+                $errors[] = RuleErrorBuilder::message(sprintf('Path "%s" summary is too short, must be at least 10 chars', $operation->path))
+                    ->identifier(RuleIdentifier::identifier('operationSummaryTooShort'))
                     ->file($operationAttribute->getFile())
-                    ->line($descriptionNode?->getLine() ?? $operationAttribute->getAttribute()->getLine())
+                    ->line($summaryNode?->getLine() ?? $operationAttribute->getAttribute()->getLine())
+                    ->build();
+            }
+
+            if (strlen($summary) > 64) {
+                $errors[] = RuleErrorBuilder::message(sprintf('Path "%s" summary is too long, must be up to 64 chars', $operation->path))
+                    ->identifier(RuleIdentifier::identifier('operationSummaryTooLong'))
+                    ->file($operationAttribute->getFile())
+                    ->line($summaryNode?->getLine() ?? $operationAttribute->getAttribute()->getLine())
                     ->build();
             }
         }
