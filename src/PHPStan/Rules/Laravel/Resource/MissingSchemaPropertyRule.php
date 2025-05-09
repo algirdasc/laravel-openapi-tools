@@ -38,7 +38,7 @@ readonly class MissingSchemaPropertyRule implements Rule
         $errors = [];
 
         /** @var ReturnStatement $returnStatement */
-        foreach ($this->getIterator($node, [JsonResourceToArrayReturnCollector::class]) as $fileId => $returnStatement) {
+        foreach ($this->getIterator($node, [JsonResourceToArrayReturnCollector::class]) as $returnStatement) {
             $schema = $returnStatement->getSchema();
             if ($schema === null) {
                 continue;

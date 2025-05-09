@@ -35,9 +35,10 @@ readonly class MissingSchemaRule implements Rule
         $errors = [];
 
         /** @var ReturnStatement $returnStatement */
-        foreach ($this->getIterator($node, [FormRequestRulesReturnCollector::class]) as $fileId => $returnStatement) {
+        foreach ($this->getIterator($node, [FormRequestRulesReturnCollector::class]) as $returnStatement) {
             if ($returnStatement->getSchema() === null) {
-                $errors[$fileId] = RuleErrorBuilder::message(sprintf('Missing schema attribute on FormRequest "%s" class', $returnStatement->getClass()))
+                $file = $returnStatement->getFile();
+                $errors[$file] = RuleErrorBuilder::message(sprintf('Missing schema attribute on FormRequest "%s" class', $returnStatement->getClass()))
                     ->identifier(RuleIdentifier::identifier('missingRequestSchemaAttribute'))
                     ->file($returnStatement->getFile())
                     ->line($returnStatement->getLine())
@@ -45,6 +46,6 @@ readonly class MissingSchemaRule implements Rule
             }
         }
 
-        return $errors;
+        return array_values($errors);
     }
 }

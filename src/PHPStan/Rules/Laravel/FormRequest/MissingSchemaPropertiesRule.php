@@ -36,7 +36,7 @@ readonly class MissingSchemaPropertiesRule implements Rule
         $errors = [];
 
         /** @var ReturnStatement $returnStatement */
-        foreach ($this->getIterator($node, [FormRequestRulesReturnCollector::class]) as $fileId => $returnStatement) {
+        foreach ($this->getIterator($node, [FormRequestRulesReturnCollector::class]) as $returnStatement) {
             $schema = $returnStatement->getSchema();
             if ($schema === null) {
                 continue;
@@ -46,7 +46,9 @@ readonly class MissingSchemaPropertiesRule implements Rule
                 continue;
             }
 
-            $errors[$fileId] = [
+            $file = $returnStatement->getFile();
+
+            $errors[$file] = [
                 RuleErrorBuilder::message(sprintf('Missing schema properties on FormRequest "%s" class', $returnStatement->getClass()))
                     ->identifier(RuleIdentifier::identifier('missingRequestSchemaProperties'))
                     ->file($returnStatement->getFile())
@@ -55,6 +57,6 @@ readonly class MissingSchemaPropertiesRule implements Rule
             ];
         }
 
-        return $errors;
+        return array_values($errors);
     }
 }

@@ -20,13 +20,13 @@ trait IteratesOverCollection
 
         foreach ($collectors as $collector) {
             $collectedData = $node->get($collector);
-            foreach ($collectedData as $fileIdx => $declarations) {
+            foreach ($collectedData as $declarations) {
                 foreach ($declarations as $declaration) {
                     if ($declaration === null) {
                         continue;
                     }
 
-                    yield [$fileIdx, unserialize($declaration)];
+                    yield unserialize($declaration);
                 }
             }
         }
