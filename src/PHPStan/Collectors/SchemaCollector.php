@@ -6,37 +6,57 @@ namespace OpenApiTools\PHPStan\Collectors;
 
 use OpenApi\Attributes\Schema;
 use OpenApiTools\PHPStan\DTO\SchemaAttribute;
+use OpenApiTools\PHPStan\Helpers\Attributes;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
 use PHPStan\Collectors\Collector;
+use PHPStan\Reflection\ReflectionProvider;
 
 /**
- * @implements Collector<Node\Attribute, string|null>
+ * @implements Collector<Node\Stmt\Class_, string|null>
  */
-class SchemaCollector implements Collector
+readonly class SchemaCollector implements Collector
 {
+    public function __construct(
+        private ReflectionProvider $reflectionProvider,
+    ) {
+    }
+
     public function getNodeType(): string
     {
-        return Node\Attribute::class;
+        return Node\Stmt\Class_::class;
     }
 
     public function processNode(Node $node, Scope $scope): ?string
     {
-        if (!$node instanceof Node\Attribute) {
+        if (!$node instanceof Node\Stmt\Class_) {
             return null;
         }
 
-        if ($node->name->name !== Schema::class) {
-            return null;
+        $class = (string) $node->namespacedName;
+
+        foreach ($node->attrGroups as $attrGroup) {
+            foreach ($attrGroup->attrs as $attribute) {
+                $resolvedAttributeName = $scope->resolveName($attribute->name);
+                if ($resolvedAttributeName === Schema::class) {
+                    /** @var ReflectionClass $reflection */
+                    $reflection = $this->reflectionProvider->getClass($class)->getNativeReflection();
+                    /** @var Schema $schema */
+                    $schema = Attributes::getAttributes($reflection, Schema::class)[0]->newInstance();
+
+                    return serialize(
+                        new SchemaAttribute(
+                            class: $class,
+                            file: $scope->getFile(),
+                            schema: $schema,
+                            attribute: $attribute,
+                        )
+                    );
+                }
+            }
         }
 
-        return serialize(
-            new SchemaAttribute(
-                class: $scope->getClassReflection()->getName(),
-                file: $scope->getFile(),
-                line: $node->getLine(),
-                attribute: $node,
-            )
-        );
+        return null;
     }
 }

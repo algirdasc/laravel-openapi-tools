@@ -8,6 +8,8 @@ use OpenApi\Attributes\Items;
 use OpenApi\Attributes\Property;
 use OpenApi\Attributes\Schema;
 use OpenApi\Generator;
+use PhpParser\Node\ArrayItem;
+use PhpParser\Node\Attribute;
 
 class SchemaProperties
 {
@@ -21,6 +23,27 @@ class SchemaProperties
         foreach ($schema->properties as $property) {
             if ($property->property === $name) {
                 return $property;
+            }
+        }
+
+        return null;
+    }
+
+    public static function findFromNodeByName(Attribute $node, string $name): ?ArrayItem
+    {
+        foreach ($node->args as $arg) {
+            if ($arg->name?->name !== 'properties') {
+                continue;
+            }
+
+            if (!$arg->value instanceof ArrayItem) {
+                continue;
+            }
+
+            foreach ($arg->value->items as $property) {
+                if ($property->value->args[0]->value->value === $name) {
+                    return $property;
+                }
             }
         }
 

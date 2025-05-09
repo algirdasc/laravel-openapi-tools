@@ -1,7 +1,11 @@
 rules:
     - OpenApiTools\PHPStan\Rules\OpenApi\Operation\ValidateOperationRule
+
     - OpenApiTools\PHPStan\Rules\OpenApi\Schema\ValidateSchemaRule
+
     - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\ValidateFormRequestRule
+
+    - OpenApiTools\PHPStan\Rules\Laravel\Resource\BooleanPropertyRule
     - OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidateResourceSchemaRule
     - OpenApiTools\PHPStan\Rules\Laravel\Resource\ValidateResourceRule
 
@@ -101,10 +105,6 @@ services:
             - openApiTools.validators.laravel.resource
     -
         class: OpenApiTools\PHPStan\Rules\Laravel\Resource\Validators\MissingReturnPropertyValidator
-        tags:
-            - openApiTools.validators.laravel.resource
-    -
-        class: OpenApiTools\PHPStan\Rules\Laravel\Resource\Validators\BooleanReturnPropertyValidator
         tags:
             - openApiTools.validators.laravel.resource
     -

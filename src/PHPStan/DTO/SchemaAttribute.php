@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace OpenApiTools\PHPStan\DTO;
 
+use OpenApi\Attributes\Schema;
 use PhpParser\Node\Attribute;
 
-class SchemaAttribute
+readonly class SchemaAttribute
 {
     public function __construct(
-        private readonly string $class,
-        private readonly string $file,
-        private readonly int    $line,
-        private ?Attribute $attribute = null
+        private string $class,
+        private string $file,
+        private Schema $schema,
+        private Attribute $attribute
     ) {
     }
 
@@ -26,18 +27,13 @@ class SchemaAttribute
         return $this->file;
     }
 
-    public function getLine(): int
+    public function getSchema(): Schema
     {
-        return $this->line;
+        return $this->schema;
     }
 
-    public function getAttribute(): ?Attribute
+    public function getAttribute(): Attribute
     {
         return $this->attribute;
-    }
-
-    public function setAttribute(?Attribute $attribute): void
-    {
-        $this->attribute = $attribute;
     }
 }
