@@ -1,7 +1,6 @@
 {
   "name": "algirdasc/laravel-openapi-tools",
   "type": "package",
-  "version": "1.0.0",
   "description": "",
   "license": "GPL-3.0-or-later",
   "require": {
