@@ -62,13 +62,13 @@ readonly class RequestBodyFormRequestParametersRule implements Rule
             try {
                 $methodReflection = $classReflection->getMethod($operationAttribute->getMethod());
             } catch (\ReflectionException $e) {
-                return [
-                    RuleErrorBuilder::message('Operation attribute applied to class, but "%s" method not found')
-                        ->identifier(RuleIdentifier::identifier('operationMethodNotFound'))
-                        ->file($operationAttribute->getFile())
-                        ->line($operationAttribute->getAttribute()->getLine())
-                        ->build()
-                ];
+                $errors[] = RuleErrorBuilder::message(sprintf('Operation attribute applied to class, but "%s" method not found', $operationAttribute->getMethod()))
+                    ->identifier(RuleIdentifier::identifier('operationMethodNotFound'))
+                    ->file($operationAttribute->getFile())
+                    ->line($operationAttribute->getAttribute()->getLine())
+                    ->build();
+
+                continue;
             }
 
             $operation = $operationAttribute->getOperation();
@@ -85,6 +85,8 @@ readonly class RequestBodyFormRequestParametersRule implements Rule
                 }
 
                 $requestBody = !Generator::isDefault($operation->requestBody) ? $operation->requestBody : null;
+
+                // TODO: check reference
 
                 if ($requestBody === null && !$operation instanceof Get) {
                     $errors[] = RuleErrorBuilder::message(sprintf('Missing "requestBody" property for method "%s" with FormRequest parameter type "%s"', $methodReflection->getName(), $parameter->getName()))

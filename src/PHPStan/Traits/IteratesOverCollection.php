@@ -6,14 +6,24 @@ namespace OpenApiTools\PHPStan\Traits;
 
 use PhpParser\Node;
 use PHPStan\Collectors\Collector;
+use PHPStan\Node\CollectedDataNode;
 
 trait IteratesOverCollection
 {
     /**
-     * @param array<class-string<Collector>>|class-string<Collector> $collectors
+     * @template TNodeType of Node
+     * @param array<class-string<Collector<TNodeType, mixed>>>|class-string<Collector<TNodeType, mixed>> $collectors
+     * @return iterable<object>
      */
     public function getIterator(Node $node, array|string $collectors): iterable
     {
+        /**
+         * @phpstan-ignore phpstanApi.instanceofAssumption
+         */
+        if (!$node instanceof CollectedDataNode) {
+            return;
+        }
+
         if (!is_array($collectors)) {
             $collectors = [$collectors];
         }

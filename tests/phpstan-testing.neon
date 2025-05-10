@@ -1,0 +1,5 @@
+services:
+    schemaNameGenerator:
+        class: OpenApiTools\PHPStan\Generators\LaravelSchemaNameGenerator
+    propertyNameGenerator:
+        class: OpenApiTools\PHPStan\Generators\SnakeCasePropertyNameGenerator

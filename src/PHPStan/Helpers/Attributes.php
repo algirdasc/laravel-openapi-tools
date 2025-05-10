@@ -13,18 +13,29 @@ use PHPStan\BetterReflection\Reflector\Exception\IdentifierNotFound;
 class Attributes
 {
     /**
-     * @param class-string $attributeName
-     * @return list<ReflectionAttribute>
+     * @template TAttribute
+     * @param class-string<TAttribute> $attributeName
+     * @return array<ReflectionAttribute>
      */
     static public function getAttributes(ReflectionClass|ReflectionMethod $reflection, string $attributeName): array
     {
         try {
-            /** @var list<ReflectionAttribute> $attributes */
+            /** @var array<ReflectionAttribute> $attributes */
             $attributes = $reflection->getAttributes($attributeName, ReflectionAttribute::IS_INSTANCEOF);
         } catch (IdentifierNotFound $e) {
             $attributes = [];
         }
 
         return $attributes;
+    }
+
+    /**
+     * @template TAttribute
+     * @param class-string<TAttribute> $attributeName
+     * @return ReflectionAttribute|null
+     */
+    static public function getAttribute(ReflectionClass|ReflectionMethod $reflection, string $attributeName): ?ReflectionAttribute
+    {
+        return self::getAttributes($reflection, $attributeName)[0] ?? null;
     }
 }

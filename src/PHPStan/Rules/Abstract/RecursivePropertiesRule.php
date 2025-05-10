@@ -128,6 +128,8 @@ abstract class RecursivePropertiesRule implements Rule
     private function findPropertyNodeFromArray(Node\Expr\Array_ $nodes, string $name): ?Node\Expr\ArrayItem
     {
         foreach ($nodes->items as $item) {
+            // todo: fix phpstan error
+            /** @phpstan-ignore property.notFound */
             if ($item->value->args[0]->value->value === $name) {
                 return $item;
             }

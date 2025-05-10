@@ -39,21 +39,18 @@ readonly class DescriptionRule implements Rule
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        if (!$node instanceof CollectedDataNode) {
-            return [];
-        }
-
         $errors = [];
 
         /** @var OperationAttribute $operationAttribute */
         foreach ($this->getIterator($node, [MethodOperationCollector::class, ClassOperationCollector::class]) as $operationAttribute) {
             $operation = $operationAttribute->getOperation();
+            $operationName = sprintf('%s %s', strtoupper($operation->method), $operation->path);
 
             $description = !Generator::isDefault($operation->description) ? $operation->description : '';
             $descriptionNode = NodeHelper::findInArgsByName($operationAttribute->getAttribute()->args, 'description');
 
             if (strlen($description) < 20) {
-                $errors[] = RuleErrorBuilder::message(sprintf('Path "%s" description is too short, must be at least 20 chars', $operation->path))
+                $errors[] = RuleErrorBuilder::message(sprintf('Operation "%s" description is too short, must be at least 20 chars', $operationName))
                     ->identifier(RuleIdentifier::identifier('operationDescriptionTooShort'))
                     ->file($operationAttribute->getFile())
                     ->line($descriptionNode?->getLine() ?? $operationAttribute->getAttribute()->getLine())

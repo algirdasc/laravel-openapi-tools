@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OpenApiTools\PHPStan\Rules\OpenApi\Schema;
 
+use OpenApi\Annotations\Property;
 use OpenApi\Attributes\Items;
 use OpenApi\Attributes\Schema;
 use OpenApi\Generator;
@@ -40,16 +41,12 @@ readonly class RequiredPropertiesRule implements Rule
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        if (!$node instanceof Node\Stmt\Class_) {
-            return [];
-        }
-
-        $className = (string)$node->namespacedName;
+        $className = (string) $node->namespacedName;
 
         /** @var ReflectionClass $reflectionClass */
         $reflectionClass = $this->reflectionProvider->getClass($className)->getNativeReflection();
         /** @var Schema|null $schema */
-        $schema = Attributes::getAttributes($reflectionClass, Schema::class)[0]?->newInstance() ?? null;
+        $schema = Attributes::getAttribute($reflectionClass, Schema::class)?->newInstance();
 
         if ($schema === null) {
             return [];
@@ -75,7 +72,7 @@ readonly class RequiredPropertiesRule implements Rule
      * @return array<string>
      * @throws ShouldNotHappenException
      */
-    private function validateRecursive(Schema|Items $schema): array
+    private function validateRecursive(Schema|Items|Property $schema): array
     {
         $undefinedProperties = [];
         $propertyNames = [];
@@ -87,6 +84,13 @@ readonly class RequiredPropertiesRule implements Rule
                 $undefinedProperties = [
                     ...$undefinedProperties,
                     ...$this->validateRecursive($property->items),
+                ];
+            }
+
+            if (!Generator::isDefault($property->properties) ? $property->properties : []) {
+                $undefinedProperties = [
+                    ...$undefinedProperties,
+                    ...$this->validateRecursive($property),
                 ];
             }
         }

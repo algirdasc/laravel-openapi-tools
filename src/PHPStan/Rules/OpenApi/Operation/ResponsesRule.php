@@ -48,6 +48,7 @@ readonly class ResponsesRule implements Rule
         /** @var OperationAttribute $operationAttribute */
         foreach ($this->getIterator($node, [MethodOperationCollector::class, ClassOperationCollector::class]) as $operationAttribute) {
             $operation = $operationAttribute->getOperation();
+            $operationName = sprintf('%s %s', strtoupper($operation->method), $operation->path);
 
             $responses = !Generator::isDefault($operation->responses) ? $operation->responses : [];
             $responsesNode = NodeHelper::findInArgsByName($operationAttribute->getAttribute()->args, 'responses');
@@ -58,7 +59,7 @@ readonly class ResponsesRule implements Rule
             $unauthorizedResponseFound = false;
             $unprocessableResponseFound = false;
             foreach ($responses as $response) {
-                if ($response->response >= Response::HTTP_OK && $response->response < Response::HTTP_MULTIPLE_CHOICES) {
+                if ($response->response >= Response::HTTP_OK && $response->response < Response::HTTP_BAD_REQUEST) {
                     $successResponseFound = true;
                 }
 
@@ -76,7 +77,7 @@ readonly class ResponsesRule implements Rule
             }
 
             if ($successResponseFound === false) {
-                $errors[] = RuleErrorBuilder::message(sprintf('Operation "%s" must have success response set', $operation->path))
+                $errors[] = RuleErrorBuilder::message(sprintf('Operation "%s" must have success response set', $operationName))
                     ->identifier(RuleIdentifier::identifier('noSuccessResponse'))
                     ->file($operationAttribute->getFile())
                     ->line($responsesNode?->getLine() ?? $operationAttribute->getAttribute()->getLine())
@@ -84,7 +85,7 @@ readonly class ResponsesRule implements Rule
             }
 
             if ($unauthorizedResponseFound === false) {
-                $errors[] = RuleErrorBuilder::message(sprintf('Operation for "%s" must have unauthorized response set', $operation->path))
+                $errors[] = RuleErrorBuilder::message(sprintf('Operation "%s" must have unauthorized response set', $operationName))
                     ->identifier(RuleIdentifier::identifier('noUnauthorizedResponse'))
                     ->file($operationAttribute->getFile())
                     ->line($responsesNode?->getLine() ?? $operationAttribute->getAttribute()->getLine())
@@ -92,7 +93,7 @@ readonly class ResponsesRule implements Rule
             }
 
             if ($errorResponseFound === false) {
-                $errors[] = RuleErrorBuilder::message(sprintf('Operation for "%s" must have error response set', $operation->path))
+                $errors[] = RuleErrorBuilder::message(sprintf('Operation "%s" must have error response set', $operationName))
                     ->identifier(RuleIdentifier::identifier('noErrorResponse'))
                     ->file($operationAttribute->getFile())
                     ->line($responsesNode?->getLine() ?? $operationAttribute->getAttribute()->getLine())
@@ -100,7 +101,7 @@ readonly class ResponsesRule implements Rule
             }
 
             if ($unprocessableResponseFound === false && $hasRequestBody) {
-                $errors[] = RuleErrorBuilder::message(sprintf('Operation for "%s" must have unprocessable response set', $operation->path))
+                $errors[] = RuleErrorBuilder::message(sprintf('Operation "%s" must have unprocessable response set', $operationName))
                     ->identifier(RuleIdentifier::identifier('noUnprocessableResponse'))
                     ->file($operationAttribute->getFile())
                     ->line($responsesNode?->getLine() ?? $operationAttribute->getAttribute()->getLine())

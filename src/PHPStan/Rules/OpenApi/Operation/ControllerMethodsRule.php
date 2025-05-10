@@ -56,13 +56,11 @@ readonly class ControllerMethodsRule implements Rule
             }
 
             if (in_array('__invoke', $methods) && count($methods) > 1) {
-                return [
-                    RuleErrorBuilder::message('Controller must not have any other methods if __invoke is defined')
-                        ->identifier(RuleIdentifier::identifier('keepControllerCleanFromOtherMethods'))
-                        ->file($operationAttribute->getFile())
-                        ->line($operationAttribute->getAttribute()->getLine())
-                        ->build(),
-                ];
+                $errors[] = RuleErrorBuilder::message('Controller must not have any other methods if "__invoke" method is defined')
+                    ->identifier(RuleIdentifier::identifier('keepControllerCleanFromOtherMethods'))
+                    ->file($operationAttribute->getFile())
+                    ->line($operationAttribute->getAttribute()->getLine())
+                    ->build();
             }
         }
 

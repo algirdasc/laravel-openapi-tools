@@ -28,25 +28,4 @@ class SchemaProperties
 
         return null;
     }
-
-    public static function findFromNodeByName(Attribute $node, string $name): ?ArrayItem
-    {
-        foreach ($node->args as $arg) {
-            if ($arg->name?->name !== 'properties') {
-                continue;
-            }
-
-            if (!$arg->value instanceof ArrayItem) {
-                continue;
-            }
-
-            foreach ($arg->value->items as $property) {
-                if ($property->value->args[0]->value->value === $name) {
-                    return $property;
-                }
-            }
-        }
-
-        return null;
-    }
 }

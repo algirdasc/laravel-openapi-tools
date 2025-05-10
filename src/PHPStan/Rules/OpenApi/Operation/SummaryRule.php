@@ -35,21 +35,19 @@ readonly class SummaryRule implements Rule
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        if (!$node instanceof CollectedDataNode) {
-            return [];
-        }
-
         $errors = [];
 
         /** @var OperationAttribute $operationAttribute */
         foreach ($this->getIterator($node, [MethodOperationCollector::class, ClassOperationCollector::class]) as $operationAttribute) {
             $operation = $operationAttribute->getOperation();
+            $operationName = sprintf('%s %s', strtoupper($operation->method), $operation->path);
+
             $summaryNode = NodeHelper::findInArgsByName($operationAttribute->getAttribute()->args, 'summary');
 
             $summary = !Generator::isDefault($operation->summary) ? $operation->summary : '';
 
             if (strlen($summary) < 10) {
-                $errors[] = RuleErrorBuilder::message(sprintf('Path "%s" summary is too short, must be at least 10 chars', $operation->path))
+                $errors[] = RuleErrorBuilder::message(sprintf('Operation "%s" summary is too short, must be at least 10 chars', $operationName))
                     ->identifier(RuleIdentifier::identifier('operationSummaryTooShort'))
                     ->file($operationAttribute->getFile())
                     ->line($summaryNode?->getLine() ?? $operationAttribute->getAttribute()->getLine())
@@ -57,7 +55,7 @@ readonly class SummaryRule implements Rule
             }
 
             if (strlen($summary) > 64) {
-                $errors[] = RuleErrorBuilder::message(sprintf('Path "%s" summary is too long, must be up to 64 chars', $operation->path))
+                $errors[] = RuleErrorBuilder::message(sprintf('Operation "%s" summary is too long, must be at to 64 chars', $operationName))
                     ->identifier(RuleIdentifier::identifier('operationSummaryTooLong'))
                     ->file($operationAttribute->getFile())
                     ->line($summaryNode?->getLine() ?? $operationAttribute->getAttribute()->getLine())

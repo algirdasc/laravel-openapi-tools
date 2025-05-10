@@ -48,7 +48,7 @@ readonly class SchemaNameRule implements Rule
         /** @var ReflectionClass $reflectionClass */
         $reflectionClass = $this->reflectionProvider->getClass($className)->getNativeReflection();
         /** @var Schema|null $schema */
-        $schema = Attributes::getAttributes($reflectionClass, Schema::class)[0]?->newInstance() ?? null;
+        $schema = Attributes::getAttribute($reflectionClass, Schema::class)?->newInstance();
 
         if ($schema === null) {
             return [];
