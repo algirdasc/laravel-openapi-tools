@@ -6,31 +6,29 @@ namespace Tests\PHPStan\Rules\OpenApi\Operation;
 
 use OpenApiTools\PHPStan\Collectors\ClassOperationCollector;
 use OpenApiTools\PHPStan\Collectors\MethodOperationCollector;
-use OpenApiTools\PHPStan\Rules\OpenApi\Operation\TagCountRule;
-use PHPStan\Collectors\Collector;
+use OpenApiTools\PHPStan\Rules\OpenApi\Operation\ControllerInvokeMethodRule;
+use OpenApiTools\PHPStan\Rules\OpenApi\Operation\DescriptionRule;
 use PHPStan\Rules\Rule;
 use Tests\CustomRuleTestCase;
 
 /**
- * @extends CustomRuleTestCase<TagCountRule>
+ * @extends CustomRuleTestCase<ControllerInvokeMethodRule>
  */
-class TagCountRuleTest extends CustomRuleTestCase
+class ControllerInvokeMethodRuleTest extends CustomRuleTestCase
 {
     protected function getRule(): Rule
     {
-        return new TagCountRule();
+        return new ControllerInvokeMethodRule();
     }
 
     public function testRule(): void
     {
         $this->analyse(
             [
-                __DIR__ . '/Data/TagCountDataClass.php',
+                __DIR__ . '/Data/InvokeControllerDataClass.php',
             ],
             [
-                ['Operation "DELETE /method1-tags" must have at least 1 tag', 15],
-                ['Operation "POST /method2-tags" must have at least 1 tag', 21],
-                ['Operation "GET /class-tags" must have at least 1 tag', 9],
+                ['OpenApi attributes must be applied on class scope', 9],
             ]
         );
     }

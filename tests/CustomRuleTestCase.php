@@ -15,6 +15,6 @@ abstract class CustomRuleTestCase extends RuleTestCase
 {
     public static function getAdditionalConfigFiles(): array
     {
-        return [__DIR__ . '/../extension.neon'];
+        return [__DIR__ . '/phpstan-testing.neon'];
     }
 }

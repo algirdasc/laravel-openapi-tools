@@ -6,31 +6,31 @@ namespace Tests\PHPStan\Rules\OpenApi\Operation;
 
 use OpenApiTools\PHPStan\Collectors\ClassOperationCollector;
 use OpenApiTools\PHPStan\Collectors\MethodOperationCollector;
-use OpenApiTools\PHPStan\Rules\OpenApi\Operation\TagCountRule;
-use PHPStan\Collectors\Collector;
+use OpenApiTools\PHPStan\Rules\OpenApi\Operation\ControllerInvokeMethodRule;
+use OpenApiTools\PHPStan\Rules\OpenApi\Operation\SummaryRule;
 use PHPStan\Rules\Rule;
 use Tests\CustomRuleTestCase;
 
 /**
- * @extends CustomRuleTestCase<TagCountRule>
+ * @extends CustomRuleTestCase<SummaryRule>
  */
-class TagCountRuleTest extends CustomRuleTestCase
+class SummaryRuleTest extends CustomRuleTestCase
 {
     protected function getRule(): Rule
     {
-        return new TagCountRule();
+        return new SummaryRule();
     }
 
     public function testRule(): void
     {
         $this->analyse(
             [
-                __DIR__ . '/Data/TagCountDataClass.php',
+                __DIR__ . '/Data/SummaryAndDescription.php',
             ],
             [
-                ['Operation "DELETE /method1-tags" must have at least 1 tag', 15],
-                ['Operation "POST /method2-tags" must have at least 1 tag', 21],
-                ['Operation "GET /class-tags" must have at least 1 tag', 9],
+                ['Operation "DELETE /method1" summary is too short, must be at least 10 chars', 17],
+                ['Operation "DELETE /method2" summary is too long, must be at to 64 chars', 26],
+                ['Operation "GET /class" summary is too short, must be at least 10 chars', 10],
             ]
         );
     }

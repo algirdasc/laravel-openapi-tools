@@ -51,13 +51,13 @@ readonly class ControllerMethodParametersRule implements Rule
             try {
                 $methodReflection = $classReflection->getMethod($operationAttribute->getMethod());
             } catch (\ReflectionException $e) {
-                return [
-                    RuleErrorBuilder::message('Operation attribute applied to class, but "%s" method not found')
+                $errors[] = RuleErrorBuilder::message(sprintf('Operation attribute applied to class, but "%s" method not found', $operationAttribute->getMethod()))
                         ->identifier(RuleIdentifier::identifier('operationMethodNotFound'))
                         ->file($operationAttribute->getFile())
                         ->line($operationAttribute->getAttribute()->getLine())
-                        ->build()
-                ];
+                        ->build();
+
+                continue;
             }
 
             $operation = $operationAttribute->getOperation();
@@ -75,15 +75,13 @@ readonly class ControllerMethodParametersRule implements Rule
                         ->file($operationAttribute->getFile())
                         ->line($operationAttribute->getAttribute()->getLine())
                         ->build();
-
-                    continue;
                 }
 
                 $orderedParameters[] = $parameter->getName();
             }
 
             if (!$orderedParameters) {
-                return $errors;
+                continue;
             }
 
             preg_match_all('/{(.*?)}/', $operation->path, $pathParameters);
@@ -91,17 +89,8 @@ readonly class ControllerMethodParametersRule implements Rule
 
             $parametersDiff = array_diff_assoc($pathParameters, $orderedParameters);
             if ($parametersDiff) {
-                $errors[] = RuleErrorBuilder::message(sprintf('Method "%s" parameters "%s" are either missing or not in the correct order', $methodReflection->getName(), implode(', ', $parametersDiff)))
+                $errors[] = RuleErrorBuilder::message(sprintf('Method "%s" parameters "%s" are either missing or not in the correct order', $methodReflection->getName(), implode('", "', $parametersDiff)))
                     ->identifier(RuleIdentifier::identifier('missingOrIncorrectMethodParametersOrder'))
-                    ->file($operationAttribute->getFile())
-                    ->line($operationAttribute->getAttribute()->getLine())
-                    ->build();
-            }
-
-            $parametersDiff = array_diff_assoc($orderedParameters, $pathParameters);
-            if ($parametersDiff) {
-                $errors[] = RuleErrorBuilder::message(sprintf('Method "%s" parameters "%s" are missing in operation path', $methodReflection->getName(), implode(', ', $parametersDiff)))
-                    ->identifier(RuleIdentifier::identifier('missingMethodParameterInSchemaPath'))
                     ->file($operationAttribute->getFile())
                     ->line($operationAttribute->getAttribute()->getLine())
                     ->build();

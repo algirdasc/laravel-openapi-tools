@@ -39,12 +39,14 @@ readonly class TagCountRule implements Rule
         /** @var OperationAttribute $operationAttribute */
         foreach ($this->getIterator($node, [MethodOperationCollector::class, ClassOperationCollector::class]) as $operationAttribute) {
             $operation = $operationAttribute->getOperation();
+            $operationName = sprintf('%s %s', strtoupper($operation->method), $operation->path);
+
             $tagNode = NodeHelper::findInArgsByName($operationAttribute->getAttribute()->args, 'tags');
 
             $tags = is_array($operation->tags) ? $operation->tags : [];
 
             if (count($tags) === 0) {
-                $errors[] = RuleErrorBuilder::message(sprintf('Path "%s" must have at least 1 tag', $operation->path))
+                $errors[] = RuleErrorBuilder::message(sprintf('Operation "%s" must have at least 1 tag', $operationName))
                     ->identifier(RuleIdentifier::identifier('operationTagCountIncorrect'))
                     ->file($operationAttribute->getFile())
                     ->line($tagNode?->getLine() ?? $operationAttribute->getAttribute()->getLine())

@@ -16,6 +16,7 @@ use OpenApiTools\PHPStan\Traits\IteratesOverCollection;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
+use PHPStan\Broker\ClassNotFoundException;
 use PHPStan\Node\CollectedDataNode;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
@@ -62,18 +63,26 @@ readonly class RequestBodyReferenceRule implements Rule
                 : ($requestBody->content->ref ?? null);
 
             if ($contentReference === null || Generator::isDefault($contentReference)) {
-                return $errors;
+                continue;
             }
 
-            /**
-             * @var ReflectionClass $reflection
-             */
-            $reflection = $this->reflectionProvider->getClass($contentReference)->getNativeReflection();
-            $schema = Attributes::getAttributes($reflection, Schema::class);
+            try {
+                /**
+                 * @var ReflectionClass $reflection
+                 */
+                $reflection = $this->reflectionProvider->getClass($contentReference)->getNativeReflection();
+                $schema = Attributes::getAttributes($reflection, Schema::class);
 
-            if (!$schema) {
-                $errors[] = RuleErrorBuilder::message(sprintf('RequestBody reference "%s" does not have schema attribute', $contentReference))
-                    ->identifier(RuleIdentifier::identifier('operationRequestBodyReferenceHasEmptySchema'))
+                if (!$schema) {
+                    $errors[] = RuleErrorBuilder::message(sprintf('RequestBody reference "%s" does not have schema attribute', $contentReference))
+                        ->identifier(RuleIdentifier::identifier('operationRequestBodyReferenceHasEmptySchema'))
+                        ->file($operationAttribute->getFile())
+                        ->line($requestBodyNode?->getLine() ?? $operationAttribute->getAttribute()->getLine())
+                        ->build();
+                }
+            } catch (ClassNotFoundException $e) {
+                $errors[] = RuleErrorBuilder::message(sprintf('RequestBody reference "%s" does not exist', $contentReference))
+                    ->identifier(RuleIdentifier::identifier('operationRequestBodyReferenceDoesNotExist'))
                     ->file($operationAttribute->getFile())
                     ->line($requestBodyNode?->getLine() ?? $operationAttribute->getAttribute()->getLine())
                     ->build();

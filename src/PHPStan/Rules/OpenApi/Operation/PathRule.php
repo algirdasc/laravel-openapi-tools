@@ -53,10 +53,12 @@ readonly class PathRule implements Rule
         /** @var OperationAttribute $operationAttribute */
         foreach ($this->getIterator($node, [MethodOperationCollector::class, ClassOperationCollector::class]) as $operationAttribute) {
             $operation = $operationAttribute->getOperation();
+            $operationName = sprintf('%s %s', strtoupper($operation->method), $operation->path);
+
             $pathNode = NodeHelper::findInArgsByName($operationAttribute->getAttribute()->args, 'path');
 
             if (!str_starts_with($operation->path, '/')) {
-                $errors[] = RuleErrorBuilder::message(sprintf('Path "%s" must start leading slash', $operation->path))
+                $errors[] = RuleErrorBuilder::message(sprintf('Operation "%s" path must start leading slash', $operationName))
                     ->identifier(RuleIdentifier::identifier('operationPathDoesNotStartWithSlash'))
                     ->file($operationAttribute->getFile())
                     ->line($pathNode?->getLine() ?? $operationAttribute->getAttribute()->getLine())
@@ -64,7 +66,7 @@ readonly class PathRule implements Rule
             }
 
             if (str_ends_with($operation->path, '/')) {
-                $errors[] = RuleErrorBuilder::message(sprintf('Path "%s" must not end with trailing slash', $operation->path))
+                $errors[] = RuleErrorBuilder::message(sprintf('Operation "%s" must not end with trailing slash', $operationName))
                     ->identifier(RuleIdentifier::identifier('operationPathMustNotEndWithSlash'))
                     ->file($operationAttribute->getFile())
                     ->line($pathNode?->getLine() ?? $operationAttribute->getAttribute()->getLine())
@@ -90,14 +92,14 @@ readonly class PathRule implements Rule
                         }
                     }
 
-                    if ($parameter->name === $pathParameter && $parameter->in === 'path') {
+                    if ($parameter->parameter === $pathParameter && $parameter->in === 'path') {
                         $found = true;
                         break;
                     }
                 }
 
                 if (!$found) {
-                    $errors[] = RuleErrorBuilder::message(sprintf('Path parameter "%s" is missing in operation "%s" parameters', $pathParameter, $operation->path))
+                    $errors[] = RuleErrorBuilder::message(sprintf('Operation "%s" parameter "%s" is missing in operation parameters', $operationName, $pathParameter))
                         ->identifier(RuleIdentifier::identifier('pathParameterMissingInSchemaParameters'))
                         ->file($operationAttribute->getFile())
                         ->line($pathNode?->getLine() ?? $operationAttribute->getAttribute()->getLine())

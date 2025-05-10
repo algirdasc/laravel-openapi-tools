@@ -13,6 +13,7 @@ use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
 use OpenApiTools\PHPStan\Rules\Abstract\RecursivePropertiesRule;
 use PhpParser\Node;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
+use PHPStan\Broker\ClassNotFoundException;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\RuleErrorBuilder;
@@ -39,6 +40,8 @@ class PropertiesRule extends RecursivePropertiesRule
     public function validateProperty(Property $property, Node\ArrayItem $node): array
     {
         $errors = [];
+
+        // TODO: check for duplicates
 
         if (!Generator::isDefault($property->type) && !in_array($property->type, self::PROPERTY_TYPES)) {
             $errors[] = RuleErrorBuilder::message(sprintf('Property "%s" has incorrect type', $property->property))
@@ -82,16 +85,24 @@ class PropertiesRule extends RecursivePropertiesRule
                 ->build();
         }
 
-        if (!Generator::isDefault($property->ref) && is_string($property->ref)) {
-            /**
-             * @var ReflectionClass $reflection
-             */
-            $reflection = $this->reflectionProvider->getClass($property->ref)->getNativeReflection();
-            $schema = Attributes::getAttributes($reflection, Schema::class);
+        if (!Generator::isDefault($property->ref) && is_string($property->ref) && !str_starts_with('#/components', $property->ref)) {
+            try {
+                /**
+                 * @var ReflectionClass $reflection
+                 */
+                $reflection = $this->reflectionProvider->getClass($property->ref)->getNativeReflection();
+                $schema = Attributes::getAttributes($reflection, Schema::class);
 
-            if (!$schema) {
-                $errors[] = RuleErrorBuilder::message(sprintf('Property "%s" reference "%s" does not have schema attribute', $property->property, $property->ref))
-                    ->identifier(RuleIdentifier::identifier('operationRequestBodyReferenceHasEmptySchema'))
+                if (!$schema) {
+                    $errors[] = RuleErrorBuilder::message(sprintf('Property "%s" reference "%s" does not have schema attribute', $property->property, $property->ref))
+                        ->identifier(RuleIdentifier::identifier('schemaPropertyReferenceHasEmptySchema'))
+                        ->file($this->file)
+                        ->line($node->getLine())
+                        ->build();
+                }
+            } catch (ClassNotFoundException $e) {
+                $errors[] = RuleErrorBuilder::message(sprintf('Property "%s" reference "%s" does not exist', $property->property, $property->ref))
+                    ->identifier(RuleIdentifier::identifier('schemaPropertyReferenceNotExist'))
                     ->file($this->file)
                     ->line($node->getLine())
                     ->build();
