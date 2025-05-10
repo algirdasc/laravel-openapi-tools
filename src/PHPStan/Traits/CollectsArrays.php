@@ -27,11 +27,12 @@ trait CollectsArrays
             return null;
         }
 
-        /**
-         * @var ReflectionClass $reflection
-         */
+
+
+        /** @var ReflectionClass $reflection */
         $reflection = $classReflection = $scope->getClassReflection()?->getNativeReflection();
-        $schema = Attributes::getAttributes($reflection, Schema::class)[0]?->newInstance() ?? null;
+        /** @var Schema|null $schema */
+        $schema = Attributes::getAttribute($reflection, Schema::class)?->newInstance();
 
         $collectedData = new ReturnStatement(
             class: $classReflection->getName(),

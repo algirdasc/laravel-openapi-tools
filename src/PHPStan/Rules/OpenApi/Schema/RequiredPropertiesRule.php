@@ -41,12 +41,12 @@ readonly class RequiredPropertiesRule implements Rule
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        $className = (string)$node->namespacedName;
+        $className = (string) $node->namespacedName;
 
         /** @var ReflectionClass $reflectionClass */
         $reflectionClass = $this->reflectionProvider->getClass($className)->getNativeReflection();
         /** @var Schema|null $schema */
-        $schema = Attributes::getAttributes($reflectionClass, Schema::class)[0]?->newInstance() ?? null;
+        $schema = Attributes::getAttribute($reflectionClass, Schema::class)?->newInstance();
 
         if ($schema === null) {
             return [];
