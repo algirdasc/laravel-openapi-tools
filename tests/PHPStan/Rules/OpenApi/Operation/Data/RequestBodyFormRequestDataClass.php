@@ -17,7 +17,7 @@ class RequestBodyFormRequestDataClass
     #[OA\Post(
         path: '/method1',
     )]
-    public function method1(SomeRequest $request): void
+    public function method1(SomeRequest $request, int $something): void
     {
     }
 
@@ -27,7 +27,7 @@ class RequestBodyFormRequestDataClass
             content: new OA\JsonContent(ref: SomeRequest::class),
         )
     )]
-    public function method2(SomeRequest $request): void
+    public function method2(SomeRequest $request, string $something): void
     {
     }
 

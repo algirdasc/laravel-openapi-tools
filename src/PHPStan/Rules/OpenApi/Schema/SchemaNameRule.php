@@ -39,10 +39,6 @@ readonly class SchemaNameRule implements Rule
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        if (!$node instanceof Node\Stmt\Class_) {
-            return [];
-        }
-
         $className = (string) $node->namespacedName;
 
         /** @var ReflectionClass $reflectionClass */

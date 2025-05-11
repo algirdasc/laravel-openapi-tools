@@ -15,6 +15,9 @@ use OpenApi\Attributes\Server;
 use OpenApi\Generator;
 use ReflectionException;
 
+/**
+ * @codeCoverageIgnore
+ */
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 class Get extends OA\Get
 {

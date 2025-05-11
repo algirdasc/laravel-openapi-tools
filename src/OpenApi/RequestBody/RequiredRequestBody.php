@@ -7,6 +7,9 @@ namespace OpenApiTools\OpenApi\RequestBody;
 use Illuminate\Foundation\Http\FormRequest;
 use OpenApi\Attributes as OA;
 
+/**
+ * @codeCoverageIgnore
+ */
 class RequiredRequestBody extends OA\RequestBody
 {
     /**

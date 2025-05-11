@@ -32,8 +32,6 @@ readonly class ControllerInvokeMethodRule implements Rule
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        $errors = [];
-
         /** @var OperationAttribute $operationAttribute */
         foreach ($this->getIterator($node, [MethodOperationCollector::class]) as $operationAttribute) {
             if ($operationAttribute->getMethod() === '__invoke') {
@@ -47,6 +45,6 @@ readonly class ControllerInvokeMethodRule implements Rule
             }
         }
 
-        return $errors;
+        return [];
     }
 }
