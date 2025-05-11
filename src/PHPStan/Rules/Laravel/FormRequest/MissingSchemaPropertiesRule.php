@@ -42,7 +42,7 @@ readonly class MissingSchemaPropertiesRule implements Rule
                 continue;
             }
 
-            if (!Generator::isDefault($schema->properties) && !empty($schema->properties)) {
+            if (!Generator::isDefault($schema->properties) && $schema->properties) {
                 continue;
             }
 
