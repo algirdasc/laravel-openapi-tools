@@ -53,24 +53,20 @@ readonly class EnumRule implements Rule
                 $isEnumerable = false;
                 if ($item->value instanceof Node\Expr\Array_) {
                     foreach ($item->value->items as $rule) {
-                        if (!$rule->value instanceof Node\Expr\StaticCall) {
-                            continue;
+                        if ($rule->value instanceof Node\Expr\StaticCall) {
+                            $isEnumerable = $this->isEnumRuleStaticCall($rule->value);
                         }
 
-                        $class = $rule->value->class;
-                        $method = $rule->value->name;
-
-                        if (!$class instanceof Node\Name || !$method instanceof Node\Identifier) {
-                            continue;
+                        if ($rule->value instanceof Node\Scalar\String_) {
+                            $isEnumerable = $this->isEnumRuleString($rule->value);
                         }
 
-                        if ($class->name !== \Illuminate\Validation\Rule::class && $method->name !== 'in') {
-                            continue;
+                        if ($isEnumerable) {
+                            break;
                         }
-
-                        $isEnumerable = true;
-                        break;
                     }
+                } elseif ($item->value instanceof Node\Scalar\String_) {
+                    $isEnumerable = $this->isEnumRuleString($item->value);
                 }
 
                 $schemaProperty = SchemaProperties::findByName($schema, $property);
@@ -87,4 +83,26 @@ readonly class EnumRule implements Rule
 
         return $errors;
     }
+
+    private function isEnumRuleStaticCall(Node\Expr\StaticCall $call): bool
+    {
+        $class = $call->class;
+        $method = $call->name;
+
+        if (!$class instanceof Node\Name || !$method instanceof Node\Identifier) {
+            return false;
+        }
+
+        if ($class->name !== \Illuminate\Validation\Rule::class && $method->name !== 'in') {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function isEnumRuleString(Node\Scalar\String_ $string): bool
+    {
+        return str_contains($string->value, 'in:');
+    }
 }
+
