@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OpenApiTools\PHPStan\Rules\Laravel\Resource;
+namespace OpenApiTools\PHPStan\Rules\Laravel\JsonResource;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use OpenApi\Annotations\Property;

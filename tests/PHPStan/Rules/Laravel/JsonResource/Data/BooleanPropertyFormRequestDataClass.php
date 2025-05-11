@@ -1,9 +1,8 @@
 <?php
 
-namespace Tests\PHPStan\Rules\Laravel\Resource\Data;
+namespace Tests\PHPStan\Rules\Laravel\JsonResource\Data;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Resources\Json\JsonResource;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(

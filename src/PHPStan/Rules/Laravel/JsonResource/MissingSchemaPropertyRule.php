@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace OpenApiTools\PHPStan\Rules\Laravel\Resource;
+namespace OpenApiTools\PHPStan\Rules\Laravel\JsonResource;
 
-use OpenApi\Generator;
 use OpenApiTools\PHPStan\Collectors\JsonResourceToArrayReturnCollector;
 use OpenApiTools\PHPStan\DTO\ReturnStatement;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
+use OpenApiTools\PHPStan\Helpers\SchemaProperties;
 use OpenApiTools\PHPStan\Traits\IteratesOverCollection;
+use OpenApiTools\PHPStan\Traits\IteratesOverReturnStatement;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\CollectedDataNode;
@@ -19,9 +20,10 @@ use PHPStan\ShouldNotHappenException;
 /**
  * @implements Rule<CollectedDataNode>
  */
-readonly class MissingSchemaPropertiesRule implements Rule
+readonly class MissingSchemaPropertyRule implements Rule
 {
     use IteratesOverCollection;
+    use IteratesOverReturnStatement;
 
     public function getNodeType(): string
     {
@@ -42,19 +44,23 @@ readonly class MissingSchemaPropertiesRule implements Rule
                 continue;
             }
 
-            if (!Generator::isDefault($schema->type) && $schema->type !== 'object') {
-                return [];
-            }
+            /**
+             * @var string $property
+             * @var Node\ArrayItem $item
+             */
 
-            if (!Generator::isDefault($schema->properties) && !empty($schema->properties)) {
-                return [];
-            }
+            // TODO: recursive check for nested objects
 
-            $errors[] = RuleErrorBuilder::message(sprintf('Missing schema properties on JsonResource "%s" class', $returnStatement->getClass()))
-                ->identifier(RuleIdentifier::identifier('missingJsonResourceSchemaProperties'))
-                ->file($returnStatement->getFile())
-                ->line($returnStatement->getLine())
-                ->build();
+            foreach ($this->getReturnStatementIterator($returnStatement) as [$property, $item]) {
+                $schemaProperty = SchemaProperties::findByName($schema, $property);
+                if ($schemaProperty === null) {
+                    $errors[] = RuleErrorBuilder::message(sprintf('Returned property "%s" is not defined in schema "%s" class', $property, $returnStatement->getClass()))
+                        ->identifier(RuleIdentifier::identifier('missingJsonResourceSchemaProperty'))
+                        ->file($returnStatement->getFile())
+                        ->line($item->getLine())
+                        ->build();
+                }
+            }
         }
 
         return $errors;

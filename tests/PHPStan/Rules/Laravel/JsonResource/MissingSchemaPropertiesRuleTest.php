@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Tests\PHPStan\Rules\Laravel\Resource;
+namespace Tests\PHPStan\Rules\Laravel\JsonResource;
 
 use OpenApiTools\PHPStan\Collectors\ClassOperationCollector;
 use OpenApiTools\PHPStan\Collectors\ClassSchemaCollector;
+use OpenApiTools\PHPStan\Collectors\JsonResourceToArrayReturnCollector;
 use OpenApiTools\PHPStan\Collectors\MethodOperationCollector;
-use OpenApiTools\PHPStan\Rules\Laravel\Resource\BooleanPropertyRule;
+use OpenApiTools\PHPStan\Rules\Laravel\JsonResource\BooleanPropertyRule;
+use OpenApiTools\PHPStan\Rules\Laravel\JsonResource\MissingSchemaPropertiesRule;
 use OpenApiTools\PHPStan\Rules\OpenApi\Operation\ControllerInvokeMethodRule;
 use OpenApiTools\PHPStan\Rules\OpenApi\Operation\TagCountRule;
 use OpenApiTools\PHPStan\Rules\OpenApi\Schema\RequiredPropertiesRule;
@@ -17,36 +19,34 @@ use Tests\CustomRuleTestCase;
 use Tests\PHPStan\Rules\OpenApi\Operation\Collector;
 
 /**
- * @extends CustomRuleTestCase<BooleanPropertyRule>
+ * @extends CustomRuleTestCase<MissingSchemaPropertiesRule>
  */
-class BooleanPropertyRuleTest extends CustomRuleTestCase
+class MissingSchemaPropertiesRuleTest extends CustomRuleTestCase
 {
     protected function getRule(): Rule
     {
-        return new BooleanPropertyRule(
+        return new MissingSchemaPropertiesRule(
             reflectionProvider: $this->createReflectionProvider(),
-            container: $this->getContainer(),
         );
     }
 
-    public function testRuleJsonResource(): void
+    public function testRuleProperties(): void
     {
         $this->analyse(
             [
-                __DIR__ . '/Data/BooleanPropertyJsonResourceDataClass.php',
+                __DIR__ . '/Data/MissingSchemaPropertiesObjectDataClass.php',
             ],
             [
-                ['Schema property "boolean_2" must start with "is" or "has"', 11],
-                ['Schema property "boolean_1" must start with "is" or "has"', 10],
+                ['Missing schema properties on JsonResource "Tests\PHPStan\Rules\Laravel\JsonResource\Data\MissingSchemaPropertiesObjectDataClass" class', 8],
             ]
         );
     }
 
-    public function testRuleFormRequest(): void
+    public function testRuleItems(): void
     {
         $this->analyse(
             [
-                __DIR__ . '/Data/BooleanPropertyFormRequestDataClass.php',
+                __DIR__ . '/Data/MissingSchemaPropertiesItemsDataClass.php',
             ],
             [
             ]
