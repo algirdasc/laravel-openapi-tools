@@ -4,8 +4,6 @@ namespace Tests\PHPStan\Rules\Laravel\FormRequest;
 
 use OpenApiTools\PHPStan\Collectors\FormRequestRulesReturnCollector;
 use OpenApiTools\PHPStan\Rules\Laravel\FormRequest\EnumRule;
-use OpenApiTools\PHPStan\Rules\Laravel\FormRequest\NullableRule;
-use OpenApiTools\PHPStan\Rules\Laravel\FormRequest\RequiredRule;
 use PHPStan\Rules\Rule;
 use Tests\CustomRuleTestCase;
 

@@ -9,21 +9,21 @@ on:
 jobs:
   test:
     uses: ./.github/workflows/test.yaml
-#  build:
-#    needs: [test]
-#    runs-on: ubuntu-latest
-#    permissions:
-#      contents: write
-#    steps:
-#      - uses: actions/checkout@v4
-#
-#      - id: bump
-#        uses: mathieudutour/github-tag-action@v6.2
-#        with:
-#          github_token: ${{ secrets.GITHUB_TOKEN }}
-#          release_branches: main
-#
-#      - uses: ncipollo/release-action@v1
-#        with:
-#          tag: ${{ steps.bump.outputs.new_tag }}
-#          generateReleaseNotes: true
+  build:
+    needs: [test]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: bump
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          release_branches: main
+
+      - uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.bump.outputs.new_tag }}
+          generateReleaseNotes: true
