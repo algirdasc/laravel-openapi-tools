@@ -4,16 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\PHPStan\Rules\Laravel\JsonResource;
 
-use OpenApiTools\PHPStan\Collectors\ClassOperationCollector;
 use OpenApiTools\PHPStan\Collectors\ClassSchemaCollector;
-use OpenApiTools\PHPStan\Collectors\JsonResourceToArrayReturnCollector;
-use OpenApiTools\PHPStan\Collectors\MethodOperationCollector;
-use OpenApiTools\PHPStan\Rules\Laravel\JsonResource\BooleanPropertyRule;
 use OpenApiTools\PHPStan\Rules\Laravel\JsonResource\MissingSchemaPropertiesRule;
-use OpenApiTools\PHPStan\Rules\OpenApi\Operation\ControllerInvokeMethodRule;
-use OpenApiTools\PHPStan\Rules\OpenApi\Operation\TagCountRule;
-use OpenApiTools\PHPStan\Rules\OpenApi\Schema\RequiredPropertiesRule;
-use OpenApiTools\PHPStan\Rules\OpenApi\Schema\SchemaNameRule;
 use PHPStan\Rules\Rule;
 use Tests\CustomRuleTestCase;
 use Tests\PHPStan\Rules\OpenApi\Operation\Collector;

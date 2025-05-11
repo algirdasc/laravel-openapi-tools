@@ -59,7 +59,7 @@ readonly class MissingReturnPropertyRule implements Rule
             }
 
             foreach ($schema->properties as $propertySchema) {
-                $schemaProperties[$propertySchema->property] = 0;
+                $schemaProperties[$propertySchema->property] = $returnStatement->getLine();
             }
 
             // TODO: recursive check for nested objects

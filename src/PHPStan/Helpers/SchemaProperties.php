@@ -8,8 +8,6 @@ use OpenApi\Attributes\Items;
 use OpenApi\Attributes\Property;
 use OpenApi\Attributes\Schema;
 use OpenApi\Generator;
-use PhpParser\Node\ArrayItem;
-use PhpParser\Node\Attribute;
 
 class SchemaProperties
 {

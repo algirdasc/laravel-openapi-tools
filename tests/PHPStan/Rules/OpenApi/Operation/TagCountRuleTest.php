@@ -7,7 +7,6 @@ namespace Tests\PHPStan\Rules\OpenApi\Operation;
 use OpenApiTools\PHPStan\Collectors\ClassOperationCollector;
 use OpenApiTools\PHPStan\Collectors\MethodOperationCollector;
 use OpenApiTools\PHPStan\Rules\OpenApi\Operation\TagCountRule;
-use PHPStan\Collectors\Collector;
 use PHPStan\Rules\Rule;
 use Tests\CustomRuleTestCase;
 

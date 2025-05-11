@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace PHPStan\Rules\OpenApi\Schema;
 
-use OpenApiTools\PHPStan\Collectors\ClassOperationCollector;
-use OpenApiTools\PHPStan\Collectors\MethodOperationCollector;
-use OpenApiTools\PHPStan\Rules\OpenApi\Operation\ControllerInvokeMethodRule;
-use OpenApiTools\PHPStan\Rules\OpenApi\Operation\TagCountRule;
 use OpenApiTools\PHPStan\Rules\OpenApi\Schema\SchemaNameRule;
 use PHPStan\Rules\Rule;
 use Tests\CustomRuleTestCase;

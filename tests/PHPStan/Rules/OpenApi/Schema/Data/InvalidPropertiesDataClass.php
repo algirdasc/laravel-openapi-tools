@@ -3,7 +3,6 @@
 namespace Tests\PHPStan\Rules\OpenApi\Schema\Data;
 
 use OpenApi\Attributes as OA;
-use Tests\PHPStan\Rules\OpenApi\Schema\Data\SchemalessDataClass;
 
 #[OA\Schema(
     properties: [

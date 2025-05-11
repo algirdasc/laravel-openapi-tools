@@ -7,8 +7,6 @@ namespace OpenApiTools\PHPStan\Rules\Laravel\JsonResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use OpenApi\Generator;
 use OpenApiTools\PHPStan\Collectors\ClassSchemaCollector;
-use OpenApiTools\PHPStan\Collectors\JsonResourceToArrayReturnCollector;
-use OpenApiTools\PHPStan\DTO\ReturnStatement;
 use OpenApiTools\PHPStan\DTO\SchemaAttribute;
 use OpenApiTools\PHPStan\Helpers\RuleIdentifier;
 use OpenApiTools\PHPStan\Traits\IteratesOverCollection;

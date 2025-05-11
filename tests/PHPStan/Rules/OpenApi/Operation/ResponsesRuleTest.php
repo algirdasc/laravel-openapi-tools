@@ -6,9 +6,7 @@ namespace PHPStan\Rules\OpenApi\Operation;
 
 use OpenApiTools\PHPStan\Collectors\ClassOperationCollector;
 use OpenApiTools\PHPStan\Collectors\MethodOperationCollector;
-use OpenApiTools\PHPStan\Rules\OpenApi\Operation\ControllerInvokeMethodRule;
 use OpenApiTools\PHPStan\Rules\OpenApi\Operation\ResponsesRule;
-use OpenApiTools\PHPStan\Rules\OpenApi\Operation\SummaryRule;
 use PHPStan\Rules\Rule;
 use Tests\CustomRuleTestCase;
 
