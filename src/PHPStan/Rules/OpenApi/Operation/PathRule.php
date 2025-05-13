@@ -83,16 +83,14 @@ readonly class PathRule implements Rule
                     if (!Generator::isDefault($parameter->ref) && is_string($parameter->ref)) {
                         /** @var ReflectionClass $reflection */
                         $reflection = $this->reflectionProvider->getClass($parameter->ref)->getNativeReflection();
-                        $attributes = Attributes::getAttributes($reflection, Parameter::class);
-
-                        foreach ($attributes as $attribute) {
+                        $attribute = Attributes::getAttribute($reflection, Parameter::class);
+                        if ($attribute !== null) {
                             /** @var Parameter $parameter */
                             $parameter = $attribute->newInstance();
-                            break;
                         }
                     }
 
-                    if ($parameter->parameter === $pathParameter && $parameter->in === 'path') {
+                    if ($parameter->name === $pathParameter && $parameter->in === 'path') {
                         $found = true;
                         break;
                     }

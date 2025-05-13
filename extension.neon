@@ -16,10 +16,10 @@ rules:
     - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\MissingSchemaRule
     - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\NullableRule
     - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\RequiredRule
-    - OpenApiTools\PHPStan\Rules\Laravel\Resource\BooleanPropertyRule
-    - OpenApiTools\PHPStan\Rules\Laravel\Resource\MissingReturnPropertyRule
-    - OpenApiTools\PHPStan\Rules\Laravel\Resource\MissingSchemaPropertiesRule
-    - OpenApiTools\PHPStan\Rules\Laravel\Resource\MissingSchemaPropertyRule
+    - OpenApiTools\PHPStan\Rules\Laravel\JsonResource\BooleanPropertyRule
+    - OpenApiTools\PHPStan\Rules\Laravel\JsonResource\MissingReturnPropertyRule
+    - OpenApiTools\PHPStan\Rules\Laravel\JsonResource\MissingSchemaPropertiesRule
+    - OpenApiTools\PHPStan\Rules\Laravel\JsonResource\MissingSchemaPropertyRule
 
 services:
     schemaNameGenerator:
