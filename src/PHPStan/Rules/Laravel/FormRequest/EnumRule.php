@@ -102,7 +102,19 @@ readonly class EnumRule implements Rule
 
     private function isEnumRuleString(Node\Scalar\String_ $string): bool
     {
-        return str_contains($string->value, 'in:');
+        if (str_contains($string->value, '|')) {
+            $rules = explode('|', $string->value);
+        } else {
+            $rules = [$string->value];
+        }
+
+        foreach ($rules as $rule) {
+            if (str_starts_with($rule, 'in:')) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
 

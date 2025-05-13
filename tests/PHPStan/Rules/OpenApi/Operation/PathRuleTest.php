@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PHPStan\Rules\OpenApi\Operation;
+namespace Tests\PHPStan\Rules\OpenApi\Operation;
 
 use OpenApiTools\PHPStan\Collectors\ClassOperationCollector;
 use OpenApiTools\PHPStan\Collectors\MethodOperationCollector;
@@ -29,12 +29,13 @@ class PathRuleTest extends CustomRuleTestCase
                 __DIR__ . '/Data/PathDataClass.php',
             ],
             [
-                ['Operation "DELETE method1/" path must start leading slash', 14],
-                ['Operation "DELETE method1/" must not end with trailing slash', 14],
-                ['Operation "DELETE /method2/{parameter}" parameter "parameter" is missing in operation parameters', 21],
-                ['Operation "POST method4" path must start leading slash', 38],
-                ['Operation "POST /method5/{parameter}" parameter "parameter" is missing in operation parameters', 45],
-                ['Operation "GET /class/" must not end with trailing slash', 9],
+                ['Operation "DELETE method1/" path must start leading slash', 15],
+                ['Operation "DELETE method1/" must not end with trailing slash', 15],
+                ['Operation "DELETE /method2/{parameter}" parameter "parameter" is missing in operation parameters', 22],
+                ['Operation "POST method4" path must start leading slash', 39],
+                ['Operation "POST /method5/{parameter}" parameter "parameter" is missing in operation parameters', 46],
+                ['Operation "POST /method6/{parameter_diff_name}" parameter "parameter_diff_name" is missing in operation parameters', 56],
+                ['Operation "GET /class/" must not end with trailing slash', 10],
             ]
         );
     }

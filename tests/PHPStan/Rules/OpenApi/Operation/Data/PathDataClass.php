@@ -4,6 +4,7 @@ namespace Tests\PHPStan\Rules\OpenApi\Operation\Data;
 
 use OpenApi\Attributes as OA;
 use Tests\PHPStan\Rules\OpenApi\Operation\Data\Parameter\Parameter;
+use Tests\PHPStan\Rules\OpenApi\Operation\Data\Parameter\ParameterWithSchema;
 
 #[OA\Get(
     path: '/class/',
@@ -20,7 +21,7 @@ class PathDataClass
     #[OA\Delete(
         path: '/method2/{parameter}',
         parameters: [
-            new OA\PathParameter('sub-parameter'),
+            new OA\PathParameter(name: 'subparameter'),
         ],
     )]
     public function method2(): void
@@ -51,13 +52,33 @@ class PathDataClass
     {
     }
 
-    #[OA\Delete(
-        path: '/success/{parameter}',
+    #[OA\Post(
+        path: '/method6/{parameter_diff_name}',
         parameters: [
-            new OA\PathParameter('parameter'),
+            new OA\PathParameter(ref: ParameterWithSchema::class),
         ]
     )]
-    public function success(): void
+    public function method6(): void
+    {
+    }
+
+    #[OA\Get(
+        path: '/success1/{parameter}',
+        parameters: [
+            new OA\PathParameter(name: 'parameter'),
+        ]
+    )]
+    public function success1(): void
+    {
+    }
+
+    #[OA\Get(
+        path: '/success2/{parameter}',
+        parameters: [
+            new OA\PathParameter(ref: ParameterWithSchema::class),
+        ]
+    )]
+    public function success2(): void
     {
     }
 }
