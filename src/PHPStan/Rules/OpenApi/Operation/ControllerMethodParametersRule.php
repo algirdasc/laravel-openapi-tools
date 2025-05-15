@@ -80,10 +80,6 @@ readonly class ControllerMethodParametersRule implements Rule
                 $orderedParameters[] = $parameter->getName();
             }
 
-            if (!$orderedParameters) {
-                continue;
-            }
-
             preg_match_all('/{(.*?)}/', $operation->path, $pathParameters);
             $pathParameters = $pathParameters[1];
 

@@ -29,23 +29,33 @@ class MethodParametersControllerDataClass
     }
 
     #[OA\Get(
-        path: '/method2/{parameter2}',
+        path: '/method3/{parameter2}',
     )]
     public function method3(string $parameter1): void
     {
     }
 
     #[OA\Get(
-        path: '/method4/{parameter1}/{parameter2}',
+        path: '/method4/{parameter}',
+        parameters: [
+            new OA\PathParameter(name: 'parameter'),
+        ],
     )]
-    public function method4(string $parameter1, FormRequest $request, string $parameter2): void
+    public function method4(): void
     {
     }
 
     #[OA\Get(
-        path: '/method5',
+        path: '/success1',
     )]
-    public function method5(): void
+    public function success1(): void
+    {
+    }
+
+    #[OA\Get(
+        path: '/success2/{parameter1}/{parameter2}',
+    )]
+    public function success2(string $parameter1, FormRequest $request, string $parameter2): void
     {
     }
 }

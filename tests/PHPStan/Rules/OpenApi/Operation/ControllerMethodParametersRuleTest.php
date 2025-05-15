@@ -37,6 +37,7 @@ class ControllerMethodParametersRuleTest extends CustomRuleTestCase
                 ['Method "method1" parameters "parameter1", "parameter2" are either missing or not in the correct order', 17],
                 ['Method "method2" parameters "parameter1" are either missing or not in the correct order', 24],
                 ['Method "method3" parameters "parameter2" are either missing or not in the correct order', 31],
+                ['Method "method4" parameters "parameter" are either missing or not in the correct order', 38],
             ]
         );
     }
