@@ -61,7 +61,7 @@ use OpenApi\Attributes as OA;
 )]
 final class MyController extends Controller
 {
-    public function __invoke(MetricGetRequest $request): MyResource
+    public function __invoke(MyQueryRequest $request): MyResource
     {
         return new MyResource('some data');
     }
@@ -77,7 +77,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\MyQueryRequest;
 use App\Http\Resources\MyResource;
-use OpenApi\Attributes as OA;
 use OpenApiTools\OpenApi\Operation;
 
 #[Operation\Get(
@@ -86,7 +85,7 @@ use OpenApiTools\OpenApi\Operation;
 )]
 final class MyController extends Controller
 {
-    public function __invoke(MetricGetRequest $request): MyResource
+    public function __invoke(MyQueryRequest $request): MyResource
     {
         return new MyResource('some data');
     }
