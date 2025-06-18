@@ -9,6 +9,7 @@ rules:
     - OpenApiTools\PHPStan\Rules\OpenApi\Operation\PathRule
     - OpenApiTools\PHPStan\Rules\OpenApi\Operation\RequestBodyReferenceRule
     - OpenApiTools\PHPStan\Rules\OpenApi\Operation\ResponsesRule
+    - OpenApiTools\PHPStan\Rules\OpenApi\Operation\ResponseTypeRule
     - OpenApiTools\PHPStan\Rules\OpenApi\Operation\SummaryRule
     - OpenApiTools\PHPStan\Rules\OpenApi\Operation\TagCountRule
     - OpenApiTools\PHPStan\Rules\Laravel\FormRequest\EnumRule
