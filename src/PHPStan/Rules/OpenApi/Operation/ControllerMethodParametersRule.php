@@ -62,8 +62,10 @@ readonly class ControllerMethodParametersRule implements Rule
 
             $operation = $operationAttribute->getOperation();
 
-            $orderedParameters = [];
+            $availableParameters = [];
             foreach ($methodReflection->getParameters() as $parameter) {
+                $availableParameters[] = $parameter->getName();
+
                 $type = $parameter->getType();
                 if (!$type instanceof ReflectionNamedType || !$type->isBuiltin()) {
                     continue;
@@ -76,14 +78,14 @@ readonly class ControllerMethodParametersRule implements Rule
                         ->line($operationAttribute->getAttribute()->getLine())
                         ->build();
                 }
-
-                $orderedParameters[] = $parameter->getName();
             }
 
             preg_match_all('/{(.*?)}/', $operation->path, $pathParameters);
             $pathParameters = $pathParameters[1];
 
-            $parametersDiff = array_diff_assoc($pathParameters, $orderedParameters);
+            $availableParameters = array_values(array_filter($availableParameters, fn ($parameter) => in_array($parameter, $pathParameters)));
+
+            $parametersDiff = array_diff_assoc($pathParameters, $availableParameters);
             if ($parametersDiff) {
                 $errors[] = RuleErrorBuilder::message(sprintf('Method "%s" parameters "%s" are either missing or not in the correct order', $methodReflection->getName(), implode('", "', $parametersDiff)))
                     ->identifier(RuleIdentifier::identifier('missingOrIncorrectMethodParametersOrder'))
