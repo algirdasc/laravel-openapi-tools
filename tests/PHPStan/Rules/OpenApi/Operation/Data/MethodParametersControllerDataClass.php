@@ -46,6 +46,16 @@ class MethodParametersControllerDataClass
     }
 
     #[OA\Get(
+        path: '/method5/{parameter1}/{parameter2}',
+        parameters: [
+            new OA\PathParameter(name: 'parameter'),
+        ],
+    )]
+    public function method5(string $parameter2, FormRequest $request, SomeModel $parameter1, SomeService $service): void
+    {
+    }
+
+    #[OA\Get(
         path: '/success1',
     )]
     public function success1(): void
@@ -56,6 +66,20 @@ class MethodParametersControllerDataClass
         path: '/success2/{parameter1}/{parameter2}',
     )]
     public function success2(string $parameter1, FormRequest $request, string $parameter2): void
+    {
+    }
+
+    #[OA\Get(
+        path: '/success3/{parameter1}',
+    )]
+    public function success3(FormRequest $request, SomeModel $parameter1): void
+    {
+    }
+
+    #[OA\Get(
+        path: '/success3/{parameter1}',
+    )]
+    public function success4(FormRequest $request, SomeModel $parameter1, SomeService $service): void
     {
     }
 }
