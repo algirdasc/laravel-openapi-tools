@@ -9,7 +9,7 @@
     "zircote/swagger-php": "^6.0"
   },
   "require-dev": {
-    "laravel/framework": "^11 || ^12",
+    "laravel/framework": "^13.1.1",
     "phpunit/phpunit": "^12.1"
   },
   "autoload": {
