@@ -6,12 +6,9 @@ namespace OpenApiTools\OpenApi\Operation;
 
 use Illuminate\Foundation\Http\FormRequest;
 use OpenApi\Attributes as OA;
-use OpenApi\Attributes\Attachable;
 use OpenApi\Attributes\ExternalDocumentation;
 use OpenApi\Attributes\Parameter;
 use OpenApi\Attributes\RequestBody;
-use OpenApi\Attributes\Response;
-use OpenApi\Attributes\Server;
 use OpenApi\Generator;
 use ReflectionException;
 
@@ -22,24 +19,8 @@ use ReflectionException;
 class Get extends OA\Get
 {
     /**
-     * @param string|null $path
-     * @param string|null $operationId
-     * @param string|null $description
-     * @param string|null $summary
      * @param array<array-key, mixed>|null $security
-     * @param array<Server>|null $servers
-     * @param RequestBody|null $requestBody
-     * @param array<string>|null $tags
-     * @param array<Parameter>|null $parameters
-     * @param array<Parameter>|class-string<FormRequest>|null $queryParameters
-     * @param array<Response>|null $responses
      * @param array<array-key, mixed>|null $callbacks
-     * @param ExternalDocumentation|null $externalDocs
-     * @param bool|null $deprecated
-     * @param array<string,mixed>|null $x
-     * @param array<Attachable>|null $attachables
-     * @noinspection PhpTooManyParametersInspection
-     * @noinspection PhpRedundantDocCommentInspection
      */
     public function __construct(
         ?string $path = null,
@@ -50,8 +31,8 @@ class Get extends OA\Get
         ?array $servers = null,
         ?RequestBody $requestBody = null,
         ?array $tags = null,
-        ?array $parameters = [],
-        mixed $queryParameters = [],
+        ?array $parameters = null,
+        mixed $queryParameters = null,
         ?array $responses = null,
         ?array $callbacks = null,
         ?ExternalDocumentation $externalDocs = null,
@@ -60,7 +41,12 @@ class Get extends OA\Get
         ?array $x = null,
         ?array $attachables = null
     ) {
-        $queryParameters = $this->getQueryParameters($queryParameters);
+        if ($queryParameters !== null) {
+            $parameters = array_values([
+                ...$parameters ?? [],
+                ...$this->getQueryParameters($queryParameters),
+            ]);
+        }
 
         parent::__construct(
             path: $path,
@@ -71,10 +57,7 @@ class Get extends OA\Get
             servers: $servers,
             requestBody: $requestBody,
             tags: $tags,
-            parameters: [
-                ...$parameters ?? [],
-                ...$queryParameters,
-            ],
+            parameters: $parameters,
             responses: $responses,
             callbacks: $callbacks,
             externalDocs: $externalDocs,
@@ -114,10 +97,10 @@ class Get extends OA\Get
                         type: !Generator::isDefault($property->type) ? $property->type : null,
                         format: !Generator::isDefault($property->format) ? $property->format : null,
                         items: !Generator::isDefault($property->items) ? $property->items : null,
-                        default: !Generator::isDefault($property->default) ? $property->default : null,
-                        enum: !Generator::isDefault($property->enum) ? $property->enum : null,
                         example: !Generator::isDefault($property->example) ? $property->example : null,
                         nullable: !Generator::isDefault($property->nullable) ? $property->nullable : null,
+                        default: !Generator::isDefault($property->default) ? $property->default : null,
+                        enum: !Generator::isDefault($property->enum) ? $property->enum : null,
                     )
                 );
             }
