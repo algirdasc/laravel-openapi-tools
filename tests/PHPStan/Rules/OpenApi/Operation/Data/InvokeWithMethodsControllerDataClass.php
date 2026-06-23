@@ -2,6 +2,7 @@
 
 namespace Tests\PHPStan\Rules\OpenApi\Operation\Data;
 
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use OpenApi\Attributes as OA;
 
 #[OA\Delete(
@@ -9,6 +10,8 @@ use OpenApi\Attributes as OA;
 )]
 class InvokeWithMethodsControllerDataClass
 {
+    use AuthorizesRequests;
+
     public function __invoke(): void
     {
     }

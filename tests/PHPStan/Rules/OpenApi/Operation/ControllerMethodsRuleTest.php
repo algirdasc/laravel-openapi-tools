@@ -26,9 +26,10 @@ class ControllerMethodsRuleTest extends CustomRuleTestCase
         $this->analyse(
             [
                 __DIR__ . '/Data/InvokeWithMethodsControllerDataClass.php',
+                __DIR__ . '/Data/InvokeWithTraitControllerDataClass.php',
             ],
             [
-                ['Controller must not have any other methods if "__invoke" method is defined', 7],
+                ['Controller must not have any other methods if "__invoke" method is defined', 8],
             ]
         );
     }

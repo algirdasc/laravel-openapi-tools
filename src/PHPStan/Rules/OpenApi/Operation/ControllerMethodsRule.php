@@ -46,9 +46,15 @@ readonly class ControllerMethodsRule implements Rule
             /** @var ReflectionClass $classReflection */
             $classReflection = $this->reflectionProvider->getClass($operationAttribute->getClass())->getNativeReflection();
 
+            $traitMethods = $this->getTraitMethodNames($classReflection);
+
             $methods = [];
             foreach ($classReflection->getMethods() as $method) {
                 if (!$method->isPublic()) {
+                    continue;
+                }
+
+                if (in_array($method->getName(), $traitMethods, true)) {
                     continue;
                 }
 
@@ -65,5 +71,32 @@ readonly class ControllerMethodsRule implements Rule
         }
 
         return $errors;
+    }
+
+    /**
+     * Collects the names of every method provided by the traits used by the
+     * class (recursively, including nested traits and traits used by parent
+     * classes), so they can be excluded from the "other methods" check.
+     *
+     * @return array<int, string>
+     */
+    private function getTraitMethodNames(ReflectionClass $classReflection): array
+    {
+        $names = [];
+
+        foreach ($classReflection->getTraits() as $trait) {
+            foreach ($trait->getMethods() as $method) {
+                $names[] = $method->getName();
+            }
+
+            $names = [...$names, ...$this->getTraitMethodNames($trait)];
+        }
+
+        $parent = $classReflection->getParentClass();
+        if ($parent !== false) {
+            $names = [...$names, ...$this->getTraitMethodNames($parent)];
+        }
+
+        return $names;
     }
 }
