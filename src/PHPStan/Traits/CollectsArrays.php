@@ -7,6 +7,7 @@ namespace OpenApiTools\PHPStan\Traits;
 use OpenApi\Attributes\Schema;
 use OpenApiTools\PHPStan\DTO\ReturnStatement;
 use OpenApiTools\PHPStan\Helpers\Attributes;
+use OpenApiTools\PHPStan\Helpers\NodeHelper;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
@@ -46,7 +47,7 @@ trait CollectsArrays
             return serialize($collectedData);
         }
 
-        $collectedData->setItems($node->expr->items);
+        $collectedData->setItems(NodeHelper::detach($node->expr->items));
 
         return serialize($collectedData);
     }

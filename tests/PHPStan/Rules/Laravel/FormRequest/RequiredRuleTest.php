@@ -22,6 +22,7 @@ class RequiredRuleTest extends CustomRuleTestCase
         $this->analyse(
             [
                 __DIR__ . '/Data/ValidationRulesDataClass.php',
+                __DIR__ . '/Data/ClosureValidationRulesDataClass.php',
             ],
             [
                 ['Property "required-property-1" is required in rules, but not in schema', 16],
