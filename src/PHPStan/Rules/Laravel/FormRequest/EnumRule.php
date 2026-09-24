@@ -54,11 +54,11 @@ readonly class EnumRule implements Rule
                 if ($item->value instanceof Node\Expr\Array_) {
                     foreach ($item->value->items as $rule) {
                         if ($rule->value instanceof Node\Expr\StaticCall) {
-                            $isEnumerable = $this->isEnumRuleStaticCall($rule->value);
+                            $isEnumerable = $isEnumerable || $this->isEnumRuleStaticCall($rule->value);
                         }
 
                         if ($rule->value instanceof Node\Scalar\String_) {
-                            $isEnumerable = $this->isEnumRuleString($rule->value);
+                            $isEnumerable = $isEnumerable || $this->isEnumRuleString($rule->value);
                         }
 
                         if ($isEnumerable) {
@@ -93,7 +93,7 @@ readonly class EnumRule implements Rule
             return false;
         }
 
-        if ($class->name !== \Illuminate\Validation\Rule::class && $method->name !== 'in') {
+        if ($class->name !== \Illuminate\Validation\Rule::class || !\in_array($method->name, ['in', 'enum'], true)) {
             return false;
         }
 

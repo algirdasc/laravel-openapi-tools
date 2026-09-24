@@ -24,9 +24,11 @@ class EnumRuleTest extends CustomRuleTestCase
                 __DIR__ . '/Data/EnumRulesDataClass.php',
             ],
             [
-                ['Property "enum-property-1" is has enum values in rules, but not in schema', 23],
-                ['Property "enum-property-2" is has enum values in rules, but not in schema', 24],
-                ['Property "enum-property-3" is has enum values in rules, but not in schema', 25],
+                ['Property "enum-property-1" is has enum values in rules, but not in schema', 27],
+                ['Property "enum-property-2" is has enum values in rules, but not in schema', 28],
+                ['Property "enum-property-3" is has enum values in rules, but not in schema', 29],
+                ['Property "enum-property-4" is has enum values in rules, but not in schema', 33],
+                ['Property "enum-property-5" is has enum values in rules, but not in schema', 34],
             ]
         );
     }
